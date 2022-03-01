@@ -4,3 +4,5 @@ exclude tests
 exclude .style.yapf
 exclude Makefile
 exclude pylintrc
+exclude __pycache__
+exclude dbt_artifacts_parser/resources

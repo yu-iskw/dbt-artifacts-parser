@@ -29,6 +29,10 @@ classifiers = [
     "Typing :: Typed",
 ]
 dynamic = ["version", "description"]
+dependencies = [
+    "pydantic >=1.6",
+    "datamodel-code-generator ==0.11.13",
+]
 
 [project.urls]
 Home = "https://github.com/yu-iskw/dbt-artifacts-parser"
