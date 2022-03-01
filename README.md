@@ -17,7 +17,30 @@ It enables us to deal with `catalog.json`, `manifest.json`, `run-results.json` a
 pip install -U dbt-artifacts-parser
 ```
 
-## Example
+## Python classes
+Those are the classes to parse dbt artifacts.
+
+### Catalog
+- [CatalogV1](dbt_artifacts_parser/parsers/catalog/catalog_v1.py) for catalog.json v1
+
+### Manifest
+- [ManifestV1](dbt_artifacts_parser/parsers/manifest/manifest_v1.py) for manifest.json v1
+- [ManifestV2](dbt_artifacts_parser/parsers/manifest/manifest_v2.py) for manifest.json v2
+- [ManifestV3](dbt_artifacts_parser/parsers/manifest/manifest_v3.py) for manifest.json v3
+- [ManifestV4](dbt_artifacts_parser/parsers/manifest/manifest_v4.py) for manifest.json v4
+
+### Run Results
+- [RunResultsV1](dbt_artifacts_parser/parsers/manifest/manifest_v1.py) for run_results.json v1
+- [RunResultsV2](dbt_artifacts_parser/parsers/manifest/manifest_v2.py) for run_results.json v2
+- [RunResultsV3](dbt_artifacts_parser/parsers/manifest/manifest_v3.py) for run_results.json v3
+- [RunResultsV4](dbt_artifacts_parser/parsers/manifest/manifest_v4.py) for run_results.json v4
+
+### Sources
+- [SourcesV1](dbt_artifacts_parser/parsers/sources/sources_v1.py) for sources.json v1
+- [SourcesV2](dbt_artifacts_parser/parsers/sources/sources_v2.py) for sources.json v2
+- [SourcesV1](dbt_artifacts_parser/parsers/sources/sources_v1.py) for sources.json v3
+
+## Examples
 
 ### Parse catalog.json
 ```python
