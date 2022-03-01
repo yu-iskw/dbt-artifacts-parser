@@ -1,0 +1,19 @@
+{
+  "subscription":"projects/your-project/subscriptions/dbt-artifacts-gcs-notification-to-bigquery",
+  "message":{
+    "attributes":{
+      "bucketId":"your-project-dbt-artifacts",
+      "eventTime":"2021-06-30T13:59:33.223484Z",
+      "eventType":"OBJECT_FINALIZE",
+      "notificationConfig":"projects/_/buckets/your-project-dbt-artifacts/notificationConfigs/2",
+      "objectGeneration":"1625061573163832",
+      "objectId":"dbt_artifacts/2021-05-06T20:00:00/run/target/manifest.json",
+      "payloadFormat":"JSON_API_V1"
+    },
+    "messageId":"2629498381589316",
+    "message_id":"2629498381589316",
+    "publishTime":"2021-06-30T13:59:33.262000+00:00",
+    "publish_time":"2021-06-30T13:59:33.262000+00:00",
+    "data":"ewogICJraW5kIjogInN0b3JhZ2Ujb2JqZWN0IiwKICAiaWQiOiAieW91ci1nY3AtcHJvamVjdC1k YnQtYXJ0aWZhY3RzL3Rlc3QvcnVuX3Jlc3VsdHMuanNvbi8xNjI0ODgxMzMwMDQzNjg4IiwKICAi c2VsZkxpbmsiOiAiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vc3RvcmFnZS92MS9iL3lvdXIt Z2NwLXByb2plY3QtZGJ0LWFydGlmYWN0cy9vL3Rlc3QlMkZydW5fcmVzdWx0cy5qc29uIiwKICAi bmFtZSI6ICJ0ZXN0L3J1bl9yZXN1bHRzLmpzb24iLAogICJidWNrZXQiOiAieW91ci1nY3AtcHJv amVjdC1kYnQtYXJ0aWZhY3RzIiwKICAiZ2VuZXJhdGlvbiI6ICIxNjI0ODgxMzMwMDQzNjg4IiwK ICAibWV0YWdlbmVyYXRpb24iOiAiMSIsCiAgImNvbnRlbnRUeXBlIjogImFwcGxpY2F0aW9uL2pz b24iLAogICJ0aW1lQ3JlYXRlZCI6ICIyMDIxLTA2LTI4VDExOjU1OjMwLjEwOFoiLAogICJ1cGRh dGVkIjogIjIwMjEtMDYtMjhUMTE6NTU6MzAuMTA4WiIsCiAgInN0b3JhZ2VDbGFzcyI6ICJTVEFO REFSRCIsCiAgInRpbWVTdG9yYWdlQ2xhc3NVcGRhdGVkIjogIjIwMjEtMDYtMjhUMTE6NTU6MzAu MTA4WiIsCiAgInNpemUiOiAiMTI0NzQiLAogICJtZDVIYXNoIjogIkV0WXZCakc0bVdseUd4REEr dE5KK1E9PSIsCiAgIm1lZGlhTGluayI6ICJodHRwczovL3d3dy5nb29nbGVhcGlzLmNvbS9kb3du bG9hZC9zdG9yYWdlL3YxL2IveW91ci1nY3AtcHJvamVjdC1kYnQtYXJ0aWZhY3RzL28vdGVzdCUy RnJ1bl9yZXN1bHRzLmpzb24/Z2VuZXJhdGlvbj0xNjI0ODgxMzMwMDQzNjg4JmFsdD1tZWRpYSIs CiAgImNyYzMyYyI6ICJZejdObHc9PSIsCiAgImV0YWciOiAiQ0tqMjZ0T2l1dkVDRUFFPSIKfQo="
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "kind": "storage#object",
+  "id": "your-gcp-project-dbt-artifacts/test/run_results.json/1624881330043688",
+  "selfLink": "https://www.googleapis.com/storage/v1/b/your-gcp-project-dbt-artifacts/o/test%2Frun_results.json",
+  "name": "test/run_results.json",
+  "bucket": "your-gcp-project-dbt-artifacts",
+  "generation": "1624881330043688",
+  "metageneration": "1",
+  "contentType": "application/json",
+  "timeCreated": "2021-06-28T11:55:30.108Z",
+  "updated": "2021-06-28T11:55:30.108Z",
+  "storageClass": "STANDARD",
+  "timeStorageClassUpdated": "2021-06-28T11:55:30.108Z",
+  "size": "12474",
+  "md5Hash": "EtYvBjG4mWlyGxDA+tNJ+Q==",
+  "mediaLink": "https://www.googleapis.com/download/storage/v1/b/your-gcp-project-dbt-artifacts/o/test%2Frun_results.json?generation=1624881330043688&alt=media",
+  "crc32c": "Yz7Nlw==",
+  "etag": "CKj26tOiuvECEAE="
+}
