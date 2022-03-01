@@ -38,7 +38,7 @@ Those are the classes to parse dbt artifacts.
 ### Sources
 - [SourcesV1](dbt_artifacts_parser/parsers/sources/sources_v1.py) for sources.json v1
 - [SourcesV2](dbt_artifacts_parser/parsers/sources/sources_v2.py) for sources.json v2
-- [SourcesV1](dbt_artifacts_parser/parsers/sources/sources_v1.py) for sources.json v3
+- [SourcesV3](dbt_artifacts_parser/parsers/sources/sources_v3.py) for sources.json v3
 
 ## Examples
 
