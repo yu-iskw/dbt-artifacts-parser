@@ -34,7 +34,7 @@ from dbt_artifacts_parser.parsers.run_results.run_results_v4 import RunResultsV4
 from dbt_artifacts_parser.parsers.sources.sources_v1 import SourcesV1
 from dbt_artifacts_parser.parsers.sources.sources_v2 import SourcesV2
 from dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
-from dbt_artifacts_parser.parsers.version_map import ArtifactsTypes
+from dbt_artifacts_parser.parsers.version_map import ArtifactTypes
 
 
 class TestDbtUtils(unittest.TestCase):
@@ -78,21 +78,21 @@ class TestDbtUtils(unittest.TestCase):
     def test_get_model_class(self):
         test_sets = [
             # v1
-            (ArtifactsTypes.CATALOG_V1, CatalogV1),
-            (ArtifactsTypes.MANIFEST_V1, ManifestV1),
-            (ArtifactsTypes.RUN_RESULTS_V1, RunResultsV1),
-            (ArtifactsTypes.SOURCES_V1, SourcesV1),
+            (ArtifactTypes.CATALOG_V1, CatalogV1),
+            (ArtifactTypes.MANIFEST_V1, ManifestV1),
+            (ArtifactTypes.RUN_RESULTS_V1, RunResultsV1),
+            (ArtifactTypes.SOURCES_V1, SourcesV1),
             # v2
-            (ArtifactsTypes.MANIFEST_V2, ManifestV2),
-            (ArtifactsTypes.RUN_RESULTS_V2, RunResultsV2),
-            (ArtifactsTypes.SOURCES_V2, SourcesV2),
+            (ArtifactTypes.MANIFEST_V2, ManifestV2),
+            (ArtifactTypes.RUN_RESULTS_V2, RunResultsV2),
+            (ArtifactTypes.SOURCES_V2, SourcesV2),
             # v3
-            (ArtifactsTypes.MANIFEST_V3, ManifestV3),
-            (ArtifactsTypes.RUN_RESULTS_V3, RunResultsV3),
-            (ArtifactsTypes.SOURCES_V3, SourcesV3),
+            (ArtifactTypes.MANIFEST_V3, ManifestV3),
+            (ArtifactTypes.RUN_RESULTS_V3, RunResultsV3),
+            (ArtifactTypes.SOURCES_V3, SourcesV3),
             # v4
-            (ArtifactsTypes.MANIFEST_V4, ManifestV4),
-            (ArtifactsTypes.RUN_RESULTS_V4, RunResultsV4),
+            (ArtifactTypes.MANIFEST_V4, ManifestV4),
+            (ArtifactTypes.RUN_RESULTS_V4, RunResultsV4),
         ]
         for (artifact_type, expected_class) in test_sets:
             klass = get_model_class(artifact_type=artifact_type)

@@ -15,10 +15,10 @@
 #  limitations under the License.
 #
 
-from typing import Optional, Type
+from typing import Type
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
-from dbt_artifacts_parser.parsers.version_map import ARTIFACT_INFO, ArtifactsTypes
+from dbt_artifacts_parser.parsers.version_map import ArtifactTypes
 
 
 def get_dbt_schema_version(artifact_json: dict) -> str:
@@ -37,33 +37,31 @@ def get_dbt_schema_version(artifact_json: dict) -> str:
     return artifact_json["metadata"]["dbt_schema_version"]
 
 
-def get_artifact_type_by_id(
-        dbt_schema_version: str) -> Optional["ArtifactsTypes"]:
-    """Get one of the enumeration values by the schema ID
+def get_artifact_type_by_id(schema_version: str) -> ArtifactTypes:
+    """Get artifact information by schema version
 
     Args:
-        dbt_schema_version (str): The schema ID
+        schema_version: dbt schema version
 
     Returns:
-        one of ArtifactsTypeV1 values
+        ArtifactsTypes
     """
-    for _, artifact_info in ARTIFACT_INFO.items():
-        if dbt_schema_version == artifact_info.dbt_schema_version:
-            return artifact_info.artifact_type
-    return None
+    for artifact_type in ArtifactTypes:
+        if schema_version == artifact_type.value.dbt_schema_version:
+            return artifact_type
+    raise ValueError(f"no such schema version: {schema_version}")
 
 
-def get_model_class(artifact_type: ArtifactsTypes) -> Type[BaseParserModel]:
+def get_model_class(artifact_type: ArtifactTypes) -> Type[BaseParserModel]:
     """Get the model class
 
     Args:
-        artifact_type (ArtifactsTypes): artifact type
+        artifact_type (ArtifactTypes): artifact type
 
     Returns:
         the model class
     """
-    # v1
-    for _, artifact_info in ARTIFACT_INFO.items():
-        if artifact_type == artifact_info.artifact_type:
-            return artifact_info.model_class
+    for artifact_type_ in ArtifactTypes:
+        if artifact_type == artifact_type_:
+            return artifact_type_.value.model_class
     raise ValueError(f"No such an artifact {artifact_type}")
