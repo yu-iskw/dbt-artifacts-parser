@@ -1,0 +1,39 @@
+name: Test publish (testpypi)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: ${{ env.pythonLocation }}
+          key: ${{ runner.os }}-python-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-publish
+      - name: Install Flit
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: bash dev/setup.sh
+      - name: Test publish
+        env:
+          # SEE https://packaging.python.org/en/latest/specifications/pypirc/?highlight=token#using-a-pypi-token
+          FLIT_USERNAME: __token__
+          FLIT_PASSWORD: ${{ secrets.TESTPYPI_API_TOKEN }}
+        run: bash dev/publish.sh "testpypi"
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"

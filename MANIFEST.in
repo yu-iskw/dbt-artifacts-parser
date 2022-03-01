@@ -1,0 +1,6 @@
+exclude .git
+exclude .gitignore
+exclude tests
+exclude .style.yapf
+exclude Makefile
+exclude pylintrc
