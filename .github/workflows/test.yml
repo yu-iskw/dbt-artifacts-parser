@@ -1,0 +1,43 @@
+name: Test python
+
+on:
+  pull_request:
+    paths:
+      - 'pyproject.toml'
+      - 'dbt_artifacts_parser/**/*.py'
+      - 'tests/**/*.py'
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
+      fail-fast: false
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: ${{ env.pythonLocation }}
+          key: ${{ runner.os }}-python-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-test
+      - name: Install Flit
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: bash dev/setup.sh
+      - name: Lint
+        if: ${{ matrix.python-version != '3.6' }}
+        run: bash dev/lint_python.sh
+      - name: Test
+        run: bash dev/test_python.sh
