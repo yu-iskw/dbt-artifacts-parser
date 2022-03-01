@@ -63,7 +63,9 @@ def parse_catalog_v1(catalog: dict) -> CatalogV1:
 #
 # manifest
 #
-def parse_manifest(manifest: dict) -> Union[ManifestV1, ManifestV2, ManifestV3, ManifestV4]:
+def parse_manifest(
+        manifest: dict
+) -> Union[ManifestV1, ManifestV2, ManifestV3, ManifestV4]:
     """Parse manifest.json
 
     Args:
@@ -119,7 +121,9 @@ def parse_manifest_v4(manifest: dict) -> ManifestV4:
 #
 # run-results
 #
-def parse_run_results(run_results: dict) -> Union[RunResultsV1, RunResultsV2, RunResultsV3, RunResultsV4]:
+def parse_run_results(
+    run_results: dict
+) -> Union[RunResultsV1, RunResultsV2, RunResultsV3, RunResultsV4]:
     """Parse run-results.json
 
     Args:

@@ -14,10 +14,12 @@ from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 
 class FreshnessMetadata(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
-    dbt_schema_version: Optional[str] = 'https://schemas.getdbt.com/dbt/sources/v1.json'
+    dbt_schema_version: Optional[
+        str] = 'https://schemas.getdbt.com/dbt/sources/v1.json'
     dbt_version: Optional[str] = '0.19.0'
     generated_at: Optional[datetime] = '2021-02-10T04:42:33.675309Z'
     invocation_id: Optional[Optional[str]] = None
@@ -29,6 +31,7 @@ class Status(Enum):
 
 
 class SourceFreshnessRuntimeError(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -51,6 +54,7 @@ class Period(Enum):
 
 
 class Time(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -59,6 +63,7 @@ class Time(BaseParserModel):
 
 
 class FreshnessThreshold(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -68,6 +73,7 @@ class FreshnessThreshold(BaseParserModel):
 
 
 class SourceFreshnessOutput(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -81,6 +87,7 @@ class SourceFreshnessOutput(BaseParserModel):
 
 
 class SourcesV1(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 

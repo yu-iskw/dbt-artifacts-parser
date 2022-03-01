@@ -14,6 +14,7 @@ from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 
 class BaseArtifactMetadata(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -45,6 +46,7 @@ class Status2(Enum):
 
 
 class TimingInfo(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -54,6 +56,7 @@ class TimingInfo(BaseParserModel):
 
 
 class RunResultOutput(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -67,6 +70,7 @@ class RunResultOutput(BaseParserModel):
 
 
 class RunResultsV1(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 

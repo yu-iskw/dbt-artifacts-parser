@@ -39,7 +39,8 @@ from dbt_artifacts_parser.parser import (
 class TestCatalogParser(unittest.TestCase):
 
     def test_parse_catalog(self):
-        path = os.path.join(get_project_root(), "tests", "resources", "v1", "jaffle_shop", "catalog.json")
+        path = os.path.join(get_project_root(), "tests", "resources", "v1",
+                            "jaffle_shop", "catalog.json")
         with open(path, "r", encoding="utf-8") as fp:
             catalog_dict = yaml.safe_load(fp)
             catalog_obj = parse_catalog(catalog_dict)
@@ -47,7 +48,8 @@ class TestCatalogParser(unittest.TestCase):
                          "https://schemas.getdbt.com/dbt/catalog/v1.json")
 
     def test_parse_catalog_v1(self):
-        path = os.path.join(get_project_root(), "tests", "resources", "v1", "jaffle_shop", "catalog.json")
+        path = os.path.join(get_project_root(), "tests", "resources", "v1",
+                            "jaffle_shop", "catalog.json")
         with open(path, "r", encoding="utf-8") as fp:
             catalog_dict = yaml.safe_load(fp)
             catalog_obj = parse_catalog_v1(catalog_dict)
@@ -60,15 +62,18 @@ class TestManifestParser(unittest.TestCase):
     def test_parse_manifest(self):
         versions = ["v1", "v2", "v3", "v4"]
         for version in versions:
-            path = os.path.join(get_project_root(), "tests", "resources", version, "jaffle_shop", "manifest.json")
+            path = os.path.join(get_project_root(), "tests", "resources",
+                                version, "jaffle_shop", "manifest.json")
             with open(path, "r", encoding="utf-8") as fp:
                 manifest_dict = yaml.safe_load(fp)
                 manifest_obj = parse_manifest(manifest_dict)
-            self.assertEqual(manifest_obj.metadata.dbt_schema_version,
-                             f"https://schemas.getdbt.com/dbt/manifest/{version}.json")
+            self.assertEqual(
+                manifest_obj.metadata.dbt_schema_version,
+                f"https://schemas.getdbt.com/dbt/manifest/{version}.json")
 
     def test_parse_manifest_v1(self):
-        path = os.path.join(get_project_root(), "tests", "resources", "v1", "jaffle_shop", "manifest.json")
+        path = os.path.join(get_project_root(), "tests", "resources", "v1",
+                            "jaffle_shop", "manifest.json")
         with open(path, "r", encoding="utf-8") as fp:
             manifest_dict = yaml.safe_load(fp)
             manifest_obj = parse_manifest_v1(manifest_dict)
@@ -76,7 +81,8 @@ class TestManifestParser(unittest.TestCase):
                          "https://schemas.getdbt.com/dbt/manifest/v1.json")
 
     def test_parse_manifest_v2(self):
-        path = os.path.join(get_project_root(), "tests", "resources", "v2", "jaffle_shop", "manifest.json")
+        path = os.path.join(get_project_root(), "tests", "resources", "v2",
+                            "jaffle_shop", "manifest.json")
         with open(path, "r", encoding="utf-8") as fp:
             manifest_dict = yaml.safe_load(fp)
             manifest_obj = parse_manifest_v2(manifest_dict)
@@ -84,7 +90,8 @@ class TestManifestParser(unittest.TestCase):
                          "https://schemas.getdbt.com/dbt/manifest/v2.json")
 
     def test_parse_manifest_v3(self):
-        path = os.path.join(get_project_root(), "tests", "resources", "v3", "jaffle_shop", "manifest.json")
+        path = os.path.join(get_project_root(), "tests", "resources", "v3",
+                            "jaffle_shop", "manifest.json")
         with open(path, "r", encoding="utf-8") as fp:
             manifest_dict = yaml.safe_load(fp)
             manifest_obj = parse_manifest_v3(manifest_dict)
@@ -92,7 +99,8 @@ class TestManifestParser(unittest.TestCase):
                          "https://schemas.getdbt.com/dbt/manifest/v3.json")
 
     def test_parse_manifest_v4(self):
-        path = os.path.join(get_project_root(), "tests", "resources", "v4", "jaffle_shop", "manifest.json")
+        path = os.path.join(get_project_root(), "tests", "resources", "v4",
+                            "jaffle_shop", "manifest.json")
         with open(path, "r", encoding="utf-8") as fp:
             manifest_dict = yaml.safe_load(fp)
             manifest_obj = parse_manifest_v4(manifest_dict)
@@ -101,18 +109,22 @@ class TestManifestParser(unittest.TestCase):
 
 
 class TestRunResultsParser(unittest.TestCase):
+
     def test_parse_run_results(self):
         versions = ["v1", "v2", "v3", "v4"]
         for version in versions:
-            path = os.path.join(get_project_root(), "tests", "resources", version, "jaffle_shop", "run_results.json")
+            path = os.path.join(get_project_root(), "tests", "resources",
+                                version, "jaffle_shop", "run_results.json")
             with open(path, "r", encoding="utf-8") as fp:
                 manifest_dict = yaml.safe_load(fp)
                 manifest_obj = parse_run_results(manifest_dict)
-            self.assertEqual(manifest_obj.metadata.dbt_schema_version,
-                             f"https://schemas.getdbt.com/dbt/run-results/{version}.json")
+            self.assertEqual(
+                manifest_obj.metadata.dbt_schema_version,
+                f"https://schemas.getdbt.com/dbt/run-results/{version}.json")
 
     def test_parse_run_results_v1(self):
-        path = os.path.join(get_project_root(), "tests", "resources", "v1", "jaffle_shop", "run_results.json")
+        path = os.path.join(get_project_root(), "tests", "resources", "v1",
+                            "jaffle_shop", "run_results.json")
         with open(path, "r", encoding="utf-8") as fp:
             run_results_dict = yaml.safe_load(fp)
             run_results_obj = parse_run_results_v1(run_results_dict)
@@ -120,7 +132,8 @@ class TestRunResultsParser(unittest.TestCase):
                          "https://schemas.getdbt.com/dbt/run-results/v1.json")
 
     def test_parse_run_results_v2(self):
-        path = os.path.join(get_project_root(), "tests", "resources", "v2", "jaffle_shop", "run_results.json")
+        path = os.path.join(get_project_root(), "tests", "resources", "v2",
+                            "jaffle_shop", "run_results.json")
         with open(path, "r", encoding="utf-8") as fp:
             run_results_dict = yaml.safe_load(fp)
             run_results_obj = parse_run_results_v2(run_results_dict)
@@ -128,7 +141,8 @@ class TestRunResultsParser(unittest.TestCase):
                          "https://schemas.getdbt.com/dbt/run-results/v2.json")
 
     def test_parse_run_results_v3(self):
-        path = os.path.join(get_project_root(), "tests", "resources", "v3", "jaffle_shop", "run_results.json")
+        path = os.path.join(get_project_root(), "tests", "resources", "v3",
+                            "jaffle_shop", "run_results.json")
         with open(path, "r", encoding="utf-8") as fp:
             run_results_dict = yaml.safe_load(fp)
             run_results_obj = parse_run_results_v3(run_results_dict)
@@ -136,12 +150,14 @@ class TestRunResultsParser(unittest.TestCase):
                          "https://schemas.getdbt.com/dbt/run-results/v3.json")
 
     def test_parse_run_results_v4(self):
-        path = os.path.join(get_project_root(), "tests", "resources", "v4", "jaffle_shop", "run_results.json")
+        path = os.path.join(get_project_root(), "tests", "resources", "v4",
+                            "jaffle_shop", "run_results.json")
         with open(path, "r", encoding="utf-8") as fp:
             run_results_dict = yaml.safe_load(fp)
             run_results_obj = parse_run_results_v4(run_results_dict)
         self.assertEqual(run_results_obj.metadata.dbt_schema_version,
                          "https://schemas.getdbt.com/dbt/run-results/v4.json")
+
 
 # TODO add fixtures of sources.json
 # class TestSourcesParser(unittest.TestCase):

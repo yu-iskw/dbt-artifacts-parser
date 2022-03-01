@@ -13,10 +13,12 @@ from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 
 class CatalogMetadata(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
-    dbt_schema_version: Optional[str] = 'https://schemas.getdbt.com/dbt/catalog/v1.json'
+    dbt_schema_version: Optional[
+        str] = 'https://schemas.getdbt.com/dbt/catalog/v1.json'
     dbt_version: Optional[str] = '0.19.0'
     generated_at: Optional[datetime] = '2021-02-10T04:42:33.680487Z'
     invocation_id: Optional[Optional[str]] = None
@@ -24,6 +26,7 @@ class CatalogMetadata(BaseParserModel):
 
 
 class TableMetadata(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -36,6 +39,7 @@ class TableMetadata(BaseParserModel):
 
 
 class ColumnMetadata(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -46,6 +50,7 @@ class ColumnMetadata(BaseParserModel):
 
 
 class StatsItem(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -57,6 +62,7 @@ class StatsItem(BaseParserModel):
 
 
 class CatalogTable(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -67,6 +73,7 @@ class CatalogTable(BaseParserModel):
 
 
 class CatalogV1(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 

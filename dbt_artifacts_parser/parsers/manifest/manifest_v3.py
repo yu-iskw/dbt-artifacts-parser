@@ -15,32 +15,27 @@ from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 
 class ManifestMetadata(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
     dbt_schema_version: Optional[
-        str
-    ] = 'https://schemas.getdbt.com/dbt/manifest/v3.json'
+        str] = 'https://schemas.getdbt.com/dbt/manifest/v3.json'
     dbt_version: Optional[str] = '0.21.0rc1'
     generated_at: Optional[datetime] = '2021-09-24T13:29:14.317700Z'
     invocation_id: Optional[Optional[str]] = None
     env: Optional[Dict[str, str]] = {}
     project_id: Optional[Optional[str]] = Field(
-        None, description='A unique identifier for the project'
-    )
-    user_id: Optional[
-        Optional[
-            constr(
-                regex=r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
-            )
-        ]
-    ] = Field(None, description='A unique identifier for the user')
+        None, description='A unique identifier for the project')
+    user_id: Optional[Optional[constr(
+        regex=r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
+    )]] = Field(None, description='A unique identifier for the user')
     send_anonymous_usage_stats: Optional[Optional[bool]] = Field(
-        None, description='Whether dbt is configured to send anonymous usage statistics'
-    )
+        None,
+        description=
+        'Whether dbt is configured to send anonymous usage statistics')
     adapter_type: Optional[Optional[str]] = Field(
-        None, description='The type name of the adapter'
-    )
+        None, description='The type name of the adapter')
 
 
 class ResourceType(Enum):
@@ -48,6 +43,7 @@ class ResourceType(Enum):
 
 
 class FileHash(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -56,6 +52,7 @@ class FileHash(BaseParserModel):
 
 
 class Hook(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -65,6 +62,7 @@ class Hook(BaseParserModel):
 
 
 class DependsOn(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -73,6 +71,7 @@ class DependsOn(BaseParserModel):
 
 
 class ColumnInfo(BaseParserModel):
+
     class Config:
         extra = Extra.allow
 
@@ -85,6 +84,7 @@ class ColumnInfo(BaseParserModel):
 
 
 class Docs(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -92,6 +92,7 @@ class Docs(BaseParserModel):
 
 
 class InjectedCTE(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -104,6 +105,7 @@ class ResourceType1(Enum):
 
 
 class TestConfig(BaseParserModel):
+
     class Config:
         extra = Extra.allow
 
@@ -114,9 +116,8 @@ class TestConfig(BaseParserModel):
     tags: Optional[Union[List[str], str]] = []
     meta: Optional[Dict[str, Any]] = {}
     materialized: Optional[str] = 'test'
-    severity: Optional[
-        constr(regex=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
-    ] = 'ERROR'
+    severity: Optional[constr(
+        regex=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')] = 'ERROR'
     store_failures: Optional[Optional[bool]] = None
     where: Optional[Optional[str]] = None
     limit: Optional[Optional[int]] = None
@@ -142,6 +143,7 @@ class ResourceType5(Enum):
 
 
 class TestMetadata(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -155,6 +157,7 @@ class ResourceType6(Enum):
 
 
 class SeedConfig(BaseParserModel):
+
     class Config:
         extra = Extra.allow
 
@@ -188,6 +191,7 @@ class ResourceType9(Enum):
 
 
 class ParsedDataTestNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -254,6 +258,7 @@ class ResourceType13(Enum):
 
 
 class ParsedSchemaTestNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -310,6 +315,7 @@ class ResourceType14(Enum):
 
 
 class ParsedSeedNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -365,6 +371,7 @@ class ResourceType15(Enum):
 
 
 class SnapshotConfig(BaseParserModel):
+
     class Config:
         extra = Extra.allow
 
@@ -395,6 +402,7 @@ class ResourceType16(Enum):
 
 
 class Quoting(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -405,10 +413,12 @@ class Quoting(BaseParserModel):
 
 
 class FreshnessMetadata(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
-    dbt_schema_version: Optional[str] = 'https://schemas.getdbt.com/dbt/sources/v2.json'
+    dbt_schema_version: Optional[
+        str] = 'https://schemas.getdbt.com/dbt/sources/v2.json'
     dbt_version: Optional[str] = '0.21.0rc1'
     generated_at: Optional[datetime] = '2021-09-24T13:29:14.312598Z'
     invocation_id: Optional[Optional[str]] = None
@@ -420,6 +430,7 @@ class Status(Enum):
 
 
 class SourceFreshnessRuntimeError(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -442,6 +453,7 @@ class Period(Enum):
 
 
 class Time(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -450,6 +462,7 @@ class Time(BaseParserModel):
 
 
 class TimingInfo(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -459,6 +472,7 @@ class TimingInfo(BaseParserModel):
 
 
 class ExternalPartition(BaseParserModel):
+
     class Config:
         extra = Extra.allow
 
@@ -469,6 +483,7 @@ class ExternalPartition(BaseParserModel):
 
 
 class SourceConfig(BaseParserModel):
+
     class Config:
         extra = Extra.allow
 
@@ -480,6 +495,7 @@ class ResourceType17(Enum):
 
 
 class MacroDependsOn(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -487,6 +503,7 @@ class MacroDependsOn(BaseParserModel):
 
 
 class MacroArgument(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -496,6 +513,7 @@ class MacroArgument(BaseParserModel):
 
 
 class ParsedDocumentation(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -537,6 +555,7 @@ class MaturityEnum(Enum):
 
 
 class ExposureOwner(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -545,6 +564,7 @@ class ExposureOwner(BaseParserModel):
 
 
 class NodeConfig(BaseParserModel):
+
     class Config:
         extra = Extra.allow
 
@@ -565,6 +585,7 @@ class NodeConfig(BaseParserModel):
 
 
 class CompiledDataTestNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -620,6 +641,7 @@ class CompiledDataTestNode(BaseParserModel):
 
 
 class CompiledModelNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -675,6 +697,7 @@ class CompiledModelNode(BaseParserModel):
 
 
 class CompiledHookNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -731,6 +754,7 @@ class CompiledHookNode(BaseParserModel):
 
 
 class CompiledRPCNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -786,6 +810,7 @@ class CompiledRPCNode(BaseParserModel):
 
 
 class CompiledSchemaTestNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -843,6 +868,7 @@ class CompiledSchemaTestNode(BaseParserModel):
 
 
 class CompiledSeedNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -899,6 +925,7 @@ class CompiledSeedNode(BaseParserModel):
 
 
 class CompiledSnapshotNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -954,6 +981,7 @@ class CompiledSnapshotNode(BaseParserModel):
 
 
 class ParsedAnalysisNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -1004,6 +1032,7 @@ class ParsedAnalysisNode(BaseParserModel):
 
 
 class ParsedHookNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -1055,6 +1084,7 @@ class ParsedHookNode(BaseParserModel):
 
 
 class ParsedModelNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -1105,6 +1135,7 @@ class ParsedModelNode(BaseParserModel):
 
 
 class ParsedRPCNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -1155,6 +1186,7 @@ class ParsedRPCNode(BaseParserModel):
 
 
 class ParsedSnapshotNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -1190,6 +1222,7 @@ class ParsedSnapshotNode(BaseParserModel):
 
 
 class FreshnessThreshold(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -1199,6 +1232,7 @@ class FreshnessThreshold(BaseParserModel):
 
 
 class SourceFreshnessOutput(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -1215,6 +1249,7 @@ class SourceFreshnessOutput(BaseParserModel):
 
 
 class ExternalTable(BaseParserModel):
+
     class Config:
         extra = Extra.allow
 
@@ -1226,6 +1261,7 @@ class ExternalTable(BaseParserModel):
 
 
 class ParsedMacro(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -1248,6 +1284,7 @@ class ParsedMacro(BaseParserModel):
 
 
 class ParsedExposure(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -1273,6 +1310,7 @@ class ParsedExposure(BaseParserModel):
 
 
 class CompiledAnalysisNode(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -1328,6 +1366,7 @@ class CompiledAnalysisNode(BaseParserModel):
 
 
 class ParsedSourceDefinition(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -1367,76 +1406,49 @@ class ParsedSourceDefinition(BaseParserModel):
 
 
 class ManifestV3(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
-    metadata: ManifestMetadata = Field(..., description='Metadata about the manifest')
+    metadata: ManifestMetadata = Field(
+        ..., description='Metadata about the manifest')
     nodes: Dict[
-        str,
-        Union[
-            CompiledAnalysisNode,
-            CompiledDataTestNode,
-            CompiledModelNode,
-            CompiledHookNode,
-            CompiledRPCNode,
-            CompiledSchemaTestNode,
-            CompiledSeedNode,
-            CompiledSnapshotNode,
-            ParsedAnalysisNode,
-            ParsedDataTestNode,
-            ParsedHookNode,
-            ParsedModelNode,
-            ParsedRPCNode,
-            ParsedSchemaTestNode,
-            ParsedSeedNode,
-            ParsedSnapshotNode,
-        ],
+        str, Union[CompiledAnalysisNode, CompiledDataTestNode,
+                   CompiledModelNode, CompiledHookNode, CompiledRPCNode,
+                   CompiledSchemaTestNode, CompiledSeedNode,
+                   CompiledSnapshotNode, ParsedAnalysisNode, ParsedDataTestNode,
+                   ParsedHookNode, ParsedModelNode, ParsedRPCNode,
+                   ParsedSchemaTestNode, ParsedSeedNode, ParsedSnapshotNode,],
     ] = Field(
-        ..., description='The nodes defined in the dbt project and its dependencies'
-    )
+        ...,
+        description='The nodes defined in the dbt project and its dependencies')
     sources: Dict[str, ParsedSourceDefinition] = Field(
-        ..., description='The sources defined in the dbt project and its dependencies'
+        ...,
+        description='The sources defined in the dbt project and its dependencies'
     )
     macros: Dict[str, ParsedMacro] = Field(
-        ..., description='The macros defined in the dbt project and its dependencies'
+        ...,
+        description='The macros defined in the dbt project and its dependencies'
     )
     docs: Dict[str, ParsedDocumentation] = Field(
-        ..., description='The docs defined in the dbt project and its dependencies'
-    )
+        ...,
+        description='The docs defined in the dbt project and its dependencies')
     exposures: Dict[str, ParsedExposure] = Field(
-        ..., description='The exposures defined in the dbt project and its dependencies'
-    )
+        ...,
+        description=
+        'The exposures defined in the dbt project and its dependencies')
     selectors: Dict[str, Any] = Field(
-        ..., description='The selectors defined in selectors.yml'
-    )
-    disabled: Optional[
-        Optional[
-            List[
-                Union[
-                    CompiledAnalysisNode,
-                    CompiledDataTestNode,
-                    CompiledModelNode,
-                    CompiledHookNode,
-                    CompiledRPCNode,
-                    CompiledSchemaTestNode,
-                    CompiledSeedNode,
-                    CompiledSnapshotNode,
-                    ParsedAnalysisNode,
-                    ParsedDataTestNode,
-                    ParsedHookNode,
-                    ParsedModelNode,
-                    ParsedRPCNode,
-                    ParsedSchemaTestNode,
-                    ParsedSeedNode,
-                    ParsedSnapshotNode,
-                    ParsedSourceDefinition,
-                ]
-            ]
-        ]
-    ] = Field(None, description='A list of the disabled nodes in the target')
+        ..., description='The selectors defined in selectors.yml')
+    disabled: Optional[Optional[List[
+        Union[CompiledAnalysisNode, CompiledDataTestNode, CompiledModelNode,
+              CompiledHookNode, CompiledRPCNode, CompiledSchemaTestNode,
+              CompiledSeedNode, CompiledSnapshotNode, ParsedAnalysisNode,
+              ParsedDataTestNode, ParsedHookNode, ParsedModelNode,
+              ParsedRPCNode, ParsedSchemaTestNode, ParsedSeedNode,
+              ParsedSnapshotNode, ParsedSourceDefinition,]]]] = Field(
+                  None,
+                  description='A list of the disabled nodes in the target')
     parent_map: Optional[Optional[Dict[str, List[str]]]] = Field(
-        None, description='A mapping from\xa0child nodes to their dependencies'
-    )
+        None, description='A mapping from\xa0child nodes to their dependencies')
     child_map: Optional[Optional[Dict[str, List[str]]]] = Field(
-        None, description='A mapping from parent nodes to their dependents'
-    )
+        None, description='A mapping from parent nodes to their dependents')

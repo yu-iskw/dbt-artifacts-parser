@@ -14,6 +14,7 @@ from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 
 class BaseArtifactMetadata(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -46,6 +47,7 @@ class Status2(Enum):
 
 
 class TimingInfo(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -55,10 +57,12 @@ class TimingInfo(BaseParserModel):
 
 
 class FreshnessMetadata(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
-    dbt_schema_version: Optional[str] = 'https://schemas.getdbt.com/dbt/sources/v3.json'
+    dbt_schema_version: Optional[
+        str] = 'https://schemas.getdbt.com/dbt/sources/v3.json'
     dbt_version: Optional[str] = '1.0.0b2'
     generated_at: Optional[datetime] = '2021-11-02T20:18:06.796684Z'
     invocation_id: Optional[Optional[str]] = None
@@ -70,6 +74,7 @@ class Status3(Enum):
 
 
 class SourceFreshnessRuntimeError(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -92,6 +97,7 @@ class PeriodEnum(Enum):
 
 
 class Time(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -100,6 +106,7 @@ class Time(BaseParserModel):
 
 
 class RunResultOutput(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -114,6 +121,7 @@ class RunResultOutput(BaseParserModel):
 
 
 class FreshnessThreshold(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -123,6 +131,7 @@ class FreshnessThreshold(BaseParserModel):
 
 
 class RunResultsV4(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
@@ -133,6 +142,7 @@ class RunResultsV4(BaseParserModel):
 
 
 class SourceFreshnessOutput(BaseParserModel):
+
     class Config:
         extra = Extra.forbid
 
