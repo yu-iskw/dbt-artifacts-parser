@@ -40,7 +40,7 @@ Those are the classes to parse dbt artifacts.
 - [SourcesV2](dbt_artifacts_parser/parsers/sources/sources_v2.py) for sources.json v2
 - [SourcesV1](dbt_artifacts_parser/parsers/sources/sources_v1.py) for sources.json v3
 
-## Example
+## Examples
 
 ### Parse catalog.json
 ```python
