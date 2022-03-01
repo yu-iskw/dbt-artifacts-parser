@@ -37,3 +37,27 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+
+  test-published-package:
+    needs:
+      - publish
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - name: Install packages
+        run: |
+          python3 -m pip install --index-url https://test.pypi.org/simple/ -U dbt-artifacts-parser
+      - name: Test pacakge
+        run: |
+          python -c 'import dbt_artifacts_parser; print(dbt_artifacts_parser.__version__)'
