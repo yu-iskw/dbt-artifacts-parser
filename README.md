@@ -17,6 +17,29 @@ It enables us to deal with `catalog.json`, `manifest.json`, `run-results.json` a
 pip install -U dbt-artifacts-parser
 ```
 
+## Python classes
+Those are the classes to parse dbt artifacts.
+
+### Catalog
+- [CatalogV1](dbt_artifacts_parser/parsers/catalog/catalog_v1.py)
+
+### Manifest
+- [ManifestV1](dbt_artifacts_parser/parsers/manifest/manifest_v1.py)
+- [ManifestV2](dbt_artifacts_parser/parsers/manifest/manifest_v2.py)
+- [ManifestV3](dbt_artifacts_parser/parsers/manifest/manifest_v3.py)
+- [ManifestV4](dbt_artifacts_parser/parsers/manifest/manifest_v4.py)
+
+### Run Results
+- [RunResultsV1](dbt_artifacts_parser/parsers/manifest/manifest_v1.py)
+- [RunResultsV2](dbt_artifacts_parser/parsers/manifest/manifest_v2.py)
+- [RunResultsV3](dbt_artifacts_parser/parsers/manifest/manifest_v3.py)
+- [RunResultsV4](dbt_artifacts_parser/parsers/manifest/manifest_v4.py)
+
+### Sources
+- [SourcesV1](dbt_artifacts_parser/parsers/sources/sources_v1.py)
+- [SourcesV2](dbt_artifacts_parser/parsers/sources/sources_v2.py)
+- [SourcesV1](dbt_artifacts_parser/parsers/sources/sources_v1.py)
+
 ## Example
 
 ### Parse catalog.json
