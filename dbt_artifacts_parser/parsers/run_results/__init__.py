@@ -14,7 +14,3 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-"""
-A dbt artifacts parser in python
-"""
-__version__ = "0.1.0-rc1"

@@ -142,6 +142,7 @@ disable=apply-builtin,
         missing-module-docstring,
         missing-class-docstring,
         consider-using-f-string,
+        invalid-name,
 
 
 [REPORTS]
