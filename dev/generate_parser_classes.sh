@@ -32,11 +32,13 @@ for ver in "${catalog_versions[@]}"
 do
   # Convert `v1` to `V1`
   upper_ver=${ver^v}
+  destination="${MODULE_ROOT}/dbt_artifacts_parser/parsers/catalog/catalog_${ver}.py"
+  echo "Generate ${destination}"
   datamodel-codegen  --input-file-type jsonschema \
     --base-class "$base_class" \
     --class-name "Catalog${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/catalog/catalog_${ver}.json" \
-    --output "${MODULE_ROOT}/dbt_artifacts_parser/parsers/catalog/catalog_${ver}.py"
+    --output "${destination}"
 done
 
 #
@@ -47,11 +49,13 @@ for ver in "${manifest_versions[@]}"
 do
   # Convert `v1` to `V1`
   upper_ver=${ver^v}
+  destination="${MODULE_ROOT}/dbt_artifacts_parser/parsers/manifest/manifest_${ver}.py"
+  echo "Generate ${destination}"
   datamodel-codegen  --input-file-type jsonschema \
     --base-class "$base_class" \
     --class-name "Manifest${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/manifest/manifest_${ver}.json" \
-    --output "${MODULE_ROOT}/dbt_artifacts_parser/parsers/manifest/manifest_${ver}.py"
+    --output "${destination}"
 done
 
 #
@@ -62,11 +66,13 @@ for ver in "${run_results_versions[@]}"
 do
   # Convert `v1` to `V1`
   upper_ver=${ver^v}
+  destination="${MODULE_ROOT}/dbt_artifacts_parser/parsers/run_results/run_results_${ver}.py"
+  echo "Generate ${destination}"
   datamodel-codegen  --input-file-type jsonschema \
     --base-class "$base_class" \
     --class-name "RunResults${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/run-results/run-results_${ver}.json" \
-    --output "${MODULE_ROOT}/dbt_artifacts_parser/parsers/run_results/run_results_${ver}.py"
+    --output "${destination}"
 done
 
 #
@@ -77,9 +83,11 @@ for ver in "${sources_versions[@]}"
 do
   # Convert `v1` to `V1`
   upper_ver=${ver^v}
+  destination="${MODULE_ROOT}/dbt_artifacts_parser/parsers/sources/sources_${ver}.py"
+  echo "Generate ${destination}"
   datamodel-codegen  --input-file-type jsonschema \
     --base-class "$base_class" \
     --class-name "Sources${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/sources/sources_${ver}.json" \
-    --output "${MODULE_ROOT}/dbt_artifacts_parser/parsers/sources/sources_${ver}.py"
+    --output "${destination}"
 done

@@ -37,7 +37,8 @@ def get_dbt_schema_version(artifact_json: dict) -> str:
     return artifact_json["metadata"]["dbt_schema_version"]
 
 
-def get_artifact_type_by_id(dbt_schema_version: str) -> Optional["ArtifactsTypes"]:
+def get_artifact_type_by_id(
+        dbt_schema_version: str) -> Optional["ArtifactsTypes"]:
     """Get one of the enumeration values by the schema ID
 
     Args:
