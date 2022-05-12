@@ -2,6 +2,10 @@ name: Test publish (testpypi)
 
 on:
   workflow_dispatch:
+    inputs:
+      description: "dbt-artifacts-parser"
+      required: true
+
 
 jobs:
   publish:
@@ -45,6 +49,9 @@ jobs:
     defaults:
       run:
         shell: bash
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
     steps:
       - name: Dump GitHub context
         env:
@@ -54,10 +61,15 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.9"
+          python-version: "${{ matrix.python-version }}"
       - name: Install packages
         run: |
-          python3 -m pip install --index-url https://test.pypi.org/simple/ -U dbt-artifacts-parser
+          python3 -m pip install -U pip~=22.1
+          python3 -m pip install \
+            --index-url https://test.pypi.org/simple/ \
+            --force-reinstall \
+            --use-feature=2020-resolver \
+            -U dbt-artifacts-parser=="${{ github.event.inputs.name }}"
       - name: Test pacakge
         run: |
           python -c 'import dbt_artifacts_parser; print(dbt_artifacts_parser.__version__)'
