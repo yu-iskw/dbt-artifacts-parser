@@ -26,6 +26,7 @@ from dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
 from dbt_artifacts_parser.parsers.manifest.manifest_v2 import ManifestV2
 from dbt_artifacts_parser.parsers.manifest.manifest_v3 import ManifestV3
 from dbt_artifacts_parser.parsers.manifest.manifest_v4 import ManifestV4
+from dbt_artifacts_parser.parsers.manifest.manifest_v5 import ManifestV5
 
 from dbt_artifacts_parser.parsers.run_results.run_results_v1 import RunResultsV1
 from dbt_artifacts_parser.parsers.run_results.run_results_v2 import RunResultsV2
@@ -57,6 +58,8 @@ class ArtifactTypes(Enum):
         "https://schemas.getdbt.com/dbt/manifest/v3.json", ManifestV3)
     MANIFEST_V4 = ArtifactType(
         "https://schemas.getdbt.com/dbt/manifest/v4.json", ManifestV4)
+    MANIFEST_V5 = ArtifactType(
+        "https://schemas.getdbt.com/dbt/manifest/v5.json", ManifestV5)
     # RunResults
     RUN_RESULTS_V1 = ArtifactType(
         "https://schemas.getdbt.com/dbt/run-results/v1.json", RunResultsV1)
