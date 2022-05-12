@@ -44,7 +44,7 @@ done
 #
 # manifest
 #
-manifest_versions=("v1" "v2" "v3" "v4")
+manifest_versions=("v1" "v2" "v3" "v4" "v5")
 for ver in "${manifest_versions[@]}"
 do
   # Convert `v1` to `V1`

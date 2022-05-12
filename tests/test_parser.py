@@ -32,7 +32,7 @@ from dbt_artifacts_parser.parser import (
     parse_run_results_v1,
     parse_run_results_v2,
     parse_run_results_v3,
-    parse_run_results_v4,
+    parse_run_results_v4, parse_manifest_v5,
 )
 
 
@@ -106,6 +106,15 @@ class TestManifestParser(unittest.TestCase):
             manifest_obj = parse_manifest_v4(manifest_dict)
         self.assertEqual(manifest_obj.metadata.dbt_schema_version,
                          "https://schemas.getdbt.com/dbt/manifest/v4.json")
+
+    def test_parse_manifest_v5(self):
+        path = os.path.join(get_project_root(), "tests", "resources", "v5",
+                            "jaffle_shop", "manifest.json")
+        with open(path, "r", encoding="utf-8") as fp:
+            manifest_dict = yaml.safe_load(fp)
+            manifest_obj = parse_manifest_v5(manifest_dict)
+        self.assertEqual(manifest_obj.metadata.dbt_schema_version,
+                         "https://schemas.getdbt.com/dbt/manifest/v5.json")
 
 
 class TestRunResultsParser(unittest.TestCase):
