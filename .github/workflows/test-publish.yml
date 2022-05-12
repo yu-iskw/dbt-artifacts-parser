@@ -3,7 +3,7 @@ name: Test publish (testpypi)
 on:
   workflow_dispatch:
     inputs:
-      description: "dbt-artifacts-parser"
+      description: "dbt-artifacts-parser version"
       required: true
 
 
