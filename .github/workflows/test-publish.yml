@@ -3,8 +3,9 @@ name: Test publish (testpypi)
 on:
   workflow_dispatch:
     inputs:
-      description: "dbt-artifacts-parser version"
-      required: true
+      dbt_artifacts_parser_version:
+        description: "dbt-artifacts-parser version"
+        required: true
 
 
 jobs:
@@ -51,7 +52,7 @@ jobs:
         shell: bash
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        python-version: [ "3.7", "3.8", "3.9", "3.10" ]
     steps:
       - name: Dump GitHub context
         env:
@@ -69,7 +70,7 @@ jobs:
             --index-url https://test.pypi.org/simple/ \
             --force-reinstall \
             --use-feature=2020-resolver \
-            -U dbt-artifacts-parser=="${{ github.event.inputs.name }}"
+            -U dbt-artifacts-parser=="${{ github.event.inputs.dbt_artifacts_parser_version }}"
       - name: Test pacakge
         run: |
           python -c 'import dbt_artifacts_parser; print(dbt_artifacts_parser.__version__)'
