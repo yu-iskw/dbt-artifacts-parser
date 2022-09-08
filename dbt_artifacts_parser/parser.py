@@ -24,6 +24,7 @@ from dbt_artifacts_parser.parsers.manifest.manifest_v2 import ManifestV2
 from dbt_artifacts_parser.parsers.manifest.manifest_v3 import ManifestV3
 from dbt_artifacts_parser.parsers.manifest.manifest_v4 import ManifestV4
 from dbt_artifacts_parser.parsers.manifest.manifest_v5 import ManifestV5
+from dbt_artifacts_parser.parsers.manifest.manifest_v6 import ManifestV6
 from dbt_artifacts_parser.parsers.run_results.run_results_v1 import RunResultsV1
 from dbt_artifacts_parser.parsers.run_results.run_results_v2 import RunResultsV2
 from dbt_artifacts_parser.parsers.run_results.run_results_v3 import RunResultsV3
@@ -65,8 +66,9 @@ def parse_catalog_v1(catalog: dict) -> CatalogV1:
 # manifest
 #
 def parse_manifest(
-        manifest: dict
-) -> Union[ManifestV1, ManifestV2, ManifestV3, ManifestV4]:
+    manifest: dict
+) -> Union[ManifestV1, ManifestV2, ManifestV3, ManifestV4, ManifestV5,
+           ManifestV6]:
     """Parse manifest.json
 
     Args:
@@ -86,6 +88,8 @@ def parse_manifest(
         return ManifestV4(**manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V5.value.dbt_schema_version:
         return ManifestV5(**manifest)
+    elif dbt_schema_version == ArtifactTypes.MANIFEST_V6.value.dbt_schema_version:
+        return ManifestV6(**manifest)
     raise ValueError("Not a soft of manifest.json")
 
 
@@ -129,11 +133,19 @@ def parse_manifest_v5(manifest: dict) -> ManifestV5:
     raise ValueError("Not a manifest.json v5")
 
 
+def parse_manifest_v6(manifest: dict) -> ManifestV6:
+    """Parse manifest.json ver.6"""
+    dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
+    if dbt_schema_version == ArtifactTypes.MANIFEST_V6.value.dbt_schema_version:
+        return ManifestV6(**manifest)
+    raise ValueError("Not a manifest.json v6")
+
+
 #
 # run-results
 #
 def parse_run_results(
-        run_results: dict
+    run_results: dict
 ) -> Union[RunResultsV1, RunResultsV2, RunResultsV3, RunResultsV4]:
     """Parse run-results.json
 
