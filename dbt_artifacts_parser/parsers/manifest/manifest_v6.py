@@ -8,10 +8,12 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import BaseModel, Extra, Field, constr
+# pylint: disable=no-name-in-module
+from pydantic import Extra, Field, constr
+from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 
-class ManifestMetadata(BaseModel):
+class ManifestMetadata(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -40,7 +42,7 @@ class ResourceType(Enum):
     analysis = 'analysis'
 
 
-class FileHash(BaseModel):
+class FileHash(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -49,7 +51,7 @@ class FileHash(BaseModel):
     checksum: str
 
 
-class Hook(BaseModel):
+class Hook(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -59,7 +61,7 @@ class Hook(BaseModel):
     index: Optional[Optional[int]] = None
 
 
-class DependsOn(BaseModel):
+class DependsOn(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -68,7 +70,7 @@ class DependsOn(BaseModel):
     nodes: Optional[List[str]] = []
 
 
-class ColumnInfo(BaseModel):
+class ColumnInfo(BaseParserModel):
 
     class Config:
         extra = Extra.allow
@@ -81,7 +83,7 @@ class ColumnInfo(BaseModel):
     tags: Optional[List[str]] = []
 
 
-class Docs(BaseModel):
+class Docs(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -89,7 +91,7 @@ class Docs(BaseModel):
     show: Optional[bool] = True
 
 
-class InjectedCTE(BaseModel):
+class InjectedCTE(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -102,7 +104,7 @@ class ResourceType1(Enum):
     test = 'test'
 
 
-class TestConfig(BaseModel):
+class TestConfig(BaseParserModel):
 
     class Config:
         extra = Extra.allow
@@ -144,7 +146,7 @@ class ResourceType6(Enum):
     test = 'test'
 
 
-class TestMetadata(BaseModel):
+class TestMetadata(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -158,7 +160,7 @@ class ResourceType7(Enum):
     seed = 'seed'
 
 
-class SeedConfig(BaseModel):
+class SeedConfig(BaseParserModel):
 
     class Config:
         extra = Extra.allow
@@ -194,7 +196,7 @@ class ResourceType10(Enum):
     test = 'test'
 
 
-class ParsedSingularTestNode(BaseModel):
+class ParsedSingularTestNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -266,7 +268,7 @@ class ResourceType15(Enum):
     test = 'test'
 
 
-class ParsedGenericTestNode(BaseModel):
+class ParsedGenericTestNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -325,7 +327,7 @@ class ResourceType16(Enum):
     seed = 'seed'
 
 
-class ParsedSeedNode(BaseModel):
+class ParsedSeedNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -384,7 +386,7 @@ class ResourceType17(Enum):
     snapshot = 'snapshot'
 
 
-class SnapshotConfig(BaseModel):
+class SnapshotConfig(BaseParserModel):
 
     class Config:
         extra = Extra.allow
@@ -416,7 +418,7 @@ class ResourceType18(Enum):
     source = 'source'
 
 
-class Quoting(BaseModel):
+class Quoting(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -427,7 +429,7 @@ class Quoting(BaseModel):
     column: Optional[Optional[bool]] = None
 
 
-class FreshnessMetadata(BaseModel):
+class FreshnessMetadata(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -445,7 +447,7 @@ class Status(Enum):
     runtime_error = 'runtime error'
 
 
-class SourceFreshnessRuntimeError(BaseModel):
+class SourceFreshnessRuntimeError(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -468,7 +470,7 @@ class PeriodEnum(Enum):
     day = 'day'
 
 
-class Time(BaseModel):
+class Time(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -477,7 +479,7 @@ class Time(BaseModel):
     period: Optional[Optional[PeriodEnum]] = None
 
 
-class TimingInfo(BaseModel):
+class TimingInfo(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -487,7 +489,7 @@ class TimingInfo(BaseModel):
     completed_at: Optional[Optional[datetime]] = None
 
 
-class ExternalPartition(BaseModel):
+class ExternalPartition(BaseParserModel):
 
     class Config:
         extra = Extra.allow
@@ -498,7 +500,7 @@ class ExternalPartition(BaseModel):
     meta: Optional[Dict[str, Any]] = {}
 
 
-class SourceConfig(BaseModel):
+class SourceConfig(BaseParserModel):
 
     class Config:
         extra = Extra.allow
@@ -510,7 +512,7 @@ class ResourceType19(Enum):
     macro = 'macro'
 
 
-class MacroDependsOn(BaseModel):
+class MacroDependsOn(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -518,7 +520,7 @@ class MacroDependsOn(BaseModel):
     macros: Optional[List[str]] = []
 
 
-class MacroArgument(BaseModel):
+class MacroArgument(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -528,7 +530,7 @@ class MacroArgument(BaseModel):
     description: Optional[str] = ''
 
 
-class ParsedDocumentation(BaseModel):
+class ParsedDocumentation(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -572,7 +574,7 @@ class MaturityEnum(Enum):
     high = 'high'
 
 
-class ExposureOwner(BaseModel):
+class ExposureOwner(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -597,7 +599,7 @@ class ResourceType21(Enum):
     metric = 'metric'
 
 
-class MetricFilter(BaseModel):
+class MetricFilter(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -607,7 +609,7 @@ class MetricFilter(BaseModel):
     value: str
 
 
-class NodeConfig(BaseModel):
+class NodeConfig(BaseParserModel):
 
     class Config:
         extra = Extra.allow
@@ -630,7 +632,7 @@ class NodeConfig(BaseModel):
     grants: Optional[Dict[str, Any]] = {}
 
 
-class CompiledSingularTestNode(BaseModel):
+class CompiledSingularTestNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -687,7 +689,7 @@ class CompiledSingularTestNode(BaseModel):
     relation_name: Optional[Optional[str]] = None
 
 
-class CompiledModelNode(BaseModel):
+class CompiledModelNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -746,7 +748,7 @@ class CompiledModelNode(BaseModel):
     relation_name: Optional[Optional[str]] = None
 
 
-class CompiledHookNode(BaseModel):
+class CompiledHookNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -806,7 +808,7 @@ class CompiledHookNode(BaseModel):
     index: Optional[Optional[int]] = None
 
 
-class CompiledRPCNode(BaseModel):
+class CompiledRPCNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -865,7 +867,7 @@ class CompiledRPCNode(BaseModel):
     relation_name: Optional[Optional[str]] = None
 
 
-class CompiledSqlNode(BaseModel):
+class CompiledSqlNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -924,7 +926,7 @@ class CompiledSqlNode(BaseModel):
     relation_name: Optional[Optional[str]] = None
 
 
-class CompiledGenericTestNode(BaseModel):
+class CompiledGenericTestNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -984,7 +986,7 @@ class CompiledGenericTestNode(BaseModel):
     file_key_name: Optional[Optional[str]] = None
 
 
-class CompiledSeedNode(BaseModel):
+class CompiledSeedNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -1044,7 +1046,7 @@ class CompiledSeedNode(BaseModel):
     relation_name: Optional[Optional[str]] = None
 
 
-class CompiledSnapshotNode(BaseModel):
+class CompiledSnapshotNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -1103,7 +1105,7 @@ class CompiledSnapshotNode(BaseModel):
     relation_name: Optional[Optional[str]] = None
 
 
-class ParsedAnalysisNode(BaseModel):
+class ParsedAnalysisNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -1157,7 +1159,7 @@ class ParsedAnalysisNode(BaseModel):
     config_call_dict: Optional[Dict[str, Any]] = {}
 
 
-class ParsedHookNode(BaseModel):
+class ParsedHookNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -1212,7 +1214,7 @@ class ParsedHookNode(BaseModel):
     index: Optional[Optional[int]] = None
 
 
-class ParsedModelNode(BaseModel):
+class ParsedModelNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -1266,7 +1268,7 @@ class ParsedModelNode(BaseModel):
     config_call_dict: Optional[Dict[str, Any]] = {}
 
 
-class ParsedRPCNode(BaseModel):
+class ParsedRPCNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -1320,7 +1322,7 @@ class ParsedRPCNode(BaseModel):
     config_call_dict: Optional[Dict[str, Any]] = {}
 
 
-class ParsedSqlNode(BaseModel):
+class ParsedSqlNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -1374,7 +1376,7 @@ class ParsedSqlNode(BaseModel):
     config_call_dict: Optional[Dict[str, Any]] = {}
 
 
-class ParsedSnapshotNode(BaseModel):
+class ParsedSnapshotNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -1411,7 +1413,7 @@ class ParsedSnapshotNode(BaseModel):
     config_call_dict: Optional[Dict[str, Any]] = {}
 
 
-class FreshnessThreshold(BaseModel):
+class FreshnessThreshold(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -1421,7 +1423,7 @@ class FreshnessThreshold(BaseModel):
     filter: Optional[Optional[str]] = None
 
 
-class SourceFreshnessOutput(BaseModel):
+class SourceFreshnessOutput(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -1438,7 +1440,7 @@ class SourceFreshnessOutput(BaseModel):
     execution_time: float
 
 
-class ExternalTable(BaseModel):
+class ExternalTable(BaseParserModel):
 
     class Config:
         extra = Extra.allow
@@ -1450,7 +1452,7 @@ class ExternalTable(BaseModel):
     partitions: Optional[Optional[List[ExternalPartition]]] = None
 
 
-class ParsedMacro(BaseModel):
+class ParsedMacro(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -1473,7 +1475,7 @@ class ParsedMacro(BaseModel):
     created_at: Optional[float] = 1658840564.1967978
 
 
-class ParsedExposure(BaseModel):
+class ParsedExposure(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -1499,7 +1501,7 @@ class ParsedExposure(BaseModel):
     created_at: Optional[float] = 1658840564.197692
 
 
-class ParsedMetric(BaseModel):
+class ParsedMetric(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -1531,7 +1533,7 @@ class ParsedMetric(BaseModel):
     created_at: Optional[float] = 1658840564.1985369
 
 
-class CompiledAnalysisNode(BaseModel):
+class CompiledAnalysisNode(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -1590,7 +1592,7 @@ class CompiledAnalysisNode(BaseModel):
     relation_name: Optional[Optional[str]] = None
 
 
-class ParsedSourceDefinition(BaseModel):
+class ParsedSourceDefinition(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
@@ -1630,7 +1632,7 @@ class ParsedSourceDefinition(BaseModel):
     created_at: Optional[float] = 1658840564.196107
 
 
-class ManifestV6(BaseModel):
+class ManifestV6(BaseParserModel):
 
     class Config:
         extra = Extra.forbid
