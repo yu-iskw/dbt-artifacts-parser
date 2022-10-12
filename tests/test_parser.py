@@ -21,19 +21,10 @@ import yaml
 from dbt_artifacts_parser.utils import get_project_root
 
 from dbt_artifacts_parser.parser import (
-    parse_catalog,
-    parse_catalog_v1,
-    parse_manifest,
-    parse_manifest_v1,
-    parse_manifest_v2,
-    parse_manifest_v3,
-    parse_manifest_v4,
-    parse_run_results,
-    parse_run_results_v1,
-    parse_run_results_v2,
-    parse_run_results_v3,
-    parse_run_results_v4, parse_manifest_v5,
-)
+    parse_catalog, parse_catalog_v1, parse_manifest, parse_manifest_v1,
+    parse_manifest_v2, parse_manifest_v3, parse_manifest_v4, parse_run_results,
+    parse_run_results_v1, parse_run_results_v2, parse_run_results_v3,
+    parse_run_results_v4, parse_manifest_v5, parse_manifest_v6)
 
 
 class TestCatalogParser(unittest.TestCase):
@@ -115,6 +106,15 @@ class TestManifestParser(unittest.TestCase):
             manifest_obj = parse_manifest_v5(manifest_dict)
         self.assertEqual(manifest_obj.metadata.dbt_schema_version,
                          "https://schemas.getdbt.com/dbt/manifest/v5.json")
+
+    def test_parse_manifest_v6(self):
+        path = os.path.join(get_project_root(), "tests", "resources", "v6",
+                            "jaffle_shop", "manifest.json")
+        with open(path, "r", encoding="utf-8") as fp:
+            manifest_dict = yaml.safe_load(fp)
+            manifest_obj = parse_manifest_v6(manifest_dict)
+        self.assertEqual(manifest_obj.metadata.dbt_schema_version,
+                         "https://schemas.getdbt.com/dbt/manifest/v6.json")
 
 
 class TestRunResultsParser(unittest.TestCase):
