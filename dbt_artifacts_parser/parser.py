@@ -144,6 +144,14 @@ def parse_manifest_v6(manifest: dict) -> ManifestV6:
     raise ValueError("Not a manifest.json v6")
 
 
+def parse_manifest_v7(manifest: dict) -> ManifestV6:
+    """Parse manifest.json ver.7"""
+    dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
+    if dbt_schema_version == ArtifactTypes.MANIFEST_V7.value.dbt_schema_version:
+        return ManifestV7(**manifest)
+    raise ValueError("Not a manifest.json v7")
+
+
 #
 # run-results
 #
