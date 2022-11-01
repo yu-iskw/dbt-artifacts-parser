@@ -6,6 +6,7 @@ on:
       - 'pyproject.toml'
       - 'dbt_artifacts_parser/**/*.py'
       - 'tests/**/*.py'
+      - 'pylintrc'
   push:
     branches:
       - master
