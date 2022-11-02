@@ -35,6 +35,7 @@ do
   destination="${MODULE_ROOT}/dbt_artifacts_parser/parsers/catalog/catalog_${ver}.py"
   echo "Generate ${destination}"
   datamodel-codegen  --input-file-type jsonschema \
+    --disable-timestamp \
     --base-class "$base_class" \
     --class-name "Catalog${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/catalog/catalog_${ver}.json" \
@@ -44,7 +45,7 @@ done
 #
 # manifest
 #
-manifest_versions=("v1" "v2" "v3" "v4" "v5")
+manifest_versions=("v1" "v2" "v3" "v4" "v5" "v6" "v7")
 for ver in "${manifest_versions[@]}"
 do
   # Convert `v1` to `V1`
@@ -52,6 +53,7 @@ do
   destination="${MODULE_ROOT}/dbt_artifacts_parser/parsers/manifest/manifest_${ver}.py"
   echo "Generate ${destination}"
   datamodel-codegen  --input-file-type jsonschema \
+    --disable-timestamp \
     --base-class "$base_class" \
     --class-name "Manifest${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/manifest/manifest_${ver}.json" \
@@ -69,6 +71,7 @@ do
   destination="${MODULE_ROOT}/dbt_artifacts_parser/parsers/run_results/run_results_${ver}.py"
   echo "Generate ${destination}"
   datamodel-codegen  --input-file-type jsonschema \
+    --disable-timestamp \
     --base-class "$base_class" \
     --class-name "RunResults${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/run-results/run-results_${ver}.json" \
@@ -86,6 +89,7 @@ do
   destination="${MODULE_ROOT}/dbt_artifacts_parser/parsers/sources/sources_${ver}.py"
   echo "Generate ${destination}"
   datamodel-codegen  --input-file-type jsonschema \
+    --disable-timestamp \
     --base-class "$base_class" \
     --class-name "Sources${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/sources/sources_${ver}.json" \
