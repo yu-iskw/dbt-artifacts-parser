@@ -12,12 +12,9 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-import unittest
-
 import dbt_artifacts_parser
 
 
-class TestBasicInformation(unittest.TestCase):
-
+class TestBasicInformation:
     def test_version(self):
-        self.assertIsNotNone(dbt_artifacts_parser.__version__)
+        assert dbt_artifacts_parser.__version__ is not None

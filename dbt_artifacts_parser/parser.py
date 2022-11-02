@@ -15,6 +15,7 @@
 #  limitations under the License.
 #
 from typing import Union
+from dbt_artifacts_parser.parsers.manifest.manifest_v7 import ManifestV7
 
 from dbt_artifacts_parser.parsers.utils import get_dbt_schema_version
 
@@ -68,7 +69,7 @@ def parse_catalog_v1(catalog: dict) -> CatalogV1:
 def parse_manifest(
     manifest: dict
 ) -> Union[ManifestV1, ManifestV2, ManifestV3, ManifestV4, ManifestV5,
-           ManifestV6]:
+           ManifestV6, ManifestV7]:
     """Parse manifest.json
 
     Args:
@@ -90,6 +91,8 @@ def parse_manifest(
         return ManifestV5(**manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V6.value.dbt_schema_version:
         return ManifestV6(**manifest)
+    elif dbt_schema_version == ArtifactTypes.MANIFEST_V7.value.dbt_schema_version:
+        return ManifestV7(**manifest)
     raise ValueError("Not a soft of manifest.json")
 
 
@@ -139,6 +142,14 @@ def parse_manifest_v6(manifest: dict) -> ManifestV6:
     if dbt_schema_version == ArtifactTypes.MANIFEST_V6.value.dbt_schema_version:
         return ManifestV6(**manifest)
     raise ValueError("Not a manifest.json v6")
+
+
+def parse_manifest_v7(manifest: dict) -> ManifestV6:
+    """Parse manifest.json ver.7"""
+    dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
+    if dbt_schema_version == ArtifactTypes.MANIFEST_V7.value.dbt_schema_version:
+        return ManifestV7(**manifest)
+    raise ValueError("Not a manifest.json v7")
 
 
 #
