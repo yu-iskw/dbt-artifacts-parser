@@ -60,7 +60,7 @@ class TestCatalogParser:
         )
 
 
-@pytest.mark.parametrize("version", ["v1", "v2", "v3", "v4", "v5", "v6", "v7"])
+@pytest.mark.parametrize("version", ["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8"])
 class TestManifestParser:
     def test_parse_manifest(self, version):
         path = os.path.join(
