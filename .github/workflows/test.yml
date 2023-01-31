@@ -9,7 +9,7 @@ on:
       - 'pylintrc'
   push:
     branches:
-      - master
+      - main
 
 jobs:
   test:
