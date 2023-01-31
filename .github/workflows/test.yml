@@ -3,6 +3,7 @@ name: Test python
 on:
   pull_request:
     paths:
+      - .github/workflows/test.yml
       - 'pyproject.toml'
       - 'dbt_artifacts_parser/**/*.py'
       - 'tests/**/*.py'
