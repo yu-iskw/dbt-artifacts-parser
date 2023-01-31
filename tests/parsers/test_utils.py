@@ -31,6 +31,7 @@ from dbt_artifacts_parser.parsers.manifest.manifest_v4 import ManifestV4
 from dbt_artifacts_parser.parsers.manifest.manifest_v5 import ManifestV5
 from dbt_artifacts_parser.parsers.manifest.manifest_v6 import ManifestV6
 from dbt_artifacts_parser.parsers.manifest.manifest_v7 import ManifestV7
+from dbt_artifacts_parser.parsers.manifest.manifest_v8 import ManifestV8
 from dbt_artifacts_parser.parsers.run_results.run_results_v1 import RunResultsV1
 from dbt_artifacts_parser.parsers.run_results.run_results_v2 import RunResultsV2
 from dbt_artifacts_parser.parsers.run_results.run_results_v3 import RunResultsV3
@@ -92,6 +93,12 @@ class TestDbtUtils:
                     "manifest.json": "https://schemas.getdbt.com/dbt/manifest/v7.json",
                 },
             ),
+            (
+                "v8",
+                {
+                    "manifest.json": "https://schemas.getdbt.com/dbt/manifest/v8.json",
+                },
+            ),
         ],
     )
     def test_get_dbt_schema_version(self, version, artifacts):
@@ -129,6 +136,8 @@ class TestDbtUtils:
             (ArtifactTypes.MANIFEST_V6, ManifestV6),
             # v7
             (ArtifactTypes.MANIFEST_V7, ManifestV7),
+            # v8
+            (ArtifactTypes.MANIFEST_V8, ManifestV8),
         ],
     )
     def test_get_model_class(self, artifact_type, expected_class):
