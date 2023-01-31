@@ -209,5 +209,6 @@ with open("path/to/sources.json", "r") as fp:
     sources_obj = parse_sources_v3(sources=sources_dict)
 ```
 
+## Contributors
 <!-- readme: contributors -start -->
 <!-- readme: contributors -end -->
