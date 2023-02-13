@@ -13,13 +13,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 import os
+import unittest
 
 from dbt_artifacts_parser.utils import get_project_root
 
 
-class TestUtils:
+class TestUtils(unittest.TestCase):
     def test_get_project_root(self):
-        assert (
-            get_project_root()
-            == os.path.abspath(os.path.dirname(os.path.dirname(__file__))),
+        self.assertEqual(
+            get_project_root(),
+            os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
         )
