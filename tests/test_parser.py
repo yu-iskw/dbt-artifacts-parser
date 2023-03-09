@@ -60,17 +60,19 @@ class TestCatalogParser:
         )
 
 
-@pytest.mark.parametrize("version", ["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8"])
+@pytest.mark.parametrize("version,path", [
+    ("v1", os.path.join(get_project_root(), "tests", "resources", "v1", "jaffle_shop", "manifest.json")),
+    ("v2", os.path.join(get_project_root(), "tests", "resources", "v2", "jaffle_shop", "manifest.json")),
+    ("v3", os.path.join(get_project_root(), "tests", "resources", "v3", "jaffle_shop", "manifest.json")),
+    ("v4", os.path.join(get_project_root(), "tests", "resources", "v4", "jaffle_shop", "manifest.json")),
+    ("v5", os.path.join(get_project_root(), "tests", "resources", "v5", "jaffle_shop", "manifest.json")),
+    ("v6", os.path.join(get_project_root(), "tests", "resources", "v6", "jaffle_shop", "manifest.json")),
+    ("v7", os.path.join(get_project_root(), "tests", "resources", "v7", "jaffle_shop", "manifest.json")),
+    ("v8", os.path.join(get_project_root(), "tests", "resources", "v8", "jaffle_shop", "manifest.json")),
+    ("v8", os.path.join(get_project_root(), "tests", "resources", "v8", "jaffle_shop_at_1_4_3", "manifest.json")),
+])
 class TestManifestParser:
-    def test_parse_manifest(self, version):
-        path = os.path.join(
-            get_project_root(),
-            "tests",
-            "resources",
-            version,
-            "jaffle_shop",
-            "manifest.json",
-        )
+    def test_parse_manifest(self, version, path):
         with open(path, "r", encoding="utf-8") as fp:
             manifest_dict = yaml.safe_load(fp)
             manifest_obj = parser.parse_manifest(manifest_dict)
@@ -79,15 +81,7 @@ class TestManifestParser:
             == f"https://schemas.getdbt.com/dbt/manifest/{version}.json"
         )
 
-    def test_parse_manifest_specific(self, version):
-        path = os.path.join(
-            get_project_root(),
-            "tests",
-            "resources",
-            version,
-            "jaffle_shop",
-            "manifest.json",
-        )
+    def test_parse_manifest_specific(self, version, path):
         with open(path, "r", encoding="utf-8") as fp:
             manifest_dict = yaml.safe_load(fp)
             manifest_obj = getattr(parser, f"parse_manifest_{version}")(manifest_dict)
