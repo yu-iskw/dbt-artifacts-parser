@@ -185,12 +185,12 @@
         },
         "dbt_version": {
           "type": "string",
-          "default": "1.4.0rc1"
+          "default": "1.4.1"
         },
         "generated_at": {
           "type": "string",
           "format": "date-time",
-          "default": "2023-01-12T17:40:35.482111Z"
+          "default": "2023-02-09T10:04:47.350768Z"
         },
         "invocation_id": {
           "oneOf": [
@@ -201,7 +201,7 @@
               "type": "null"
             }
           ],
-          "default": "a47b343c-eb75-498d-9696-75599f127f26"
+          "default": "f795bc66-f417-4007-af6e-f2e513d33790"
         },
         "env": {
           "type": "object",
@@ -406,7 +406,7 @@
         },
         "created_at": {
           "type": "number",
-          "default": 1673545235.487852
+          "default": 1675937087.353436
         },
         "config_call_dict": {
           "type": "object",
@@ -953,7 +953,7 @@
         },
         "created_at": {
           "type": "number",
-          "default": 1673545235.492712
+          "default": 1675937087.355371
         },
         "config_call_dict": {
           "type": "object",
@@ -1312,7 +1312,7 @@
         },
         "created_at": {
           "type": "number",
-          "default": 1673545235.4943008
+          "default": 1675937087.356482
         },
         "config_call_dict": {
           "type": "object",
@@ -1569,7 +1569,7 @@
         },
         "created_at": {
           "type": "number",
-          "default": 1673545235.495842
+          "default": 1675937087.357701
         },
         "config_call_dict": {
           "type": "object",
@@ -1816,7 +1816,7 @@
         },
         "created_at": {
           "type": "number",
-          "default": 1673545235.4974778
+          "default": 1675937087.358761
         },
         "config_call_dict": {
           "type": "object",
@@ -2063,7 +2063,7 @@
         },
         "created_at": {
           "type": "number",
-          "default": 1673545235.4989471
+          "default": 1675937087.359803
         },
         "config_call_dict": {
           "type": "object",
@@ -2306,7 +2306,7 @@
         },
         "created_at": {
           "type": "number",
-          "default": 1673545235.500624
+          "default": 1675937087.361009
         },
         "config_call_dict": {
           "type": "object",
@@ -2577,7 +2577,7 @@
         },
         "created_at": {
           "type": "number",
-          "default": 1673545235.5029492
+          "default": 1675937087.364386
         },
         "config_call_dict": {
           "type": "object",
@@ -3030,7 +3030,7 @@
         },
         "created_at": {
           "type": "number",
-          "default": 1673545235.505524
+          "default": 1675937087.366245
         },
         "config_call_dict": {
           "type": "object",
@@ -3059,10 +3059,16 @@
               "type": "null"
             }
           ]
+        },
+        "depends_on": {
+          "$ref": "#/definitions/MacroDependsOn",
+          "default": {
+            "macros": []
+          }
         }
       },
       "additionalProperties": false,
-      "description": "SeedNode(database: Optional[str], schema: str, name: str, resource_type: dbt.node_types.NodeType, package_name: str, path: str, original_file_path: str, unique_id: str, fqn: List[str], alias: str, checksum: dbt.contracts.files.FileHash, config: dbt.contracts.graph.model_config.SeedConfig = <factory>, _event_status: Dict[str, Any] = <factory>, tags: List[str] = <factory>, description: str = '', columns: Dict[str, dbt.contracts.graph.nodes.ColumnInfo] = <factory>, meta: Dict[str, Any] = <factory>, docs: dbt.contracts.graph.unparsed.Docs = <factory>, patch_path: Optional[str] = None, build_path: Optional[str] = None, deferred: bool = False, unrendered_config: Dict[str, Any] = <factory>, created_at: float = <factory>, config_call_dict: Dict[str, Any] = <factory>, relation_name: Optional[str] = None, raw_code: str = '', root_path: Optional[str] = None)"
+      "description": "SeedNode(database: Optional[str], schema: str, name: str, resource_type: dbt.node_types.NodeType, package_name: str, path: str, original_file_path: str, unique_id: str, fqn: List[str], alias: str, checksum: dbt.contracts.files.FileHash, config: dbt.contracts.graph.model_config.SeedConfig = <factory>, _event_status: Dict[str, Any] = <factory>, tags: List[str] = <factory>, description: str = '', columns: Dict[str, dbt.contracts.graph.nodes.ColumnInfo] = <factory>, meta: Dict[str, Any] = <factory>, docs: dbt.contracts.graph.unparsed.Docs = <factory>, patch_path: Optional[str] = None, build_path: Optional[str] = None, deferred: bool = False, unrendered_config: Dict[str, Any] = <factory>, created_at: float = <factory>, config_call_dict: Dict[str, Any] = <factory>, relation_name: Optional[str] = None, raw_code: str = '', root_path: Optional[str] = None, depends_on: dbt.contracts.graph.nodes.MacroDependsOn = <factory>)"
     },
     "SeedConfig": {
       "type": "object",
@@ -3228,6 +3234,21 @@
       },
       "additionalProperties": true,
       "description": "SeedConfig(_extra: Dict[str, Any] = <factory>, enabled: bool = True, alias: Optional[str] = None, schema: Optional[str] = None, database: Optional[str] = None, tags: Union[List[str], str] = <factory>, meta: Dict[str, Any] = <factory>, materialized: str = 'seed', incremental_strategy: Optional[str] = None, persist_docs: Dict[str, Any] = <factory>, post_hook: List[dbt.contracts.graph.model_config.Hook] = <factory>, pre_hook: List[dbt.contracts.graph.model_config.Hook] = <factory>, quoting: Dict[str, Any] = <factory>, column_types: Dict[str, Any] = <factory>, full_refresh: Optional[bool] = None, unique_key: Union[str, List[str], NoneType] = None, on_schema_change: Optional[str] = 'ignore', grants: Dict[str, Any] = <factory>, packages: List[str] = <factory>, docs: dbt.contracts.graph.unparsed.Docs = <factory>, quote_columns: Optional[bool] = None)"
+    },
+    "MacroDependsOn": {
+      "type": "object",
+      "required": [],
+      "properties": {
+        "macros": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      },
+      "additionalProperties": false,
+      "description": "Used only in the Macro class"
     },
     "SourceDefinition": {
       "type": "object",
@@ -3395,7 +3416,7 @@
         },
         "created_at": {
           "type": "number",
-          "default": 1673545235.507746
+          "default": 1675937087.368067
         }
       },
       "additionalProperties": false,
@@ -3505,12 +3526,12 @@
         },
         "dbt_version": {
           "type": "string",
-          "default": "1.4.0rc1"
+          "default": "1.4.1"
         },
         "generated_at": {
           "type": "string",
           "format": "date-time",
-          "default": "2023-01-12T17:40:35.473220Z"
+          "default": "2023-02-09T10:04:47.347023Z"
         },
         "invocation_id": {
           "oneOf": [
@@ -3521,7 +3542,7 @@
               "type": "null"
             }
           ],
-          "default": "a47b343c-eb75-498d-9696-75599f127f26"
+          "default": "f795bc66-f417-4007-af6e-f2e513d33790"
         },
         "env": {
           "type": "object",
@@ -3532,7 +3553,7 @@
         }
       },
       "additionalProperties": false,
-      "description": "FreshnessMetadata(dbt_schema_version: str = <factory>, dbt_version: str = '1.4.0rc1', generated_at: datetime.datetime = <factory>, invocation_id: Optional[str] = <factory>, env: Dict[str, str] = <factory>)"
+      "description": "FreshnessMetadata(dbt_schema_version: str = <factory>, dbt_version: str = '1.4.1', generated_at: datetime.datetime = <factory>, invocation_id: Optional[str] = <factory>, env: Dict[str, str] = <factory>)"
     },
     "SourceFreshnessRuntimeError": {
       "type": "object",
@@ -3874,7 +3895,7 @@
         },
         "created_at": {
           "type": "number",
-          "default": 1673545235.508598
+          "default": 1675937087.368656
         },
         "supported_languages": {
           "oneOf": [
@@ -3896,21 +3917,6 @@
       },
       "additionalProperties": false,
       "description": "Macro(name: str, resource_type: dbt.node_types.NodeType, package_name: str, path: str, original_file_path: str, unique_id: str, macro_sql: str, depends_on: dbt.contracts.graph.nodes.MacroDependsOn = <factory>, description: str = '', meta: Dict[str, Any] = <factory>, docs: dbt.contracts.graph.unparsed.Docs = <factory>, patch_path: Optional[str] = None, arguments: List[dbt.contracts.graph.unparsed.MacroArgument] = <factory>, created_at: float = <factory>, supported_languages: Optional[List[dbt.node_types.ModelLanguage]] = None)"
-    },
-    "MacroDependsOn": {
-      "type": "object",
-      "required": [],
-      "properties": {
-        "macros": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": []
-        }
-      },
-      "additionalProperties": false,
-      "description": "Used only in the Macro class"
     },
     "MacroArgument": {
       "type": "object",
@@ -4132,7 +4138,7 @@
         },
         "created_at": {
           "type": "number",
-          "default": 1673545235.510027
+          "default": 1675937087.369866
         }
       },
       "additionalProperties": false,
@@ -4349,7 +4355,7 @@
         },
         "created_at": {
           "type": "number",
-          "default": 1673545235.512001
+          "default": 1675937087.371092
         }
       },
       "additionalProperties": false,
