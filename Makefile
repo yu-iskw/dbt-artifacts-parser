@@ -1,7 +1,14 @@
 # Set up an environment
 .PHONEY: setup
-setup:
+setup: setup-python setup-pre-commit
+
+.PHONE: setup-python
+setup-python:
 	bash ./dev/setup.sh
+
+.PHONE: setup-pre-commit
+setup-pre-commit:
+	pre-commit install
 
 # Check all the coding style.
 .PHONY: lint
