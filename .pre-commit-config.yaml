@@ -24,7 +24,7 @@ repos:
       - id: check-yaml
       - id: detect-private-key
   - repo: https://github.com/rhysd/actionlint
-    rev: main
+    rev: v1.6.24
     hooks:
       - id: actionlint
   - repo: https://github.com/asottile/reorder_python_imports
