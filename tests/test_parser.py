@@ -15,9 +15,9 @@
 #  limitations under the License.
 #
 import os
-import yaml
 
 import pytest
+import yaml
 
 from dbt_artifacts_parser import parser
 from dbt_artifacts_parser.utils import get_project_root
@@ -70,6 +70,7 @@ class TestCatalogParser:
     ("v7", os.path.join(get_project_root(), "tests", "resources", "v7", "jaffle_shop", "manifest.json")),
     ("v8", os.path.join(get_project_root(), "tests", "resources", "v8", "jaffle_shop", "manifest.json")),
     ("v8", os.path.join(get_project_root(), "tests", "resources", "v8", "jaffle_shop_at_1_4_3", "manifest.json")),
+    ("v9", os.path.join(get_project_root(), "tests", "resources", "v9", "jaffle_shop_at_1.5rc1", "manifest.json")),
 ])
 class TestManifestParser:
     def test_parse_manifest(self, version, path):
