@@ -16,8 +16,6 @@
 #
 from typing import Union
 
-from dbt_artifacts_parser.parsers.utils import get_dbt_schema_version
-
 from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
 from dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
 from dbt_artifacts_parser.parsers.manifest.manifest_v2 import ManifestV2
@@ -27,6 +25,7 @@ from dbt_artifacts_parser.parsers.manifest.manifest_v5 import ManifestV5
 from dbt_artifacts_parser.parsers.manifest.manifest_v6 import ManifestV6
 from dbt_artifacts_parser.parsers.manifest.manifest_v7 import ManifestV7
 from dbt_artifacts_parser.parsers.manifest.manifest_v8 import ManifestV8
+from dbt_artifacts_parser.parsers.manifest.manifest_v9 import ManifestV9
 from dbt_artifacts_parser.parsers.run_results.run_results_v1 import RunResultsV1
 from dbt_artifacts_parser.parsers.run_results.run_results_v2 import RunResultsV2
 from dbt_artifacts_parser.parsers.run_results.run_results_v3 import RunResultsV3
@@ -34,7 +33,7 @@ from dbt_artifacts_parser.parsers.run_results.run_results_v4 import RunResultsV4
 from dbt_artifacts_parser.parsers.sources.sources_v1 import SourcesV1
 from dbt_artifacts_parser.parsers.sources.sources_v2 import SourcesV2
 from dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
-
+from dbt_artifacts_parser.parsers.utils import get_dbt_schema_version
 from dbt_artifacts_parser.parsers.version_map import ArtifactTypes
 
 
@@ -96,6 +95,8 @@ def parse_manifest(
         return ManifestV7(**manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V8.value.dbt_schema_version:
         return ManifestV8(**manifest)
+    elif dbt_schema_version == ArtifactTypes.MANIFEST_V9.value.dbt_schema_version:
+        return ManifestV9(**manifest)
     raise ValueError("Not a soft of manifest.json")
 
 
@@ -161,6 +162,14 @@ def parse_manifest_v8(manifest: dict) -> ManifestV6:
     if dbt_schema_version == ArtifactTypes.MANIFEST_V8.value.dbt_schema_version:
         return ManifestV8(**manifest)
     raise ValueError("Not a manifest.json v8")
+
+
+def parse_manifest_v9(manifest: dict) -> ManifestV6:
+    """Parse manifest.json ver.9"""
+    dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
+    if dbt_schema_version == ArtifactTypes.MANIFEST_V9.value.dbt_schema_version:
+        return ManifestV9(**manifest)
+    raise ValueError("Not a manifest.json v9")
 
 
 #

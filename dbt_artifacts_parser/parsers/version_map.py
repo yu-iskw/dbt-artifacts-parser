@@ -14,14 +14,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-from typing import Type
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
+from typing import Type
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
-
 from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
-
 from dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
 from dbt_artifacts_parser.parsers.manifest.manifest_v2 import ManifestV2
 from dbt_artifacts_parser.parsers.manifest.manifest_v3 import ManifestV3
@@ -30,12 +28,11 @@ from dbt_artifacts_parser.parsers.manifest.manifest_v5 import ManifestV5
 from dbt_artifacts_parser.parsers.manifest.manifest_v6 import ManifestV6
 from dbt_artifacts_parser.parsers.manifest.manifest_v7 import ManifestV7
 from dbt_artifacts_parser.parsers.manifest.manifest_v8 import ManifestV8
-
+from dbt_artifacts_parser.parsers.manifest.manifest_v9 import ManifestV9
 from dbt_artifacts_parser.parsers.run_results.run_results_v1 import RunResultsV1
 from dbt_artifacts_parser.parsers.run_results.run_results_v2 import RunResultsV2
 from dbt_artifacts_parser.parsers.run_results.run_results_v3 import RunResultsV3
 from dbt_artifacts_parser.parsers.run_results.run_results_v4 import RunResultsV4
-
 from dbt_artifacts_parser.parsers.sources.sources_v1 import SourcesV1
 from dbt_artifacts_parser.parsers.sources.sources_v2 import SourcesV2
 from dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
@@ -69,6 +66,8 @@ class ArtifactTypes(Enum):
         "https://schemas.getdbt.com/dbt/manifest/v7.json", ManifestV7)
     MANIFEST_V8 = ArtifactType(
         "https://schemas.getdbt.com/dbt/manifest/v8.json", ManifestV8)
+    MANIFEST_V9 = ArtifactType(
+        "https://schemas.getdbt.com/dbt/manifest/v9.json", ManifestV9)
     # RunResults
     RUN_RESULTS_V1 = ArtifactType(
         "https://schemas.getdbt.com/dbt/run-results/v1.json", RunResultsV1)
