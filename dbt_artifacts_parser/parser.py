@@ -69,7 +69,7 @@ def parse_catalog_v1(catalog: dict) -> CatalogV1:
 def parse_manifest(
     manifest: dict
 ) -> Union[ManifestV1, ManifestV2, ManifestV3, ManifestV4, ManifestV5,
-           ManifestV6, ManifestV7, ManifestV8]:
+           ManifestV6, ManifestV7, ManifestV8, ManifestV9]:
     """Parse manifest.json
 
     Args:
