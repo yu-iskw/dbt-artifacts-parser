@@ -32,6 +32,7 @@ Those are the classes to parse dbt artifacts.
 - [ManifestV6](dbt_artifacts_parser/parsers/manifest/manifest_v6.py) for manifest.json v6
 - [ManifestV7](dbt_artifacts_parser/parsers/manifest/manifest_v7.py) for manifest.json v7
 - [ManifestV8](dbt_artifacts_parser/parsers/manifest/manifest_v8.py) for manifest.json v8
+- [ManifestV9](dbt_artifacts_parser/parsers/manifest/manifest_v9.py) for manifest.json v9
 
 ### Run Results
 - [RunResultsV1](dbt_artifacts_parser/parsers/manifest/manifest_v1.py) for run_results.json v1
@@ -132,6 +133,13 @@ from dbt_artifacts_parser.parser import parse_manifest_v8
 with open("path/to/manifest.json", "r") as fp:
     manifest_dict = json.load(fp)
     manifest_obj = parse_manifest_v8(manifest=manifest_dict)
+
+# parse manifest.json v9
+from dbt_artifacts_parser.parser import parse_manifest_v9
+
+with open("path/to/manifest.json", "r") as fp:
+    manifest_dict = json.load(fp)
+    manifest_obj = parse_manifest_v9(manifest=manifest_dict)
 ```
 
 ### Parse run-results.json
