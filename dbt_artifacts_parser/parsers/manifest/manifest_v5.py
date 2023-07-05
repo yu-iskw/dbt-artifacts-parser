@@ -10,6 +10,7 @@ from typing import Any, Dict, List, Optional, Union
 
 # pylint: disable=no-name-in-module
 from pydantic import Extra, Field, constr
+
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 

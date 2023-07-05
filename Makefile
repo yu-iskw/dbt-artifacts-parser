@@ -12,7 +12,11 @@ setup-pre-commit:
 
 # Check all the coding style.
 .PHONY: lint
-lint: lint-shell lint-python
+lint: run-pre-commit lint-shell lint-python
+
+.PHONE: run-pre-commit
+run-pre-commit:
+	pre-commit run --all-files
 
 # Check the coding style for the shell scripts.
 .PHONY: lint-shell

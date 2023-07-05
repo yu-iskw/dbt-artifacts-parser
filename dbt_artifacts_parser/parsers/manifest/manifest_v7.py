@@ -9,6 +9,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
 from pydantic import Extra, Field, constr
+
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 

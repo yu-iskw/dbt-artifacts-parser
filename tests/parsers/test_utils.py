@@ -15,13 +15,10 @@
 #  limitations under the License.
 #
 #
-import os
 import json
+import os
 
 import pytest
-
-from dbt_artifacts_parser.utils import get_project_root
-from dbt_artifacts_parser.parsers.utils import get_dbt_schema_version, get_model_class
 
 from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
 from dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
@@ -39,7 +36,9 @@ from dbt_artifacts_parser.parsers.run_results.run_results_v4 import RunResultsV4
 from dbt_artifacts_parser.parsers.sources.sources_v1 import SourcesV1
 from dbt_artifacts_parser.parsers.sources.sources_v2 import SourcesV2
 from dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
+from dbt_artifacts_parser.parsers.utils import get_dbt_schema_version, get_model_class
 from dbt_artifacts_parser.parsers.version_map import ArtifactTypes
+from dbt_artifacts_parser.utils import get_project_root
 
 
 class TestDbtUtils:
