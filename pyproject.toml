@@ -30,7 +30,7 @@ classifiers = [
 ]
 dynamic = ["version", "description"]
 dependencies = [
-    "pydantic >=1.6",
+    "pydantic >=1.6,<2.0",
     "datamodel-code-generator >=0.12.0",
 ]
 
