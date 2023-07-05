@@ -44,4 +44,6 @@ jobs:
       - name: Run tests
         run: bash dev/test_python.sh
       - name: Test installation
-        run: pip install -e .
+        run: |
+          pip install -e .
+          python -c 'import dbt_artifacts_parser'
