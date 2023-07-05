@@ -27,10 +27,10 @@ repos:
     rev: v1.6.25
     hooks:
       - id: actionlint
-  - repo: https://github.com/asottile/reorder_python_imports
-    rev: v3.10.0
-    hooks:
-      - id: reorder-python-imports
+#  - repo: https://github.com/asottile/reorder_python_imports
+#    rev: v3.10.0
+#    hooks:
+#      - id: reorder-python-imports
   - repo: https://github.com/asottile/setup-cfg-fmt
     rev: v2.4.0
     hooks:
