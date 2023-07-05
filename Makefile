@@ -41,7 +41,7 @@ test:
 	bash ./dev/test_python.sh
 
 # Build the package
-build: clean format test
+build: clean lint test
 	flit build
 
 clean:

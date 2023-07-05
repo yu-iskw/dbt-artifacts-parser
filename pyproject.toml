@@ -5,6 +5,19 @@ build-backend = "flit_core.buildapi"
 [tool.flit.module]
 name = "dbt_artifacts_parser"
 
+[tool.flit.sdist]
+exclude = [
+    ".github/",
+    ".gitignore",
+    ".pre-commit-config.yaml",
+    ".style.yapf",
+    ".pylintrc",
+    ".pypirc",
+    "Makefile",
+    "dev/",
+    "tests/",
+]
+
 [project]
 name = "dbt-artifacts-parser"
 authors = [{name = "yu-iskw"}]
