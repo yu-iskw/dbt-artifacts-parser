@@ -149,6 +149,7 @@ disable=abstract-method,
         missing-module-docstring,
         missing-class-docstring,
         invalid-name,
+        unexpected-keyword-arg,
 
 
 [REPORTS]
