@@ -29,6 +29,8 @@ from dbt_artifacts_parser.parsers.manifest.manifest_v5 import ManifestV5
 from dbt_artifacts_parser.parsers.manifest.manifest_v6 import ManifestV6
 from dbt_artifacts_parser.parsers.manifest.manifest_v7 import ManifestV7
 from dbt_artifacts_parser.parsers.manifest.manifest_v8 import ManifestV8
+from dbt_artifacts_parser.parsers.manifest.manifest_v9 import ManifestV9
+from dbt_artifacts_parser.parsers.manifest.manifest_v10 import ManifestV10
 from dbt_artifacts_parser.parsers.run_results.run_results_v1 import RunResultsV1
 from dbt_artifacts_parser.parsers.run_results.run_results_v2 import RunResultsV2
 from dbt_artifacts_parser.parsers.run_results.run_results_v3 import RunResultsV3
@@ -137,6 +139,10 @@ class TestDbtUtils:
             (ArtifactTypes.MANIFEST_V7, ManifestV7),
             # v8
             (ArtifactTypes.MANIFEST_V8, ManifestV8),
+            # v9
+            (ArtifactTypes.MANIFEST_V9, ManifestV9),
+            # v10
+            (ArtifactTypes.MANIFEST_V10, ManifestV10),
         ],
     )
     def test_get_model_class(self, artifact_type, expected_class):
