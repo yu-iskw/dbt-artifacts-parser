@@ -7,8 +7,9 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
-from dbt_artifacts_parser.parsers.base import BaseParserModel
 from pydantic import Extra, Field, constr
+
+from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 
 class ManifestMetadata(BaseParserModel):

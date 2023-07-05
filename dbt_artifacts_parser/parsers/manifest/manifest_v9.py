@@ -4,15 +4,9 @@ from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
-from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Union
+from typing import Any, Dict, List, Optional, Union
 
-from pydantic import constr
-from pydantic import Extra
-from pydantic import Field
+from pydantic import Extra, Field, constr
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
