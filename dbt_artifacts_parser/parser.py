@@ -53,7 +53,7 @@ def parse_catalog(catalog: dict) -> Union[CatalogV1]:
     dbt_schema_version = get_dbt_schema_version(artifact_json=catalog)
     if dbt_schema_version == ArtifactTypes.CATALOG_V1.value.dbt_schema_version:
         return CatalogV1(**catalog)
-    raise ValueError("Not a soft of catalog.json")
+    raise ValueError("Not a catalog.json")
 
 
 def parse_catalog_v1(catalog: dict) -> CatalogV1:
@@ -100,7 +100,7 @@ def parse_manifest(
         return ManifestV9(**manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V10.value.dbt_schema_version:
         return ManifestV10(**manifest)
-    raise ValueError("Not a soft of manifest.json")
+    raise ValueError("Not a manifest.json")
 
 
 def parse_manifest_v1(manifest: dict) -> ManifestV1:
@@ -205,7 +205,7 @@ def parse_run_results(
         return RunResultsV3(**run_results)
     elif dbt_schema_version == ArtifactTypes.RUN_RESULTS_V4.value.dbt_schema_version:
         return RunResultsV4(**run_results)
-    raise ValueError("Not a soft of manifest.json")
+    raise ValueError("Not a manifest.json")
 
 
 def parse_run_results_v1(run_results: dict) -> RunResultsV1:
@@ -259,7 +259,7 @@ def parse_sources(sources: dict) -> Union[SourcesV1, SourcesV2, SourcesV3]:
         return SourcesV2(**sources)
     elif dbt_schema_version == ArtifactTypes.SOURCES_V3.value.dbt_schema_version:
         return SourcesV3(**sources)
-    raise ValueError("Not a soft of manifest.json")
+    raise ValueError("Not a manifest.json")
 
 
 def parse_sources_v1(sources: dict) -> SourcesV1:
