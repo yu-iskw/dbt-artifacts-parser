@@ -259,6 +259,13 @@ with open("path/to/sources.json", "r") as fp:
             <br />
             <sub><b>Null</b></sub>
         </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/meyer-glean">
+            <img src="https://avatars.githubusercontent.com/u/134302890?v=4" width="100;" alt="meyer-glean"/>
+            <br />
+            <sub><b>Null</b></sub>
+        </a>
     </td></tr>
 </table>
 <!-- readme: contributors -end -->
