@@ -233,6 +233,13 @@ with open("path/to/sources.json", "r") as fp:
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/dlawin">
+            <img src="https://avatars.githubusercontent.com/u/11282254?v=4" width="100;" alt="dlawin"/>
+            <br />
+            <sub><b>Null</b></sub>
+        </a>
+    </td>
+    <td align="center">
         <a href="https://github.com/bbrewington">
             <img src="https://avatars.githubusercontent.com/u/10573749?v=4" width="100;" alt="bbrewington"/>
             <br />
@@ -251,13 +258,6 @@ with open("path/to/sources.json", "r") as fp:
             <img src="https://avatars.githubusercontent.com/u/987369?v=4" width="100;" alt="nabilm"/>
             <br />
             <sub><b>Mohamed Nabil Mahmoud Hafez</b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/dlawin">
-            <img src="https://avatars.githubusercontent.com/u/11282254?v=4" width="100;" alt="dlawin"/>
-            <br />
-            <sub><b>Null</b></sub>
         </a>
     </td>
     <td align="center">
