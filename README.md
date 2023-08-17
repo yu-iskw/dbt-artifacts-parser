@@ -138,12 +138,16 @@ with open("path/to/manifest.json", "r") as fp:
 # parse manifest.json v9
 from dbt_artifacts_parser.parser import parse_manifest_v9
 
+with open("path/to/manifest.json", "r") as fp:
+    manifest_dict = json.load(fp)
+    manifest_obj = parse_manifest_v9(manifest=manifest_dict)
+
 # parse manifest.json v10
 from dbt_artifacts_parser.parser import parse_manifest_v10
 
 with open("path/to/manifest.json", "r") as fp:
     manifest_dict = json.load(fp)
-    manifest_obj = parse_manifest_v9(manifest=manifest_dict)
+    manifest_obj = parse_manifest_v10(manifest=manifest_dict)
 ```
 
 ### Parse run-results.json
