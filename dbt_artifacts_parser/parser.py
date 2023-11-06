@@ -27,10 +27,12 @@ from dbt_artifacts_parser.parsers.manifest.manifest_v7 import ManifestV7
 from dbt_artifacts_parser.parsers.manifest.manifest_v8 import ManifestV8
 from dbt_artifacts_parser.parsers.manifest.manifest_v9 import ManifestV9
 from dbt_artifacts_parser.parsers.manifest.manifest_v10 import ManifestV10
+from dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
 from dbt_artifacts_parser.parsers.run_results.run_results_v1 import RunResultsV1
 from dbt_artifacts_parser.parsers.run_results.run_results_v2 import RunResultsV2
 from dbt_artifacts_parser.parsers.run_results.run_results_v3 import RunResultsV3
 from dbt_artifacts_parser.parsers.run_results.run_results_v4 import RunResultsV4
+from dbt_artifacts_parser.parsers.run_results.run_results_v5 import RunResultsV5
 from dbt_artifacts_parser.parsers.sources.sources_v1 import SourcesV1
 from dbt_artifacts_parser.parsers.sources.sources_v2 import SourcesV2
 from dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
@@ -68,9 +70,19 @@ def parse_catalog_v1(catalog: dict) -> CatalogV1:
 # manifest
 #
 def parse_manifest(
-    manifest: dict
-) -> Union[ManifestV1, ManifestV2, ManifestV3, ManifestV4, ManifestV5,
-           ManifestV6, ManifestV7, ManifestV8, ManifestV9, ManifestV10]:
+    manifest: dict,
+) -> Union[
+        ManifestV1,
+        ManifestV2,
+        ManifestV3,
+        ManifestV4,
+        ManifestV5,
+        ManifestV6,
+        ManifestV7,
+        ManifestV8,
+        ManifestV9,
+        ManifestV10,
+]:
     """Parse manifest.json
 
     Args:
@@ -100,6 +112,8 @@ def parse_manifest(
         return ManifestV9(**manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V10.value.dbt_schema_version:
         return ManifestV10(**manifest)
+    elif dbt_schema_version == ArtifactTypes.MANIFEST_V11.value.dbt_schema_version:
+        return ManifestV11(**manifest)
     raise ValueError("Not a manifest.json")
 
 
@@ -182,12 +196,21 @@ def parse_manifest_v10(manifest: dict) -> ManifestV6:
     raise ValueError("Not a manifest.json v10")
 
 
+def parse_manifest_v11(manifest: dict) -> ManifestV6:
+    """Parse manifest.json ver.11"""
+    dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
+    if dbt_schema_version == ArtifactTypes.MANIFEST_V11.value.dbt_schema_version:
+        return ManifestV11(**manifest)
+    raise ValueError("Not a manifest.json v11")
+
+
 #
 # run-results
 #
 def parse_run_results(
-    run_results: dict
-) -> Union[RunResultsV1, RunResultsV2, RunResultsV3, RunResultsV4]:
+    run_results: dict,
+) -> Union[RunResultsV1, RunResultsV2, RunResultsV3, RunResultsV4,
+           RunResultsV5]:
     """Parse run-results.json
 
     Args:
@@ -205,6 +228,8 @@ def parse_run_results(
         return RunResultsV3(**run_results)
     elif dbt_schema_version == ArtifactTypes.RUN_RESULTS_V4.value.dbt_schema_version:
         return RunResultsV4(**run_results)
+    elif dbt_schema_version == ArtifactTypes.RUN_RESULTS_V5.value.dbt_schema_version:
+        return RunResultsV5(**run_results)
     raise ValueError("Not a manifest.json")
 
 
@@ -238,6 +263,13 @@ def parse_run_results_v4(run_results: dict) -> RunResultsV4:
     if dbt_schema_version == ArtifactTypes.RUN_RESULTS_V4.value.dbt_schema_version:
         return RunResultsV4(**run_results)
     raise ValueError("Not a run-results.json v4")
+
+def parse_run_results_v5(run_results: dict) -> RunResultsV5:
+    """Parse run-results.json v5"""
+    dbt_schema_version = get_dbt_schema_version(artifact_json=run_results)
+    if dbt_schema_version == ArtifactTypes.RUN_RESULTS_V5.value.dbt_schema_version:
+        return RunResultsV5(**run_results)
+    raise ValueError("Not a run-results.json v5")
 
 
 #
