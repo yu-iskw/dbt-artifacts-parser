@@ -72,6 +72,7 @@ class TestCatalogParser:
     ("v8", os.path.join(get_project_root(), "tests", "resources", "v8", "jaffle_shop_at_1_4_3", "manifest.json")),
     ("v9", os.path.join(get_project_root(), "tests", "resources", "v9", "jaffle_shop_at_1.5rc1", "manifest.json")),
     ("v10", os.path.join(get_project_root(), "tests", "resources", "v10", "jaffle_shop", "manifest.json")),
+    ("v11", os.path.join(get_project_root(), "tests", "resources", "v11", "jaffle_shop", "manifest.json")),
 ])
 class TestManifestParser:
     def test_parse_manifest(self, version, path):
@@ -93,7 +94,7 @@ class TestManifestParser:
         )
 
 
-@pytest.mark.parametrize("version", ["v1", "v2", "v3", "v4"])
+@pytest.mark.parametrize("version", ["v1", "v2", "v3", "v4", "v5"])
 class TestRunResultsParser:
     def test_parse_run_results(self, version):
         path = os.path.join(
