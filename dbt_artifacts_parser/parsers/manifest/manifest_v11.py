@@ -1421,7 +1421,8 @@ class SemanticModel(BaseParserModel):
     group: Optional[Optional[str]] = None
 
 
-class WritableManifest(BaseParserModel):
+# NOTE Manually replaced the class, as datamodel-code-generator didn't work as expected.
+class ManifestV11(BaseParserModel):
     class Config:
         extra = Extra.forbid
 
@@ -1501,7 +1502,3 @@ class WritableManifest(BaseParserModel):
     semantic_models: Dict[str, SemanticModel] = Field(
         ..., description='The semantic models defined in the dbt project'
     )
-
-
-class ManifestV11(BaseParserModel):
-    __root__: WritableManifest

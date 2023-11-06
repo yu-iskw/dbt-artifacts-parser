@@ -68,8 +68,8 @@ class RunResultOutput(BaseParserModel):
     compiled_code: Optional[str]
     relation_name: Optional[str]
 
-
-class RunResultsArtifact(BaseParserModel):
+# NOTE Manually replaced the class, as datamodel-code-generator didn't work as expected.
+class RunResultsV5(BaseParserModel):
     class Config:
         extra = Extra.forbid
 
@@ -77,7 +77,3 @@ class RunResultsArtifact(BaseParserModel):
     results: List[RunResultOutput]
     elapsed_time: float
     args: Optional[Dict[str, Any]] = None
-
-
-class RunResultsV5(BaseParserModel):
-    __root__: RunResultsArtifact
