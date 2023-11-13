@@ -6,19 +6,19 @@ from __future__ import annotations
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import Extra
+from pydantic import ConfigDict, RootModel
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 
 class BaseArtifactMetadata(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     dbt_schema_version: str
     dbt_version: Optional[str] = '1.7.0b1'
     generated_at: Optional[str] = None
-    invocation_id: Optional[Optional[str]] = None
+    invocation_id: Optional[str] = None
     env: Optional[Dict[str, str]] = None
 
 
@@ -44,36 +44,40 @@ class StatusEnum2(Enum):
 
 
 class TimingInfo(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    started_at: Optional[Optional[str]] = None
-    completed_at: Optional[Optional[str]] = None
+    started_at: Optional[str] = None
+    completed_at: Optional[str] = None
 
 
 class RunResultOutput(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     status: Union[StatusEnum, StatusEnum1, StatusEnum2]
     timing: List[TimingInfo]
     thread_id: str
     execution_time: float
     adapter_response: Dict[str, Any]
-    message: Optional[str]
-    failures: Optional[int]
+    message: Optional[str] = None
+    failures: Optional[int] = None
     unique_id: str
-    compiled: Optional[bool]
-    compiled_code: Optional[str]
-    relation_name: Optional[str]
+    compiled: Optional[bool] = None
+    compiled_code: Optional[str] = None
+    relation_name: Optional[str] = None
 
-# NOTE Manually replaced the class, as datamodel-code-generator didn't work as expected.
-class RunResultsV5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
 
+class RunResultsArtifact(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     metadata: BaseArtifactMetadata
     results: List[RunResultOutput]
     elapsed_time: float
     args: Optional[Dict[str, Any]] = None
+
+
+class RunResultsV5(RootModel[RunResultsArtifact]):
+    root: RunResultsArtifact
