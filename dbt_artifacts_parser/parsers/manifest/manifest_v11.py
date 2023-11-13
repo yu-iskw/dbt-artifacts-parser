@@ -7,7 +7,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 from uuid import UUID
 
-from pydantic import ConfigDict, Field, RootModel, constr
+from pydantic import ConfigDict, Field, constr
 from typing_extensions import Literal
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
@@ -1367,8 +1367,8 @@ class SemanticModel(BaseParserModel):
     primary_entity: Optional[str] = None
     group: Optional[str] = None
 
-
-class WritableManifest(BaseParserModel):
+# NOTE Manually replaced the class, as datamodel-code-generator didn't work as expected.
+class ManifestV11(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1448,7 +1448,3 @@ class WritableManifest(BaseParserModel):
     semantic_models: Dict[str, SemanticModel] = Field(
         ..., description='The semantic models defined in the dbt project'
     )
-
-
-class ManifestV11(RootModel[WritableManifest]):
-    root: WritableManifest
