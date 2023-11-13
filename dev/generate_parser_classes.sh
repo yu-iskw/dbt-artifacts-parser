@@ -39,7 +39,8 @@ do
     --base-class "$base_class" \
     --class-name "Catalog${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/catalog/catalog_${ver}.json" \
-    --output "${destination}"
+    --output "${destination}" \
+    --output-model-type pydantic_v2.BaseModel
 done
 
 #
@@ -57,7 +58,8 @@ do
     --base-class "$base_class" \
     --class-name "Manifest${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/manifest/manifest_${ver}.json" \
-    --output "${destination}"
+    --output "${destination}" \
+    --output-model-type pydantic_v2.BaseModel
 done
 
 #
@@ -75,7 +77,8 @@ do
     --base-class "$base_class" \
     --class-name "RunResults${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/run-results/run-results_${ver}.json" \
-    --output "${destination}"
+    --output "${destination}" \
+    --output-model-type pydantic_v2.BaseModel
 done
 
 #
@@ -93,5 +96,6 @@ do
     --base-class "$base_class" \
     --class-name "Sources${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/sources/sources_${ver}.json" \
-    --output "${destination}"
+    --output "${destination}" \
+    --output-model-type pydantic_v2.BaseModel
 done
