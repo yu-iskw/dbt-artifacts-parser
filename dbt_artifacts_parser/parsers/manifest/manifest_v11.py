@@ -11,13 +11,14 @@ from pydantic import Extra, Field, constr
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
-
+class ResourceType11(Enum):
+    doc = 'doc'
 class Documentation(BaseParserModel):
     class Config:
         extra = Extra.forbid
 
     name: str
-    resource_type: Any
+    resource_type: ResourceType11
     package_name: str
     path: str
     original_file_path: str
@@ -85,41 +86,11 @@ class Access(Enum):
 
 
 class ResourceType(Enum):
-    model = 'model'
     analysis = 'analysis'
-    test = 'test'
-    snapshot = 'snapshot'
-    operation = 'operation'
-    seed = 'seed'
-    rpc = 'rpc'
-    sql_operation = 'sql_operation'
-    doc = 'doc'
-    source = 'source'
-    macro = 'macro'
-    exposure = 'exposure'
-    metric = 'metric'
-    group = 'group'
-    saved_query = 'saved_query'
-    semantic_model = 'semantic_model'
 
 
 class ResourceType1(Enum):
-    model = 'model'
-    analysis = 'analysis'
     test = 'test'
-    snapshot = 'snapshot'
-    operation = 'operation'
-    seed = 'seed'
-    rpc = 'rpc'
-    sql_operation = 'sql_operation'
-    doc = 'doc'
-    source = 'source'
-    macro = 'macro'
-    exposure = 'exposure'
-    metric = 'metric'
-    group = 'group'
-    saved_query = 'saved_query'
-    semantic_model = 'semantic_model'
 
 
 class Contract(BaseParserModel):
@@ -570,13 +541,15 @@ class DimensionValidityParams(BaseParserModel):
     is_start: Optional[bool] = False
     is_end: Optional[bool] = False
 
+class ResourceType12(Enum):
+    exposure = 'exposure'
 
 class Exposure(BaseParserModel):
     class Config:
         extra = Extra.forbid
 
     name: str
-    resource_type: Any
+    resource_type: ResourceType12
     package_name: str
     path: str
     original_file_path: str
@@ -598,26 +571,30 @@ class Exposure(BaseParserModel):
     metrics: Optional[List[List[str]]] = None
     created_at: Optional[float] = None
 
+class ResourceType14(Enum):
+    group = 'group'
 
 class Group(BaseParserModel):
     class Config:
         extra = Extra.forbid
 
     name: str
-    resource_type: Any
+    resource_type: ResourceType14
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     owner: Owner
 
+class ResourceType10(Enum):
+    macro = 'macro'
 
 class Macro(BaseParserModel):
     class Config:
         extra = Extra.forbid
 
     name: str
-    resource_type: Any
+    resource_type: ResourceType10
     package_name: str
     path: str
     original_file_path: str
@@ -867,7 +844,7 @@ class AnalysisNode(BaseParserModel):
     database: Optional[str]
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: ResourceType
     package_name: str
     path: str
     original_file_path: str
@@ -904,6 +881,8 @@ class AnalysisNode(BaseParserModel):
     _pre_injected_sql: Optional[Optional[str]] = None
     contract: Optional[Contract] = None
 
+class ResourceType6(Enum):
+    test = 'test'
 
 class GenericTestNode(BaseParserModel):
     class Config:
@@ -913,7 +892,7 @@ class GenericTestNode(BaseParserModel):
     database: Optional[str]
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: ResourceType6
     package_name: str
     path: str
     original_file_path: str
@@ -953,6 +932,8 @@ class GenericTestNode(BaseParserModel):
     file_key_name: Optional[Optional[str]] = None
     attached_node: Optional[Optional[str]] = None
 
+class ResourceType2(Enum):
+    operation = 'operation'
 
 class HookNode(BaseParserModel):
     class Config:
@@ -961,7 +942,7 @@ class HookNode(BaseParserModel):
     database: Optional[str]
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: ResourceType2
     package_name: str
     path: str
     original_file_path: str
@@ -999,6 +980,8 @@ class HookNode(BaseParserModel):
     contract: Optional[Contract] = None
     index: Optional[Optional[int]] = None
 
+class ResourceType3(Enum):
+    model = 'model'
 
 class ModelNode(BaseParserModel):
     class Config:
@@ -1007,7 +990,7 @@ class ModelNode(BaseParserModel):
     database: Optional[str]
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: ResourceType3
     package_name: str
     path: str
     original_file_path: str
@@ -1050,6 +1033,8 @@ class ModelNode(BaseParserModel):
     deprecation_date: Optional[Optional[str]] = None
     defer_relation: Optional[Optional[DeferRelation]] = None
 
+class ResourceType4(Enum):
+    rpc = 'rpc'
 
 class RPCNode(BaseParserModel):
     class Config:
@@ -1058,7 +1043,7 @@ class RPCNode(BaseParserModel):
     database: Optional[str]
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: ResourceType4
     package_name: str
     path: str
     original_file_path: str
@@ -1095,6 +1080,8 @@ class RPCNode(BaseParserModel):
     _pre_injected_sql: Optional[Optional[str]] = None
     contract: Optional[Contract] = None
 
+class ResourceType8(Enum):
+    seed = 'seed'
 
 class SeedNode(BaseParserModel):
     class Config:
@@ -1103,7 +1090,7 @@ class SeedNode(BaseParserModel):
     database: Optional[str]
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: ResourceType8
     package_name: str
     path: str
     original_file_path: str
@@ -1139,7 +1126,7 @@ class SingularTestNode(BaseParserModel):
     database: Optional[str]
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: ResourceType1
     package_name: str
     path: str
     original_file_path: str
@@ -1176,7 +1163,8 @@ class SingularTestNode(BaseParserModel):
     _pre_injected_sql: Optional[Optional[str]] = None
     contract: Optional[Contract] = None
 
-
+class ResourceType7(Enum):
+    snapshot = 'snapshot'
 class SnapshotNode(BaseParserModel):
     class Config:
         extra = Extra.forbid
@@ -1184,7 +1172,7 @@ class SnapshotNode(BaseParserModel):
     database: Optional[str]
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: ResourceType7
     package_name: str
     path: str
     original_file_path: str
@@ -1222,6 +1210,8 @@ class SnapshotNode(BaseParserModel):
     contract: Optional[Contract] = None
     defer_relation: Optional[Optional[DeferRelation]] = None
 
+class ResourceType9(Enum):
+    source = 'source'
 
 class SourceDefinition(BaseParserModel):
     class Config:
@@ -1230,7 +1220,7 @@ class SourceDefinition(BaseParserModel):
     database: Optional[str]
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: ResourceType9
     package_name: str
     path: str
     original_file_path: str
@@ -1256,7 +1246,8 @@ class SourceDefinition(BaseParserModel):
     relation_name: Optional[Optional[str]] = None
     created_at: Optional[float] = None
 
-
+class ResourceType5(Enum):
+    sql_operation = 'sql_operation'
 class SqlNode(BaseParserModel):
     class Config:
         extra = Extra.forbid
@@ -1264,7 +1255,7 @@ class SqlNode(BaseParserModel):
     database: Optional[str]
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: ResourceType5
     package_name: str
     path: str
     original_file_path: str
@@ -1338,13 +1329,15 @@ class QueryParams(BaseParserModel):
     group_by: List[str]
     where: Optional[WhereFilterIntersection]
 
+class ResourceType13(Enum):
+    metric = 'metric'
 
 class Metric(BaseParserModel):
     class Config:
         extra = Extra.forbid
 
     name: str
-    resource_type: Any
+    resource_type: ResourceType13
     package_name: str
     path: str
     original_file_path: str
