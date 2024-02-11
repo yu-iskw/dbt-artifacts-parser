@@ -39,18 +39,20 @@ from dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
 from dbt_artifacts_parser.parsers.utils import get_dbt_schema_version
 from dbt_artifacts_parser.parsers.version_map import ArtifactTypes
 
-
 #
 # catalog
 #
-def parse_catalog(catalog: dict) -> Union[CatalogV1]:
+Catalog = Union[CatalogV1]
+
+
+def parse_catalog(catalog: dict) -> Catalog:
     """Parse catalog.json
 
     Args:
         catalog: dict of catalog.json
 
     Returns:
-        Union[CatalogV1]
+        Catalog
     """
     dbt_schema_version = get_dbt_schema_version(artifact_json=catalog)
     if dbt_schema_version == ArtifactTypes.CATALOG_V1.value.dbt_schema_version:
@@ -69,9 +71,7 @@ def parse_catalog_v1(catalog: dict) -> CatalogV1:
 #
 # manifest
 #
-def parse_manifest(
-    manifest: dict,
-) -> Union[
+Manifest = Union[
         ManifestV1,
         ManifestV2,
         ManifestV3,
@@ -82,14 +82,18 @@ def parse_manifest(
         ManifestV8,
         ManifestV9,
         ManifestV10,
-]:
+        ManifestV11,
+]
+
+
+def parse_manifest(manifest: dict) -> Manifest:
     """Parse manifest.json
 
     Args:
         manifest: A dict of manifest.json
 
     Returns:
-       Union[ManifestV1, ManifestV2, ManifestV3, ManifestV4]
+       Manifest
     """
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V1.value.dbt_schema_version:
@@ -207,17 +211,17 @@ def parse_manifest_v11(manifest: dict) -> ManifestV6:
 #
 # run-results
 #
-def parse_run_results(
-    run_results: dict,
-) -> Union[RunResultsV1, RunResultsV2, RunResultsV3, RunResultsV4,
-           RunResultsV5]:
+RunResults = Union[RunResultsV1, RunResultsV2, RunResultsV3, RunResultsV4, RunResultsV5]
+
+
+def parse_run_results(run_results: dict) -> RunResults:
     """Parse run-results.json
 
     Args:
         run_results: A dict of run-results.json
 
     Returns:
-        Union[RunResultsV1, RunResultsV2, RunResultsV3, RunResultsV4]:
+        RunResults
     """
     dbt_schema_version = get_dbt_schema_version(artifact_json=run_results)
     if dbt_schema_version == ArtifactTypes.RUN_RESULTS_V1.value.dbt_schema_version:
@@ -275,14 +279,17 @@ def parse_run_results_v5(run_results: dict) -> RunResultsV5:
 #
 # sources
 #
-def parse_sources(sources: dict) -> Union[SourcesV1, SourcesV2, SourcesV3]:
+Sources = Union[SourcesV1, SourcesV2, SourcesV3]
+
+
+def parse_sources(sources: dict) -> Sources:
     """Parse sources.json
 
     Args:
         sources: A dict of sources.json
 
     Returns:
-        Union[SourcesV1, SourcesV2, SourcesV3]
+        Sources
     """
     dbt_schema_version = get_dbt_schema_version(artifact_json=sources)
     if dbt_schema_version == ArtifactTypes.SOURCES_V1.value.dbt_schema_version:
