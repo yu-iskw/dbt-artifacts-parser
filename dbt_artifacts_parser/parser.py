@@ -14,7 +14,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-from typing import Union
+from typing import TypeAlias, Union
 
 from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
 from dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
@@ -42,7 +42,7 @@ from dbt_artifacts_parser.parsers.version_map import ArtifactTypes
 #
 # catalog
 #
-Catalog = Union[CatalogV1]
+Catalog: TypeAlias = Union[CatalogV1]
 
 
 def parse_catalog(catalog: dict) -> Catalog:
@@ -71,7 +71,7 @@ def parse_catalog_v1(catalog: dict) -> CatalogV1:
 #
 # manifest
 #
-Manifest = Union[
+Manifest: TypeAlias = Union[
         ManifestV1,
         ManifestV2,
         ManifestV3,
@@ -211,7 +211,7 @@ def parse_manifest_v11(manifest: dict) -> ManifestV6:
 #
 # run-results
 #
-RunResults = Union[RunResultsV1, RunResultsV2, RunResultsV3, RunResultsV4, RunResultsV5]
+RunResults: TypeAlias = Union[RunResultsV1, RunResultsV2, RunResultsV3, RunResultsV4, RunResultsV5]
 
 
 def parse_run_results(run_results: dict) -> RunResults:
@@ -279,7 +279,7 @@ def parse_run_results_v5(run_results: dict) -> RunResultsV5:
 #
 # sources
 #
-Sources = Union[SourcesV1, SourcesV2, SourcesV3]
+Sources: TypeAlias = Union[SourcesV1, SourcesV2, SourcesV3]
 
 
 def parse_sources(sources: dict) -> Sources:
