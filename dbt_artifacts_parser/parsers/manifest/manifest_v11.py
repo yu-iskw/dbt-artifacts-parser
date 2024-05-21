@@ -11,6 +11,7 @@ from pydantic import Extra, Field, constr
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
+
 class ResourceType11(Enum):
     doc = 'doc'
 class Documentation(BaseParserModel):

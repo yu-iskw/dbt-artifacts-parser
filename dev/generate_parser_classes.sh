@@ -45,7 +45,7 @@ done
 #
 # manifest
 #
-manifest_versions=("v1" "v2" "v3" "v4" "v5" "v6" "v7" "v8" "v9" "v10" "v11")
+manifest_versions=("v1" "v2" "v3" "v4" "v5" "v6" "v7" "v8" "v9" "v10" "v11" "v12")
 for ver in "${manifest_versions[@]}"
 do
   # Convert `v1` to `V1`
@@ -63,7 +63,7 @@ done
 #
 # run-results
 #
-run_results_versions=("v1" "v2" "v3" "v4" "v5")
+run_results_versions=("v1" "v2" "v3" "v4" "v5" "v6")
 for ver in "${run_results_versions[@]}"
 do
   # Convert `v1` to `V1`
