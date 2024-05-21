@@ -4,65 +4,63 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Literal, Optional, Union
 from uuid import UUID
 
-from pydantic import Extra, Field, constr
+from pydantic import ConfigDict, Field, constr
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 
 class Metadata(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     dbt_schema_version: Optional[str] = None
     dbt_version: Optional[str] = '1.8.0b3'
     generated_at: Optional[str] = None
-    invocation_id: Optional[Optional[str]] = None
+    invocation_id: Optional[str] = None
     env: Optional[Dict[str, str]] = None
-    project_name: Optional[Optional[str]] = Field(
-        None, description='Name of the root project'
-    )
-    project_id: Optional[Optional[str]] = Field(
+    project_name: Optional[str] = Field(None, description='Name of the root project')
+    project_id: Optional[str] = Field(
         None,
         description='A unique identifier for the project, hashed from the project name',
     )
-    user_id: Optional[Optional[UUID]] = Field(
+    user_id: Optional[UUID] = Field(
         None, description='A unique identifier for the user'
     )
-    send_anonymous_usage_stats: Optional[Optional[bool]] = Field(
+    send_anonymous_usage_stats: Optional[bool] = Field(
         None, description='Whether dbt is configured to send anonymous usage statistics'
     )
-    adapter_type: Optional[Optional[str]] = Field(
+    adapter_type: Optional[str] = Field(
         None, description='The type name of the adapter'
     )
 
 
 class Checksum(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
     checksum: str
 
 
 class PostHookItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     sql: str
     transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
+    index: Optional[int] = None
 
 
 class PreHookItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     sql: str
     transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
+    index: Optional[int] = None
 
 
 class OnConfigurationChange(Enum):
@@ -72,50 +70,50 @@ class OnConfigurationChange(Enum):
 
 
 class Docs(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
+    node_color: Optional[str] = None
 
 
 class Contract(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
 
 
 class Config(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     materialized: Optional[str] = 'seed'
-    incremental_strategy: Optional[Optional[str]] = None
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = None
     post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
     pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
     on_configuration_change: Optional[OnConfigurationChange] = None
     grants: Optional[Dict[str, Any]] = None
     packages: Optional[List[str]] = None
     docs: Optional[Docs] = Field(None, title='Docs')
     contract: Optional[Contract] = Field(None, title='ContractConfig')
     delimiter: Optional[str] = ','
-    quote_columns: Optional[Optional[bool]] = None
+    quote_columns: Optional[bool] = None
 
 
 class Type(Enum):
@@ -128,42 +126,34 @@ class Type(Enum):
 
 
 class Constraint(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     type: Type
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
+    name: Optional[str] = None
+    expression: Optional[str] = None
     warn_unenforced: Optional[bool] = True
     warn_unsupported: Optional[bool] = True
 
 
 class Columns(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: str
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
+    data_type: Optional[str] = None
     constraints: Optional[List[Constraint]] = None
-    quote: Optional[Optional[bool]] = None
+    quote: Optional[bool] = None
     tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
-
-
-class Docs1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
 class DependsOn(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     macros: Optional[List[str]] = None
 
 
@@ -188,100 +178,60 @@ class ResourceType(Enum):
     fixture = 'fixture'
 
 
-class PostHookItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange1(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Contract1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-
-
-class ConfigItem(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     materialized: Optional[str] = 'view'
-    incremental_strategy: Optional[Optional[str]] = None
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem1]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem1]] = Field(None, alias='pre-hook')
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange1] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
     grants: Optional[Dict[str, Any]] = None
     packages: Optional[List[str]] = None
-    docs: Optional[Docs2] = Field(None, title='Docs')
-    contract: Optional[Contract1] = Field(None, title='ContractConfig')
+    docs: Optional[Docs] = Field(None, title='Docs')
+    contract: Optional[Contract] = Field(None, title='ContractConfig')
 
 
-class DeferRelationItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class DeferRelation(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     alias: str
-    relation_name: Optional[str]
+    relation_name: Optional[str] = None
     resource_type: ResourceType
     name: str
     description: str
-    compiled_code: Optional[str]
+    compiled_code: Optional[str] = None
     meta: Dict[str, Any]
     tags: List[str]
-    config: Optional[ConfigItem]
+    config: Optional[Config1] = None
 
 
-class Node(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class Nodes(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: Literal['seed']
     package_name: str
     path: str
     original_file_path: str
@@ -294,609 +244,363 @@ class Node(BaseParserModel):
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs1] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     unrendered_config: Optional[Dict[str, Any]] = None
     created_at: Optional[float] = None
     config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
-    root_path: Optional[Optional[str]] = None
+    root_path: Optional[str] = None
     depends_on: Optional[DependsOn] = Field(None, title='MacroDependsOn')
-    defer_relation: Optional[Optional[DeferRelationItem]] = None
+    defer_relation: Optional[DeferRelation] = None
 
 
-class Checksum1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    checksum: str
-
-
-class PostHookItem2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange2(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Contract2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-
-
-class Config1(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config2(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     materialized: Optional[str] = 'view'
-    incremental_strategy: Optional[Optional[str]] = None
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem2]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem2]] = Field(None, alias='pre-hook')
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange2] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
     grants: Optional[Dict[str, Any]] = None
     packages: Optional[List[str]] = None
-    docs: Optional[Docs3] = Field(None, title='Docs')
-    contract: Optional[Contract2] = Field(None, title='ContractConfig')
-
-
-class Type1(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
+    docs: Optional[Docs] = Field(None, title='Docs')
+    contract: Optional[Contract] = Field(None, title='ContractConfig')
 
 
 class Constraint1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type1
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type
+    name: Optional[str] = None
+    expression: Optional[str] = None
     warn_unenforced: Optional[bool] = True
     warn_unsupported: Optional[bool] = True
 
 
 class Columns1(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: str
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
+    data_type: Optional[str] = None
     constraints: Optional[List[Constraint1]] = None
-    quote: Optional[Optional[bool]] = None
+    quote: Optional[bool] = None
     tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
-
-
-class Docs4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
 class Ref(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
+    package: Optional[str] = None
+    version: Optional[Union[str, float]] = None
 
 
 class DependsOn1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     macros: Optional[List[str]] = None
     nodes: Optional[List[str]] = None
 
 
 class ExtraCte(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     id: str
     sql: str
 
 
 class Contract3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
-    checksum: Optional[Optional[str]] = None
+    checksum: Optional[str] = None
 
 
-class Node1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class Nodes1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: Literal['analysis']
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     alias: str
-    checksum: Checksum1 = Field(..., title='FileHash')
-    config: Optional[Config1] = Field(None, title='NodeConfig')
+    checksum: Checksum = Field(..., title='FileHash')
+    config: Optional[Config2] = Field(None, title='NodeConfig')
     tags: Optional[List[str]] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns1]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs4] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     unrendered_config: Optional[Dict[str, Any]] = None
     created_at: Optional[float] = None
     config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
     refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
     depends_on: Optional[DependsOn1] = Field(None, title='DependsOn')
-    compiled_path: Optional[Optional[str]] = None
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
     extra_ctes: Optional[List[ExtraCte]] = None
-    _pre_injected_sql: Optional[Optional[str]] = None
+    field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
     contract: Optional[Contract3] = Field(None, title='Contract')
 
 
-class Checksum2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    checksum: str
-
-
-class Config2(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config3(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field('dbt_test__audit', alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field('dbt_test__audit', alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     materialized: Optional[str] = 'test'
     severity: Optional[
-        constr(regex=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
+        constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
     ] = 'ERROR'
-    store_failures: Optional[Optional[bool]] = None
-    store_failures_as: Optional[Optional[str]] = None
-    where: Optional[Optional[str]] = None
-    limit: Optional[Optional[int]] = None
+    store_failures: Optional[bool] = None
+    store_failures_as: Optional[str] = None
+    where: Optional[str] = None
+    limit: Optional[int] = None
     fail_calc: Optional[str] = 'count(*)'
     warn_if: Optional[str] = '!= 0'
     error_if: Optional[str] = '!= 0'
 
 
-class Type2(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
-
-
 class Constraint2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type2
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type
+    name: Optional[str] = None
+    expression: Optional[str] = None
     warn_unenforced: Optional[bool] = True
     warn_unsupported: Optional[bool] = True
 
 
 class Columns2(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: str
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
+    data_type: Optional[str] = None
     constraints: Optional[List[Constraint2]] = None
-    quote: Optional[Optional[bool]] = None
+    quote: Optional[bool] = None
     tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Docs5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Ref1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class DependsOn2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class ExtraCte1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    id: str
-    sql: str
-
-
-class Contract4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-    checksum: Optional[Optional[str]] = None
-
-
-class Node2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class Nodes2(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: Literal['test']
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     alias: str
-    checksum: Checksum2 = Field(..., title='FileHash')
-    config: Optional[Config2] = Field(None, title='TestConfig')
+    checksum: Checksum = Field(..., title='FileHash')
+    config: Optional[Config3] = Field(None, title='TestConfig')
     tags: Optional[List[str]] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns2]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs5] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     unrendered_config: Optional[Dict[str, Any]] = None
     created_at: Optional[float] = None
     config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
-    refs: Optional[List[Ref1]] = None
+    refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn2] = Field(None, title='DependsOn')
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn1] = Field(None, title='DependsOn')
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
-    extra_ctes: Optional[List[ExtraCte1]] = None
-    _pre_injected_sql: Optional[Optional[str]] = None
-    contract: Optional[Contract4] = Field(None, title='Contract')
-
-
-class Checksum3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    checksum: str
-
-
-class PostHookItem3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange3(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs6(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
+    extra_ctes: Optional[List[ExtraCte]] = None
+    field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
+    contract: Optional[Contract3] = Field(None, title='Contract')
 
 
 class Contract5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
 
 
-class Config3(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config4(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     materialized: Optional[str] = 'view'
-    incremental_strategy: Optional[Optional[str]] = None
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem3]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem3]] = Field(None, alias='pre-hook')
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange3] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
     grants: Optional[Dict[str, Any]] = None
     packages: Optional[List[str]] = None
-    docs: Optional[Docs6] = Field(None, title='Docs')
+    docs: Optional[Docs] = Field(None, title='Docs')
     contract: Optional[Contract5] = Field(None, title='ContractConfig')
 
 
-class Type3(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
-
-
 class Constraint3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type3
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type
+    name: Optional[str] = None
+    expression: Optional[str] = None
     warn_unenforced: Optional[bool] = True
     warn_unsupported: Optional[bool] = True
 
 
 class Columns3(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: str
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
+    data_type: Optional[str] = None
     constraints: Optional[List[Constraint3]] = None
-    quote: Optional[Optional[bool]] = None
+    quote: Optional[bool] = None
     tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
-
-
-class Docs7(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Ref2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class DependsOn3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class ExtraCte2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    id: str
-    sql: str
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
 class Contract6(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
-    checksum: Optional[Optional[str]] = None
+    checksum: Optional[str] = None
 
 
-class Node3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class Nodes3(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: Literal['operation']
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     alias: str
-    checksum: Checksum3 = Field(..., title='FileHash')
-    config: Optional[Config3] = Field(None, title='NodeConfig')
+    checksum: Checksum = Field(..., title='FileHash')
+    config: Optional[Config4] = Field(None, title='NodeConfig')
     tags: Optional[List[str]] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns3]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs7] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     unrendered_config: Optional[Dict[str, Any]] = None
     created_at: Optional[float] = None
     config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
-    refs: Optional[List[Ref2]] = None
+    refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn3] = Field(None, title='DependsOn')
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn1] = Field(None, title='DependsOn')
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
-    extra_ctes: Optional[List[ExtraCte2]] = None
-    _pre_injected_sql: Optional[Optional[str]] = None
+    extra_ctes: Optional[List[ExtraCte]] = None
+    field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
     contract: Optional[Contract6] = Field(None, title='Contract')
-    index: Optional[Optional[int]] = None
-
-
-class Checksum4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    checksum: str
-
-
-class PostHookItem4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange4(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs8(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
+    index: Optional[int] = None
 
 
 class Contract7(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
 
@@ -907,1086 +611,677 @@ class Access(Enum):
     public = 'public'
 
 
-class Config4(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config5(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     materialized: Optional[str] = 'view'
-    incremental_strategy: Optional[Optional[str]] = None
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem4]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem4]] = Field(None, alias='pre-hook')
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange4] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
     grants: Optional[Dict[str, Any]] = None
     packages: Optional[List[str]] = None
-    docs: Optional[Docs8] = Field(None, title='Docs')
+    docs: Optional[Docs] = Field(None, title='Docs')
     contract: Optional[Contract7] = Field(None, title='ContractConfig')
     access: Optional[Access] = 'protected'
 
 
-class Type4(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
-
-
 class Constraint4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type4
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type
+    name: Optional[str] = None
+    expression: Optional[str] = None
     warn_unenforced: Optional[bool] = True
     warn_unsupported: Optional[bool] = True
 
 
 class Columns4(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: str
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
+    data_type: Optional[str] = None
     constraints: Optional[List[Constraint4]] = None
-    quote: Optional[Optional[bool]] = None
+    quote: Optional[bool] = None
     tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
-
-
-class Docs9(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Ref3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class DependsOn4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class ExtraCte3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    id: str
-    sql: str
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
 class Contract8(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
-    checksum: Optional[Optional[str]] = None
-
-
-class Access1(Enum):
-    private = 'private'
-    protected = 'protected'
-    public = 'public'
-
-
-class Type5(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
+    checksum: Optional[str] = None
 
 
 class Constraint5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type5
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type
+    name: Optional[str] = None
+    expression: Optional[str] = None
     warn_unenforced: Optional[bool] = True
     warn_unsupported: Optional[bool] = True
     columns: Optional[List[str]] = None
 
 
-class ResourceType1(Enum):
-    model = 'model'
-    analysis = 'analysis'
-    test = 'test'
-    snapshot = 'snapshot'
-    operation = 'operation'
-    seed = 'seed'
-    rpc = 'rpc'
-    sql_operation = 'sql_operation'
-    doc = 'doc'
-    source = 'source'
-    macro = 'macro'
-    exposure = 'exposure'
-    metric = 'metric'
-    group = 'group'
-    saved_query = 'saved_query'
-    semantic_model = 'semantic_model'
-    unit_test = 'unit_test'
-    fixture = 'fixture'
-
-
-class PostHookItem5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange5(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs10(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
 class Contract9(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
 
 
-class ConfigItem1(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config6(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     materialized: Optional[str] = 'view'
-    incremental_strategy: Optional[Optional[str]] = None
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem5]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem5]] = Field(None, alias='pre-hook')
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange5] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
     grants: Optional[Dict[str, Any]] = None
     packages: Optional[List[str]] = None
-    docs: Optional[Docs10] = Field(None, title='Docs')
+    docs: Optional[Docs] = Field(None, title='Docs')
     contract: Optional[Contract9] = Field(None, title='ContractConfig')
 
 
-class DeferRelationItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class DeferRelation1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     alias: str
-    relation_name: Optional[str]
-    resource_type: ResourceType1
+    relation_name: Optional[str] = None
+    resource_type: ResourceType
     name: str
     description: str
-    compiled_code: Optional[str]
+    compiled_code: Optional[str] = None
     meta: Dict[str, Any]
     tags: List[str]
-    config: Optional[ConfigItem1]
+    config: Optional[Config6] = None
 
 
-class Node4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class Nodes4(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: Literal['model']
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     alias: str
-    checksum: Checksum4 = Field(..., title='FileHash')
-    config: Optional[Config4] = Field(None, title='ModelConfig')
+    checksum: Checksum = Field(..., title='FileHash')
+    config: Optional[Config5] = Field(None, title='ModelConfig')
     tags: Optional[List[str]] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns4]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs9] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     unrendered_config: Optional[Dict[str, Any]] = None
     created_at: Optional[float] = None
     config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
-    refs: Optional[List[Ref3]] = None
+    refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn4] = Field(None, title='DependsOn')
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn1] = Field(None, title='DependsOn')
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
-    extra_ctes: Optional[List[ExtraCte3]] = None
-    _pre_injected_sql: Optional[Optional[str]] = None
+    extra_ctes: Optional[List[ExtraCte]] = None
+    field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
     contract: Optional[Contract8] = Field(None, title='Contract')
-    access: Optional[Access1] = 'protected'
+    access: Optional[Access] = 'protected'
     constraints: Optional[List[Constraint5]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-    latest_version: Optional[Optional[Union[str, float]]] = None
-    deprecation_date: Optional[Optional[str]] = None
-    defer_relation: Optional[Optional[DeferRelationItem1]] = None
-    primary_key: Optional[Optional[List[str]]] = None
+    version: Optional[Union[str, float]] = None
+    latest_version: Optional[Union[str, float]] = None
+    deprecation_date: Optional[str] = None
+    defer_relation: Optional[DeferRelation1] = None
+    primary_key: Optional[List[str]] = None
 
 
-class Checksum5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    checksum: str
-
-
-class PostHookItem6(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem6(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange6(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs11(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Contract10(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-
-
-class Config5(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config7(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     materialized: Optional[str] = 'view'
-    incremental_strategy: Optional[Optional[str]] = None
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem6]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem6]] = Field(None, alias='pre-hook')
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange6] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
     grants: Optional[Dict[str, Any]] = None
     packages: Optional[List[str]] = None
-    docs: Optional[Docs11] = Field(None, title='Docs')
-    contract: Optional[Contract10] = Field(None, title='ContractConfig')
-
-
-class Type6(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
+    docs: Optional[Docs] = Field(None, title='Docs')
+    contract: Optional[Contract9] = Field(None, title='ContractConfig')
 
 
 class Constraint6(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type6
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type
+    name: Optional[str] = None
+    expression: Optional[str] = None
     warn_unenforced: Optional[bool] = True
     warn_unsupported: Optional[bool] = True
 
 
 class Columns5(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: str
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
+    data_type: Optional[str] = None
     constraints: Optional[List[Constraint6]] = None
-    quote: Optional[Optional[bool]] = None
+    quote: Optional[bool] = None
     tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
-
-
-class Docs12(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Ref4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class DependsOn5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class ExtraCte4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    id: str
-    sql: str
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
 class Contract11(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
-    checksum: Optional[Optional[str]] = None
+    checksum: Optional[str] = None
 
 
-class Node5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class Nodes5(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: Literal['sql_operation']
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     alias: str
-    checksum: Checksum5 = Field(..., title='FileHash')
-    config: Optional[Config5] = Field(None, title='NodeConfig')
+    checksum: Checksum = Field(..., title='FileHash')
+    config: Optional[Config7] = Field(None, title='NodeConfig')
     tags: Optional[List[str]] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns5]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs12] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     unrendered_config: Optional[Dict[str, Any]] = None
     created_at: Optional[float] = None
     config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
-    refs: Optional[List[Ref4]] = None
+    refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn5] = Field(None, title='DependsOn')
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn1] = Field(None, title='DependsOn')
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
-    extra_ctes: Optional[List[ExtraCte4]] = None
-    _pre_injected_sql: Optional[Optional[str]] = None
+    extra_ctes: Optional[List[ExtraCte]] = None
+    field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
     contract: Optional[Contract11] = Field(None, title='Contract')
 
 
-class Checksum6(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    checksum: str
-
-
-class Config6(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config8(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field('dbt_test__audit', alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field('dbt_test__audit', alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     materialized: Optional[str] = 'test'
     severity: Optional[
-        constr(regex=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
+        constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
     ] = 'ERROR'
-    store_failures: Optional[Optional[bool]] = None
-    store_failures_as: Optional[Optional[str]] = None
-    where: Optional[Optional[str]] = None
-    limit: Optional[Optional[int]] = None
+    store_failures: Optional[bool] = None
+    store_failures_as: Optional[str] = None
+    where: Optional[str] = None
+    limit: Optional[int] = None
     fail_calc: Optional[str] = 'count(*)'
     warn_if: Optional[str] = '!= 0'
     error_if: Optional[str] = '!= 0'
 
 
-class Type7(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
-
-
 class Constraint7(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type7
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type
+    name: Optional[str] = None
+    expression: Optional[str] = None
     warn_unenforced: Optional[bool] = True
     warn_unsupported: Optional[bool] = True
 
 
 class Columns6(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: str
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
+    data_type: Optional[str] = None
     constraints: Optional[List[Constraint7]] = None
-    quote: Optional[Optional[bool]] = None
+    quote: Optional[bool] = None
     tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
-
-
-class Docs13(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Ref5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class DependsOn6(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class ExtraCte5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    id: str
-    sql: str
-
-
-class Contract12(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-    checksum: Optional[Optional[str]] = None
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
 class TestMetadata(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: Optional[str] = 'test'
     kwargs: Optional[Dict[str, Any]] = None
-    namespace: Optional[Optional[str]] = None
+    namespace: Optional[str] = None
 
 
-class Node6(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class Nodes6(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: Literal['test']
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     alias: str
-    checksum: Checksum6 = Field(..., title='FileHash')
-    config: Optional[Config6] = Field(None, title='TestConfig')
+    checksum: Checksum = Field(..., title='FileHash')
+    config: Optional[Config8] = Field(None, title='TestConfig')
     tags: Optional[List[str]] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns6]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs13] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     unrendered_config: Optional[Dict[str, Any]] = None
     created_at: Optional[float] = None
     config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
-    refs: Optional[List[Ref5]] = None
+    refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn6] = Field(None, title='DependsOn')
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn1] = Field(None, title='DependsOn')
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
-    extra_ctes: Optional[List[ExtraCte5]] = None
-    _pre_injected_sql: Optional[Optional[str]] = None
-    contract: Optional[Contract12] = Field(None, title='Contract')
-    column_name: Optional[Optional[str]] = None
-    file_key_name: Optional[Optional[str]] = None
-    attached_node: Optional[Optional[str]] = None
+    extra_ctes: Optional[List[ExtraCte]] = None
+    field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
+    contract: Optional[Contract11] = Field(None, title='Contract')
+    column_name: Optional[str] = None
+    file_key_name: Optional[str] = None
+    attached_node: Optional[str] = None
     test_metadata: Optional[TestMetadata] = Field(None, title='TestMetadata')
 
 
-class Checksum7(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    checksum: str
-
-
-class PostHookItem7(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem7(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange7(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs14(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
 class Contract13(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
 
 
-class Config7(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config9(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     materialized: Optional[str] = 'snapshot'
-    incremental_strategy: Optional[Optional[str]] = None
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem7]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem7]] = Field(None, alias='pre-hook')
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[str]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange7] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[str] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
     grants: Optional[Dict[str, Any]] = None
     packages: Optional[List[str]] = None
-    docs: Optional[Docs14] = Field(None, title='Docs')
+    docs: Optional[Docs] = Field(None, title='Docs')
     contract: Optional[Contract13] = Field(None, title='ContractConfig')
-    strategy: Optional[Optional[str]] = None
-    target_schema: Optional[Optional[str]] = None
-    target_database: Optional[Optional[str]] = None
-    updated_at: Optional[Optional[str]] = None
-    check_cols: Optional[Optional[Union[str, List[str]]]] = None
-
-
-class Type8(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
+    strategy: Optional[str] = None
+    target_schema: Optional[str] = None
+    target_database: Optional[str] = None
+    updated_at: Optional[str] = None
+    check_cols: Optional[Union[str, List[str]]] = None
 
 
 class Constraint8(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type8
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type
+    name: Optional[str] = None
+    expression: Optional[str] = None
     warn_unenforced: Optional[bool] = True
     warn_unsupported: Optional[bool] = True
 
 
 class Columns7(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: str
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
+    data_type: Optional[str] = None
     constraints: Optional[List[Constraint8]] = None
-    quote: Optional[Optional[bool]] = None
+    quote: Optional[bool] = None
     tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
-
-
-class Docs15(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Ref6(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class DependsOn7(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class ExtraCte6(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    id: str
-    sql: str
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
 class Contract14(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
-    checksum: Optional[Optional[str]] = None
-
-
-class ResourceType2(Enum):
-    model = 'model'
-    analysis = 'analysis'
-    test = 'test'
-    snapshot = 'snapshot'
-    operation = 'operation'
-    seed = 'seed'
-    rpc = 'rpc'
-    sql_operation = 'sql_operation'
-    doc = 'doc'
-    source = 'source'
-    macro = 'macro'
-    exposure = 'exposure'
-    metric = 'metric'
-    group = 'group'
-    saved_query = 'saved_query'
-    semantic_model = 'semantic_model'
-    unit_test = 'unit_test'
-    fixture = 'fixture'
-
-
-class PostHookItem8(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem8(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange8(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs16(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
+    checksum: Optional[str] = None
 
 
 class Contract15(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
 
 
-class ConfigItem2(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config10(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     materialized: Optional[str] = 'view'
-    incremental_strategy: Optional[Optional[str]] = None
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem8]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem8]] = Field(None, alias='pre-hook')
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange8] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
     grants: Optional[Dict[str, Any]] = None
     packages: Optional[List[str]] = None
-    docs: Optional[Docs16] = Field(None, title='Docs')
+    docs: Optional[Docs] = Field(None, title='Docs')
     contract: Optional[Contract15] = Field(None, title='ContractConfig')
 
 
-class DeferRelationItem2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class DeferRelation2(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     alias: str
-    relation_name: Optional[str]
-    resource_type: ResourceType2
+    relation_name: Optional[str] = None
+    resource_type: ResourceType
     name: str
     description: str
-    compiled_code: Optional[str]
+    compiled_code: Optional[str] = None
     meta: Dict[str, Any]
     tags: List[str]
-    config: Optional[ConfigItem2]
+    config: Optional[Config10] = None
 
 
-class Node7(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class Nodes7(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: Literal['snapshot']
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     alias: str
-    checksum: Checksum7 = Field(..., title='FileHash')
-    config: Config7 = Field(..., title='SnapshotConfig')
+    checksum: Checksum = Field(..., title='FileHash')
+    config: Config9 = Field(..., title='SnapshotConfig')
     tags: Optional[List[str]] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns7]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs15] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     unrendered_config: Optional[Dict[str, Any]] = None
     created_at: Optional[float] = None
     config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
-    refs: Optional[List[Ref6]] = None
+    refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn7] = Field(None, title='DependsOn')
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn1] = Field(None, title='DependsOn')
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
-    extra_ctes: Optional[List[ExtraCte6]] = None
-    _pre_injected_sql: Optional[Optional[str]] = None
+    extra_ctes: Optional[List[ExtraCte]] = None
+    field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
     contract: Optional[Contract14] = Field(None, title='Contract')
-    defer_relation: Optional[Optional[DeferRelationItem2]] = None
+    defer_relation: Optional[DeferRelation2] = None
 
 
 class Quoting(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[bool] = None
+    schema_: Optional[bool] = Field(None, alias='schema')
+    identifier: Optional[bool] = None
+    column: Optional[bool] = None
 
-    database: Optional[Optional[bool]] = None
-    schema_: Optional[Optional[bool]] = Field(None, alias='schema')
-    identifier: Optional[Optional[bool]] = None
-    column: Optional[Optional[bool]] = None
 
-
-class PeriodEnum(Enum):
+class Period(Enum):
     minute = 'minute'
     hour = 'hour'
     day = 'day'
 
 
-class WarnAfterItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    count: Optional[Optional[int]] = None
-    period: Optional[Optional[PeriodEnum]] = None
-
-
-class PeriodEnum1(Enum):
-    minute = 'minute'
-    hour = 'hour'
-    day = 'day'
+class WarnAfter(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    count: Optional[int] = None
+    period: Optional[Period] = None
 
 
-class ErrorAfterItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
+class ErrorAfter(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    count: Optional[int] = None
+    period: Optional[Period] = None
 
-    count: Optional[Optional[int]] = None
-    period: Optional[Optional[PeriodEnum1]] = None
 
-
-class Freshnes(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    warn_after: Optional[Optional[WarnAfterItem]] = None
-    error_after: Optional[Optional[ErrorAfterItem]] = None
-    filter: Optional[Optional[str]] = None
+class Freshness(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    warn_after: Optional[WarnAfter] = None
+    error_after: Optional[ErrorAfter] = None
+    filter: Optional[str] = None
 
 
 class Partition(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     name: Optional[str] = ''
     description: Optional[str] = ''
     data_type: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
 
 
-class ExternalItem(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
-    location: Optional[Optional[str]] = None
-    file_format: Optional[Optional[str]] = None
-    row_format: Optional[Optional[str]] = None
-    tbl_properties: Optional[Optional[str]] = None
-    partitions: Optional[Optional[Union[List[str], List[Partition]]]] = None
-
-
-class Type9(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
+class External(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
+    location: Optional[str] = None
+    file_format: Optional[str] = None
+    row_format: Optional[str] = None
+    tbl_properties: Optional[str] = None
+    partitions: Optional[Union[List[str], List[Partition]]] = None
 
 
 class Constraint9(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type9
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type
+    name: Optional[str] = None
+    expression: Optional[str] = None
     warn_unenforced: Optional[bool] = True
     warn_unsupported: Optional[bool] = True
 
 
 class Columns8(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: str
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
+    data_type: Optional[str] = None
     constraints: Optional[List[Constraint9]] = None
-    quote: Optional[Optional[bool]] = None
+    quote: Optional[bool] = None
     tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Config8(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config11(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
 
 
 class Sources(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: Literal['source']
     package_name: str
     path: str
     original_file_path: str
@@ -1997,42 +1292,34 @@ class Sources(BaseParserModel):
     loader: str
     identifier: str
     quoting: Optional[Quoting] = Field(None, title='Quoting')
-    loaded_at_field: Optional[Optional[str]] = None
-    freshness: Optional[Optional[Freshnes]] = None
-    external: Optional[Optional[ExternalItem]] = None
+    loaded_at_field: Optional[str] = None
+    freshness: Optional[Freshness] = None
+    external: Optional[External] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns8]] = None
     meta: Optional[Dict[str, Any]] = None
     source_meta: Optional[Dict[str, Any]] = None
     tags: Optional[List[str]] = None
-    config: Optional[Config8] = Field(None, title='SourceConfig')
-    patch_path: Optional[Optional[str]] = None
+    config: Optional[Config11] = Field(None, title='SourceConfig')
+    patch_path: Optional[str] = None
     unrendered_config: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     created_at: Optional[float] = None
 
 
 class DependsOn8(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     macros: Optional[List[str]] = None
 
 
-class Docs17(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
 class Argument(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    type: Optional[Optional[str]] = None
+    type: Optional[str] = None
     description: Optional[str] = ''
 
 
@@ -2042,11 +1329,11 @@ class SupportedLanguage(Enum):
 
 
 class Macros(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    resource_type: Any
+    resource_type: Literal['macro']
     package_name: str
     path: str
     original_file_path: str
@@ -2055,19 +1342,19 @@ class Macros(BaseParserModel):
     depends_on: Optional[DependsOn8] = Field(None, title='MacroDependsOn')
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
-    docs: Optional[Docs17] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
+    docs: Optional[Docs] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
     arguments: Optional[List[Argument]] = None
     created_at: Optional[float] = None
-    supported_languages: Optional[Optional[List[SupportedLanguage]]] = None
+    supported_languages: Optional[List[SupportedLanguage]] = None
 
 
 class Docs18(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    resource_type: Any
+    resource_type: Literal['doc']
     package_name: str
     path: str
     original_file_path: str
@@ -2084,51 +1371,34 @@ class Type10(Enum):
 
 
 class Owner(BaseParserModel):
-    class Config:
-        extra = Extra.allow
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
+    email: Optional[str] = None
+    name: Optional[str] = None
 
-    _extra: Optional[Dict[str, Any]] = None
-    email: Optional[Optional[str]] = None
-    name: Optional[Optional[str]] = None
 
-
-class MaturityEnum(Enum):
+class Maturity(Enum):
     low = 'low'
     medium = 'medium'
     high = 'high'
 
 
-class Config9(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
-    enabled: Optional[bool] = True
-
-
 class DependsOn9(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     macros: Optional[List[str]] = None
     nodes: Optional[List[str]] = None
 
 
-class Ref7(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
 class Exposures(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    resource_type: Any
+    resource_type: Literal['exposure']
     package_name: str
     path: str
     original_file_path: str
@@ -2137,15 +1407,15 @@ class Exposures(BaseParserModel):
     type: Type10
     owner: Owner = Field(..., title='Owner')
     description: Optional[str] = ''
-    label: Optional[Optional[str]] = None
-    maturity: Optional[Optional[MaturityEnum]] = None
+    label: Optional[str] = None
+    maturity: Optional[Maturity] = None
     meta: Optional[Dict[str, Any]] = None
     tags: Optional[List[str]] = None
-    config: Optional[Config9] = Field(None, title='ExposureConfig')
+    config: Optional[Config11] = Field(None, title='ExposureConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
-    url: Optional[Optional[str]] = None
+    url: Optional[str] = None
     depends_on: Optional[DependsOn9] = Field(None, title='DependsOn')
-    refs: Optional[List[Ref7]] = None
+    refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
     created_at: Optional[float] = None
@@ -2160,67 +1430,53 @@ class Type11(Enum):
 
 
 class WhereFilter(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     where_sql_template: str
 
 
-class FilterItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Filter(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     where_filters: List[WhereFilter]
 
 
-class MeasureItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Measure(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    filter: Optional[Optional[FilterItem]] = None
-    alias: Optional[Optional[str]] = None
+    filter: Optional[Filter] = None
+    alias: Optional[str] = None
     join_to_timespine: Optional[bool] = False
-    fill_nulls_with: Optional[Optional[int]] = None
+    fill_nulls_with: Optional[int] = None
 
 
-class WhereFilter1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class FilterItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter1]
+class Filter1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
 class InputMeasure(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    filter: Optional[Optional[FilterItem1]] = None
-    alias: Optional[Optional[str]] = None
+    filter: Optional[Filter1] = None
+    alias: Optional[str] = None
     join_to_timespine: Optional[bool] = False
-    fill_nulls_with: Optional[Optional[int]] = None
+    fill_nulls_with: Optional[int] = None
 
 
-class WhereFilter2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class FilterItem2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter2]
+class Filter2(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
 class Granularity(Enum):
@@ -2231,15 +1487,15 @@ class Granularity(Enum):
     year = 'year'
 
 
-class OffsetWindowItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class OffsetWindow(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     count: int
     granularity: Granularity
 
 
-class OffsetToGrainEnum(Enum):
+class OffsetToGrain(Enum):
     day = 'day'
     week = 'week'
     month = 'month'
@@ -2247,83 +1503,52 @@ class OffsetToGrainEnum(Enum):
     year = 'year'
 
 
-class NumeratorItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Numerator(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    filter: Optional[Optional[FilterItem2]] = None
-    alias: Optional[Optional[str]] = None
-    offset_window: Optional[Optional[OffsetWindowItem]] = None
-    offset_to_grain: Optional[Optional[OffsetToGrainEnum]] = None
+    filter: Optional[Filter2] = None
+    alias: Optional[str] = None
+    offset_window: Optional[OffsetWindow] = None
+    offset_to_grain: Optional[OffsetToGrain] = None
 
 
-class WhereFilter3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class FilterItem3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter3]
+class Filter3(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
-class Granularity1(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
-
-
-class OffsetWindowItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class OffsetWindow1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     count: int
-    granularity: Granularity1
+    granularity: Granularity
 
 
-class OffsetToGrainEnum1(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
-
-
-class DenominatorItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Denominator(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    filter: Optional[Optional[FilterItem3]] = None
-    alias: Optional[Optional[str]] = None
-    offset_window: Optional[Optional[OffsetWindowItem1]] = None
-    offset_to_grain: Optional[Optional[OffsetToGrainEnum1]] = None
+    filter: Optional[Filter3] = None
+    alias: Optional[str] = None
+    offset_window: Optional[OffsetWindow1] = None
+    offset_to_grain: Optional[OffsetToGrain] = None
 
 
-class Granularity2(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
-
-
-class WindowItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Window(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     count: int
-    granularity: Granularity2
+    granularity: Granularity
 
 
-class GrainToDateEnum(Enum):
+class GrainToDate(Enum):
     day = 'day'
     week = 'week'
     month = 'month'
@@ -2331,103 +1556,66 @@ class GrainToDateEnum(Enum):
     year = 'year'
 
 
-class WhereFilter4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class FilterItem4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter4]
+class Filter4(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
-class Granularity3(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
-
-
-class OffsetWindowItem2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class OffsetWindow2(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     count: int
-    granularity: Granularity3
-
-
-class OffsetToGrainEnum2(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
+    granularity: Granularity
 
 
 class Metric(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    filter: Optional[Optional[FilterItem4]] = None
-    alias: Optional[Optional[str]] = None
-    offset_window: Optional[Optional[OffsetWindowItem2]] = None
-    offset_to_grain: Optional[Optional[OffsetToGrainEnum2]] = None
+    filter: Optional[Filter4] = None
+    alias: Optional[str] = None
+    offset_window: Optional[OffsetWindow2] = None
+    offset_to_grain: Optional[OffsetToGrain] = None
 
 
-class WhereFilter5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class FilterItem5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter5]
+class Filter5(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
 class BaseMeasure(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    filter: Optional[Optional[FilterItem5]] = None
-    alias: Optional[Optional[str]] = None
+    filter: Optional[Filter5] = None
+    alias: Optional[str] = None
     join_to_timespine: Optional[bool] = False
-    fill_nulls_with: Optional[Optional[int]] = None
+    fill_nulls_with: Optional[int] = None
 
 
-class WhereFilter6(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class FilterItem6(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter6]
+class Filter6(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
 class ConversionMeasure(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    filter: Optional[Optional[FilterItem6]] = None
-    alias: Optional[Optional[str]] = None
+    filter: Optional[Filter6] = None
+    alias: Optional[str] = None
     join_to_timespine: Optional[bool] = False
-    fill_nulls_with: Optional[Optional[int]] = None
+    fill_nulls_with: Optional[int] = None
 
 
 class Calculation(Enum):
@@ -2435,122 +1623,90 @@ class Calculation(Enum):
     conversion_rate = 'conversion_rate'
 
 
-class Granularity4(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
-
-
-class WindowItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Window1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     count: int
-    granularity: Granularity4
+    granularity: Granularity
 
 
 class ConstantProperty(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     base_property: str
     conversion_property: str
 
 
-class ConversionTypeParam(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class ConversionTypeParams(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     base_measure: BaseMeasure = Field(..., title='MetricInputMeasure')
     conversion_measure: ConversionMeasure = Field(..., title='MetricInputMeasure')
     entity: str
     calculation: Optional[Calculation] = 'conversion_rate'
-    window: Optional[Optional[WindowItem1]] = None
-    constant_properties: Optional[Optional[List[ConstantProperty]]] = None
+    window: Optional[Window1] = None
+    constant_properties: Optional[List[ConstantProperty]] = None
 
 
 class TypeParams(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    measure: Optional[Optional[MeasureItem]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    measure: Optional[Measure] = None
     input_measures: Optional[List[InputMeasure]] = None
-    numerator: Optional[Optional[NumeratorItem]] = None
-    denominator: Optional[Optional[DenominatorItem]] = None
-    expr: Optional[Optional[str]] = None
-    window: Optional[Optional[WindowItem]] = None
-    grain_to_date: Optional[Optional[GrainToDateEnum]] = None
-    metrics: Optional[Optional[List[Metric]]] = None
-    conversion_type_params: Optional[Optional[ConversionTypeParam]] = None
+    numerator: Optional[Numerator] = None
+    denominator: Optional[Denominator] = None
+    expr: Optional[str] = None
+    window: Optional[Window] = None
+    grain_to_date: Optional[GrainToDate] = None
+    metrics: Optional[List[Metric]] = None
+    conversion_type_params: Optional[ConversionTypeParams] = None
 
 
-class WhereFilter7(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class FilterItem7(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter7]
+class Filter7(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
 class FileSlice(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     filename: str
     content: str
     start_line_number: int
     end_line_number: int
 
 
-class Metadatum(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Metadata1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     repo_file_path: str
     file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class Config10(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config13(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None
 
 
-class DependsOn10(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class Ref8(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
 class Metrics(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    resource_type: Any
+    resource_type: Literal['metric']
     package_name: str
     path: str
     original_file_path: str
@@ -2560,119 +1716,70 @@ class Metrics(BaseParserModel):
     label: str
     type: Type11
     type_params: TypeParams = Field(..., title='MetricTypeParams')
-    filter: Optional[Optional[FilterItem7]] = None
-    metadata: Optional[Optional[Metadatum]] = None
+    filter: Optional[Filter7] = None
+    metadata: Optional[Metadata1] = None
     meta: Optional[Dict[str, Any]] = None
     tags: Optional[List[str]] = None
-    config: Optional[Config10] = Field(None, title='MetricConfig')
+    config: Optional[Config13] = Field(None, title='MetricConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
     sources: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn10] = Field(None, title='DependsOn')
-    refs: Optional[List[Ref8]] = None
+    depends_on: Optional[DependsOn9] = Field(None, title='DependsOn')
+    refs: Optional[List[Ref]] = None
     metrics: Optional[List[List[str]]] = None
     created_at: Optional[float] = None
-    group: Optional[Optional[str]] = None
-
-
-class Owner1(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
-    email: Optional[Optional[str]] = None
-    name: Optional[Optional[str]] = None
+    group: Optional[str] = None
 
 
 class Groups(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    resource_type: Any
+    resource_type: Literal['group']
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
-    owner: Owner1 = Field(..., title='Owner')
-
-
-class Checksum8(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    checksum: str
-
-
-class PostHookItem9(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem9(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange9(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
+    owner: Owner = Field(..., title='Owner')
 
 
 class Docs19(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
+    node_color: Optional[str] = None
 
 
-class Contract16(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-
-
-class Config11(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config14(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     materialized: Optional[str] = 'seed'
-    incremental_strategy: Optional[Optional[str]] = None
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem9]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem9]] = Field(None, alias='pre-hook')
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange9] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
     grants: Optional[Dict[str, Any]] = None
     packages: Optional[List[str]] = None
     docs: Optional[Docs19] = Field(None, title='Docs')
-    contract: Optional[Contract16] = Field(None, title='ContractConfig')
+    contract: Optional[Contract15] = Field(None, title='ContractConfig')
     delimiter: Optional[str] = ','
-    quote_columns: Optional[Optional[bool]] = None
+    quote_columns: Optional[bool] = None
 
 
 class Type12(Enum):
@@ -2685,1865 +1792,1082 @@ class Type12(Enum):
 
 
 class Constraint10(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     type: Type12
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
+    name: Optional[str] = None
+    expression: Optional[str] = None
     warn_unenforced: Optional[bool] = True
     warn_unsupported: Optional[bool] = True
 
 
 class Columns9(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: str
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
+    data_type: Optional[str] = None
     constraints: Optional[List[Constraint10]] = None
-    quote: Optional[Optional[bool]] = None
+    quote: Optional[bool] = None
     tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
-
-
-class Docs20(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
 class DependsOn11(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     macros: Optional[List[str]] = None
 
 
-class ResourceType3(Enum):
-    model = 'model'
-    analysis = 'analysis'
-    test = 'test'
-    snapshot = 'snapshot'
-    operation = 'operation'
-    seed = 'seed'
-    rpc = 'rpc'
-    sql_operation = 'sql_operation'
-    doc = 'doc'
-    source = 'source'
-    macro = 'macro'
-    exposure = 'exposure'
-    metric = 'metric'
-    group = 'group'
-    saved_query = 'saved_query'
-    semantic_model = 'semantic_model'
-    unit_test = 'unit_test'
-    fixture = 'fixture'
-
-
-class PostHookItem10(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem10(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange10(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs21(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Contract17(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-
-
-class ConfigItem3(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config15(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     materialized: Optional[str] = 'view'
-    incremental_strategy: Optional[Optional[str]] = None
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem10]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem10]] = Field(None, alias='pre-hook')
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange10] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
     grants: Optional[Dict[str, Any]] = None
     packages: Optional[List[str]] = None
-    docs: Optional[Docs21] = Field(None, title='Docs')
-    contract: Optional[Contract17] = Field(None, title='ContractConfig')
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    contract: Optional[Contract15] = Field(None, title='ContractConfig')
 
 
-class DeferRelationItem3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class DeferRelation3(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     alias: str
-    relation_name: Optional[str]
-    resource_type: ResourceType3
+    relation_name: Optional[str] = None
+    resource_type: ResourceType
     name: str
     description: str
-    compiled_code: Optional[str]
+    compiled_code: Optional[str] = None
     meta: Dict[str, Any]
     tags: List[str]
-    config: Optional[ConfigItem3]
+    config: Optional[Config15] = None
 
 
-class DisabledItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class Disabled(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: Literal['seed']
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     alias: str
-    checksum: Checksum8 = Field(..., title='FileHash')
-    config: Optional[Config11] = Field(None, title='SeedConfig')
+    checksum: Checksum = Field(..., title='FileHash')
+    config: Optional[Config14] = Field(None, title='SeedConfig')
     tags: Optional[List[str]] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns9]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs20] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     unrendered_config: Optional[Dict[str, Any]] = None
     created_at: Optional[float] = None
     config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
-    root_path: Optional[Optional[str]] = None
+    root_path: Optional[str] = None
     depends_on: Optional[DependsOn11] = Field(None, title='MacroDependsOn')
-    defer_relation: Optional[Optional[DeferRelationItem3]] = None
+    defer_relation: Optional[DeferRelation3] = None
 
 
-class Checksum9(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    checksum: str
-
-
-class PostHookItem11(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem11(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange11(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs22(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Contract18(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-
-
-class Config12(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config16(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     materialized: Optional[str] = 'view'
-    incremental_strategy: Optional[Optional[str]] = None
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem11]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem11]] = Field(None, alias='pre-hook')
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange11] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
     grants: Optional[Dict[str, Any]] = None
     packages: Optional[List[str]] = None
-    docs: Optional[Docs22] = Field(None, title='Docs')
-    contract: Optional[Contract18] = Field(None, title='ContractConfig')
-
-
-class Type13(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    contract: Optional[Contract15] = Field(None, title='ContractConfig')
 
 
 class Constraint11(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type13
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type12
+    name: Optional[str] = None
+    expression: Optional[str] = None
     warn_unenforced: Optional[bool] = True
     warn_unsupported: Optional[bool] = True
 
 
 class Columns10(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: str
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
+    data_type: Optional[str] = None
     constraints: Optional[List[Constraint11]] = None
-    quote: Optional[Optional[bool]] = None
+    quote: Optional[bool] = None
     tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
-
-
-class Docs23(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Ref9(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
 class DependsOn12(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     macros: Optional[List[str]] = None
     nodes: Optional[List[str]] = None
 
 
-class ExtraCte7(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    id: str
-    sql: str
-
-
 class Contract19(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
-    checksum: Optional[Optional[str]] = None
+    checksum: Optional[str] = None
 
 
-class DisabledItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class Disabled1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: Literal['analysis']
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     alias: str
-    checksum: Checksum9 = Field(..., title='FileHash')
-    config: Optional[Config12] = Field(None, title='NodeConfig')
+    checksum: Checksum = Field(..., title='FileHash')
+    config: Optional[Config16] = Field(None, title='NodeConfig')
     tags: Optional[List[str]] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns10]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs23] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     unrendered_config: Optional[Dict[str, Any]] = None
     created_at: Optional[float] = None
     config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
-    refs: Optional[List[Ref9]] = None
+    refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
     depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
-    compiled_path: Optional[Optional[str]] = None
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
-    extra_ctes: Optional[List[ExtraCte7]] = None
-    _pre_injected_sql: Optional[Optional[str]] = None
+    extra_ctes: Optional[List[ExtraCte]] = None
+    field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
     contract: Optional[Contract19] = Field(None, title='Contract')
 
 
-class Checksum10(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    checksum: str
-
-
-class Config13(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config17(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field('dbt_test__audit', alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field('dbt_test__audit', alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     materialized: Optional[str] = 'test'
     severity: Optional[
-        constr(regex=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
+        constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
     ] = 'ERROR'
-    store_failures: Optional[Optional[bool]] = None
-    store_failures_as: Optional[Optional[str]] = None
-    where: Optional[Optional[str]] = None
-    limit: Optional[Optional[int]] = None
+    store_failures: Optional[bool] = None
+    store_failures_as: Optional[str] = None
+    where: Optional[str] = None
+    limit: Optional[int] = None
     fail_calc: Optional[str] = 'count(*)'
     warn_if: Optional[str] = '!= 0'
     error_if: Optional[str] = '!= 0'
 
 
-class Type14(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
-
-
 class Constraint12(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type14
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type12
+    name: Optional[str] = None
+    expression: Optional[str] = None
     warn_unenforced: Optional[bool] = True
     warn_unsupported: Optional[bool] = True
 
 
 class Columns11(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: str
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
+    data_type: Optional[str] = None
     constraints: Optional[List[Constraint12]] = None
-    quote: Optional[Optional[bool]] = None
+    quote: Optional[bool] = None
     tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Docs24(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Ref10(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class DependsOn13(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class ExtraCte8(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    id: str
-    sql: str
-
-
-class Contract20(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-    checksum: Optional[Optional[str]] = None
-
-
-class DisabledItem2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class Disabled2(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: Literal['test']
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     alias: str
-    checksum: Checksum10 = Field(..., title='FileHash')
-    config: Optional[Config13] = Field(None, title='TestConfig')
+    checksum: Checksum = Field(..., title='FileHash')
+    config: Optional[Config17] = Field(None, title='TestConfig')
     tags: Optional[List[str]] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns11]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs24] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     unrendered_config: Optional[Dict[str, Any]] = None
     created_at: Optional[float] = None
     config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
-    refs: Optional[List[Ref10]] = None
+    refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn13] = Field(None, title='DependsOn')
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
-    extra_ctes: Optional[List[ExtraCte8]] = None
-    _pre_injected_sql: Optional[Optional[str]] = None
-    contract: Optional[Contract20] = Field(None, title='Contract')
-
-
-class Checksum11(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    checksum: str
-
-
-class PostHookItem12(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem12(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange12(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs25(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
+    extra_ctes: Optional[List[ExtraCte]] = None
+    field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
+    contract: Optional[Contract19] = Field(None, title='Contract')
 
 
 class Contract21(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-
-
-class Config14(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
-    enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
-    tags: Optional[Union[List[str], str]] = None
-    meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    materialized: Optional[str] = 'view'
-    incremental_strategy: Optional[Optional[str]] = None
-    persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem12]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem12]] = Field(None, alias='pre-hook')
-    quoting: Optional[Dict[str, Any]] = None
-    column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange12] = None
-    grants: Optional[Dict[str, Any]] = None
-    packages: Optional[List[str]] = None
-    docs: Optional[Docs25] = Field(None, title='Docs')
-    contract: Optional[Contract21] = Field(None, title='ContractConfig')
-
-
-class Type15(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
-
-
-class Constraint13(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type15
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
-    warn_unenforced: Optional[bool] = True
-    warn_unsupported: Optional[bool] = True
-
-
-class Columns12(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    name: str
-    description: Optional[str] = ''
-    meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
-    constraints: Optional[List[Constraint13]] = None
-    quote: Optional[Optional[bool]] = None
-    tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
-
-
-class Docs26(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Ref11(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class DependsOn14(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class ExtraCte9(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    id: str
-    sql: str
-
-
-class Contract22(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-    checksum: Optional[Optional[str]] = None
-
-
-class DisabledItem3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
-    schema_: str = Field(..., alias='schema')
-    name: str
-    resource_type: Any
-    package_name: str
-    path: str
-    original_file_path: str
-    unique_id: str
-    fqn: List[str]
-    alias: str
-    checksum: Checksum11 = Field(..., title='FileHash')
-    config: Optional[Config14] = Field(None, title='NodeConfig')
-    tags: Optional[List[str]] = None
-    description: Optional[str] = ''
-    columns: Optional[Dict[str, Columns12]] = None
-    meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs26] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
-    unrendered_config: Optional[Dict[str, Any]] = None
-    created_at: Optional[float] = None
-    config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
-    raw_code: Optional[str] = ''
-    language: Optional[str] = 'sql'
-    refs: Optional[List[Ref11]] = None
-    sources: Optional[List[List[str]]] = None
-    metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn14] = Field(None, title='DependsOn')
-    compiled_path: Optional[Optional[str]] = None
-    compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
-    extra_ctes_injected: Optional[bool] = False
-    extra_ctes: Optional[List[ExtraCte9]] = None
-    _pre_injected_sql: Optional[Optional[str]] = None
-    contract: Optional[Contract22] = Field(None, title='Contract')
-    index: Optional[Optional[int]] = None
-
-
-class Checksum12(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    checksum: str
-
-
-class PostHookItem13(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem13(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange13(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs27(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Contract23(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-
-
-class Access2(Enum):
-    private = 'private'
-    protected = 'protected'
-    public = 'public'
-
-
-class Config15(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
-    enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
-    tags: Optional[Union[List[str], str]] = None
-    meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    materialized: Optional[str] = 'view'
-    incremental_strategy: Optional[Optional[str]] = None
-    persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem13]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem13]] = Field(None, alias='pre-hook')
-    quoting: Optional[Dict[str, Any]] = None
-    column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange13] = None
-    grants: Optional[Dict[str, Any]] = None
-    packages: Optional[List[str]] = None
-    docs: Optional[Docs27] = Field(None, title='Docs')
-    contract: Optional[Contract23] = Field(None, title='ContractConfig')
-    access: Optional[Access2] = 'protected'
-
-
-class Type16(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
-
-
-class Constraint14(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type16
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
-    warn_unenforced: Optional[bool] = True
-    warn_unsupported: Optional[bool] = True
-
-
-class Columns13(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    name: str
-    description: Optional[str] = ''
-    meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
-    constraints: Optional[List[Constraint14]] = None
-    quote: Optional[Optional[bool]] = None
-    tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
-
-
-class Docs28(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Ref12(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class DependsOn15(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class ExtraCte10(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    id: str
-    sql: str
-
-
-class Contract24(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-    checksum: Optional[Optional[str]] = None
-
-
-class Access3(Enum):
-    private = 'private'
-    protected = 'protected'
-    public = 'public'
-
-
-class Type17(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
-
-
-class Constraint15(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type17
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
-    warn_unenforced: Optional[bool] = True
-    warn_unsupported: Optional[bool] = True
-    columns: Optional[List[str]] = None
-
-
-class ResourceType4(Enum):
-    model = 'model'
-    analysis = 'analysis'
-    test = 'test'
-    snapshot = 'snapshot'
-    operation = 'operation'
-    seed = 'seed'
-    rpc = 'rpc'
-    sql_operation = 'sql_operation'
-    doc = 'doc'
-    source = 'source'
-    macro = 'macro'
-    exposure = 'exposure'
-    metric = 'metric'
-    group = 'group'
-    saved_query = 'saved_query'
-    semantic_model = 'semantic_model'
-    unit_test = 'unit_test'
-    fixture = 'fixture'
-
-
-class PostHookItem14(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem14(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange14(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs29(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Contract25(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-
-
-class ConfigItem4(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
-    enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
-    tags: Optional[Union[List[str], str]] = None
-    meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    materialized: Optional[str] = 'view'
-    incremental_strategy: Optional[Optional[str]] = None
-    persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem14]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem14]] = Field(None, alias='pre-hook')
-    quoting: Optional[Dict[str, Any]] = None
-    column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange14] = None
-    grants: Optional[Dict[str, Any]] = None
-    packages: Optional[List[str]] = None
-    docs: Optional[Docs29] = Field(None, title='Docs')
-    contract: Optional[Contract25] = Field(None, title='ContractConfig')
-
-
-class DeferRelationItem4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
-    schema_: str = Field(..., alias='schema')
-    alias: str
-    relation_name: Optional[str]
-    resource_type: ResourceType4
-    name: str
-    description: str
-    compiled_code: Optional[str]
-    meta: Dict[str, Any]
-    tags: List[str]
-    config: Optional[ConfigItem4]
-
-
-class DisabledItem4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
-    schema_: str = Field(..., alias='schema')
-    name: str
-    resource_type: Any
-    package_name: str
-    path: str
-    original_file_path: str
-    unique_id: str
-    fqn: List[str]
-    alias: str
-    checksum: Checksum12 = Field(..., title='FileHash')
-    config: Optional[Config15] = Field(None, title='ModelConfig')
-    tags: Optional[List[str]] = None
-    description: Optional[str] = ''
-    columns: Optional[Dict[str, Columns13]] = None
-    meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs28] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
-    unrendered_config: Optional[Dict[str, Any]] = None
-    created_at: Optional[float] = None
-    config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
-    raw_code: Optional[str] = ''
-    language: Optional[str] = 'sql'
-    refs: Optional[List[Ref12]] = None
-    sources: Optional[List[List[str]]] = None
-    metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn15] = Field(None, title='DependsOn')
-    compiled_path: Optional[Optional[str]] = None
-    compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
-    extra_ctes_injected: Optional[bool] = False
-    extra_ctes: Optional[List[ExtraCte10]] = None
-    _pre_injected_sql: Optional[Optional[str]] = None
-    contract: Optional[Contract24] = Field(None, title='Contract')
-    access: Optional[Access3] = 'protected'
-    constraints: Optional[List[Constraint15]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-    latest_version: Optional[Optional[Union[str, float]]] = None
-    deprecation_date: Optional[Optional[str]] = None
-    defer_relation: Optional[Optional[DeferRelationItem4]] = None
-    primary_key: Optional[Optional[List[str]]] = None
-
-
-class Checksum13(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    checksum: str
-
-
-class PostHookItem15(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem15(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange15(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs30(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Contract26(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-
-
-class Config16(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
-    enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
-    tags: Optional[Union[List[str], str]] = None
-    meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    materialized: Optional[str] = 'view'
-    incremental_strategy: Optional[Optional[str]] = None
-    persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem15]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem15]] = Field(None, alias='pre-hook')
-    quoting: Optional[Dict[str, Any]] = None
-    column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange15] = None
-    grants: Optional[Dict[str, Any]] = None
-    packages: Optional[List[str]] = None
-    docs: Optional[Docs30] = Field(None, title='Docs')
-    contract: Optional[Contract26] = Field(None, title='ContractConfig')
-
-
-class Type18(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
-
-
-class Constraint16(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type18
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
-    warn_unenforced: Optional[bool] = True
-    warn_unsupported: Optional[bool] = True
-
-
-class Columns14(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    name: str
-    description: Optional[str] = ''
-    meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
-    constraints: Optional[List[Constraint16]] = None
-    quote: Optional[Optional[bool]] = None
-    tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
-
-
-class Docs31(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Ref13(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class DependsOn16(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class ExtraCte11(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    id: str
-    sql: str
-
-
-class Contract27(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-    checksum: Optional[Optional[str]] = None
-
-
-class DisabledItem5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
-    schema_: str = Field(..., alias='schema')
-    name: str
-    resource_type: Any
-    package_name: str
-    path: str
-    original_file_path: str
-    unique_id: str
-    fqn: List[str]
-    alias: str
-    checksum: Checksum13 = Field(..., title='FileHash')
-    config: Optional[Config16] = Field(None, title='NodeConfig')
-    tags: Optional[List[str]] = None
-    description: Optional[str] = ''
-    columns: Optional[Dict[str, Columns14]] = None
-    meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs31] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
-    unrendered_config: Optional[Dict[str, Any]] = None
-    created_at: Optional[float] = None
-    config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
-    raw_code: Optional[str] = ''
-    language: Optional[str] = 'sql'
-    refs: Optional[List[Ref13]] = None
-    sources: Optional[List[List[str]]] = None
-    metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn16] = Field(None, title='DependsOn')
-    compiled_path: Optional[Optional[str]] = None
-    compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
-    extra_ctes_injected: Optional[bool] = False
-    extra_ctes: Optional[List[ExtraCte11]] = None
-    _pre_injected_sql: Optional[Optional[str]] = None
-    contract: Optional[Contract27] = Field(None, title='Contract')
-
-
-class Checksum14(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    checksum: str
-
-
-class Config17(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
-    enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field('dbt_test__audit', alias='schema')
-    database: Optional[Optional[str]] = None
-    tags: Optional[Union[List[str], str]] = None
-    meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    materialized: Optional[str] = 'test'
-    severity: Optional[
-        constr(regex=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
-    ] = 'ERROR'
-    store_failures: Optional[Optional[bool]] = None
-    store_failures_as: Optional[Optional[str]] = None
-    where: Optional[Optional[str]] = None
-    limit: Optional[Optional[int]] = None
-    fail_calc: Optional[str] = 'count(*)'
-    warn_if: Optional[str] = '!= 0'
-    error_if: Optional[str] = '!= 0'
-
-
-class Type19(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
-
-
-class Constraint17(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type19
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
-    warn_unenforced: Optional[bool] = True
-    warn_unsupported: Optional[bool] = True
-
-
-class Columns15(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    name: str
-    description: Optional[str] = ''
-    meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
-    constraints: Optional[List[Constraint17]] = None
-    quote: Optional[Optional[bool]] = None
-    tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
-
-
-class Docs32(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Ref14(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class DependsOn17(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class ExtraCte12(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    id: str
-    sql: str
-
-
-class Contract28(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-    checksum: Optional[Optional[str]] = None
-
-
-class TestMetadata1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: Optional[str] = 'test'
-    kwargs: Optional[Dict[str, Any]] = None
-    namespace: Optional[Optional[str]] = None
-
-
-class DisabledItem6(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
-    schema_: str = Field(..., alias='schema')
-    name: str
-    resource_type: Any
-    package_name: str
-    path: str
-    original_file_path: str
-    unique_id: str
-    fqn: List[str]
-    alias: str
-    checksum: Checksum14 = Field(..., title='FileHash')
-    config: Optional[Config17] = Field(None, title='TestConfig')
-    tags: Optional[List[str]] = None
-    description: Optional[str] = ''
-    columns: Optional[Dict[str, Columns15]] = None
-    meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs32] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
-    unrendered_config: Optional[Dict[str, Any]] = None
-    created_at: Optional[float] = None
-    config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
-    raw_code: Optional[str] = ''
-    language: Optional[str] = 'sql'
-    refs: Optional[List[Ref14]] = None
-    sources: Optional[List[List[str]]] = None
-    metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn17] = Field(None, title='DependsOn')
-    compiled_path: Optional[Optional[str]] = None
-    compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
-    extra_ctes_injected: Optional[bool] = False
-    extra_ctes: Optional[List[ExtraCte12]] = None
-    _pre_injected_sql: Optional[Optional[str]] = None
-    contract: Optional[Contract28] = Field(None, title='Contract')
-    column_name: Optional[Optional[str]] = None
-    file_key_name: Optional[Optional[str]] = None
-    attached_node: Optional[Optional[str]] = None
-    test_metadata: Optional[TestMetadata1] = Field(None, title='TestMetadata')
-
-
-class Checksum15(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    checksum: str
-
-
-class PostHookItem16(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem16(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange16(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs33(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Contract29(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
 
 
 class Config18(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    materialized: Optional[str] = 'snapshot'
-    incremental_strategy: Optional[Optional[str]] = None
+    group: Optional[str] = None
+    materialized: Optional[str] = 'view'
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem16]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem16]] = Field(None, alias='pre-hook')
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[str]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange16] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
     grants: Optional[Dict[str, Any]] = None
     packages: Optional[List[str]] = None
-    docs: Optional[Docs33] = Field(None, title='Docs')
-    contract: Optional[Contract29] = Field(None, title='ContractConfig')
-    strategy: Optional[Optional[str]] = None
-    target_schema: Optional[Optional[str]] = None
-    target_database: Optional[Optional[str]] = None
-    updated_at: Optional[Optional[str]] = None
-    check_cols: Optional[Optional[Union[str, List[str]]]] = None
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    contract: Optional[Contract21] = Field(None, title='ContractConfig')
 
 
-class Type20(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
-
-
-class Constraint18(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type20
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
+class Constraint13(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type12
+    name: Optional[str] = None
+    expression: Optional[str] = None
     warn_unenforced: Optional[bool] = True
     warn_unsupported: Optional[bool] = True
 
 
-class Columns16(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+class Columns12(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: str
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
-    constraints: Optional[List[Constraint18]] = None
-    quote: Optional[Optional[bool]] = None
+    data_type: Optional[str] = None
+    constraints: Optional[List[Constraint13]] = None
+    quote: Optional[bool] = None
     tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Docs34(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Ref15(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class DependsOn18(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class ExtraCte13(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    id: str
-    sql: str
-
-
-class Contract30(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Contract22(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
-    checksum: Optional[Optional[str]] = None
+    checksum: Optional[str] = None
 
 
-class ResourceType5(Enum):
-    model = 'model'
-    analysis = 'analysis'
-    test = 'test'
-    snapshot = 'snapshot'
-    operation = 'operation'
-    seed = 'seed'
-    rpc = 'rpc'
-    sql_operation = 'sql_operation'
-    doc = 'doc'
-    source = 'source'
-    macro = 'macro'
-    exposure = 'exposure'
-    metric = 'metric'
-    group = 'group'
-    saved_query = 'saved_query'
-    semantic_model = 'semantic_model'
-    unit_test = 'unit_test'
-    fixture = 'fixture'
-
-
-class PostHookItem17(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class PreHookItem17(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    sql: str
-    transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
-
-
-class OnConfigurationChange17(Enum):
-    apply = 'apply'
-    continue_ = 'continue'
-    fail = 'fail'
-
-
-class Docs35(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
-
-
-class Contract31(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enforced: Optional[bool] = False
-    alias_types: Optional[bool] = True
-
-
-class ConfigItem5(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
-    enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
-    tags: Optional[Union[List[str], str]] = None
-    meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    materialized: Optional[str] = 'view'
-    incremental_strategy: Optional[Optional[str]] = None
-    persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[PostHookItem17]] = Field(None, alias='post-hook')
-    pre_hook: Optional[List[PreHookItem17]] = Field(None, alias='pre-hook')
-    quoting: Optional[Dict[str, Any]] = None
-    column_types: Optional[Dict[str, Any]] = None
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
-    on_configuration_change: Optional[OnConfigurationChange17] = None
-    grants: Optional[Dict[str, Any]] = None
-    packages: Optional[List[str]] = None
-    docs: Optional[Docs35] = Field(None, title='Docs')
-    contract: Optional[Contract31] = Field(None, title='ContractConfig')
-
-
-class DeferRelationItem5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
-    schema_: str = Field(..., alias='schema')
-    alias: str
-    relation_name: Optional[str]
-    resource_type: ResourceType5
-    name: str
-    description: str
-    compiled_code: Optional[str]
-    meta: Dict[str, Any]
-    tags: List[str]
-    config: Optional[ConfigItem5]
-
-
-class DisabledItem7(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class Disabled3(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: Literal['operation']
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     alias: str
-    checksum: Checksum15 = Field(..., title='FileHash')
-    config: Config18 = Field(..., title='SnapshotConfig')
+    checksum: Checksum = Field(..., title='FileHash')
+    config: Optional[Config18] = Field(None, title='NodeConfig')
+    tags: Optional[List[str]] = None
+    description: Optional[str] = ''
+    columns: Optional[Dict[str, Columns12]] = None
+    meta: Optional[Dict[str, Any]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
+    unrendered_config: Optional[Dict[str, Any]] = None
+    created_at: Optional[float] = None
+    config_call_dict: Optional[Dict[str, Any]] = None
+    relation_name: Optional[str] = None
+    raw_code: Optional[str] = ''
+    language: Optional[str] = 'sql'
+    refs: Optional[List[Ref]] = None
+    sources: Optional[List[List[str]]] = None
+    metrics: Optional[List[List[str]]] = None
+    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    compiled_path: Optional[str] = None
+    compiled: Optional[bool] = False
+    compiled_code: Optional[str] = None
+    extra_ctes_injected: Optional[bool] = False
+    extra_ctes: Optional[List[ExtraCte]] = None
+    field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
+    contract: Optional[Contract22] = Field(None, title='Contract')
+    index: Optional[int] = None
+
+
+class Contract23(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    enforced: Optional[bool] = False
+    alias_types: Optional[bool] = True
+
+
+class Config19(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
+    enabled: Optional[bool] = True
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
+    tags: Optional[Union[List[str], str]] = None
+    meta: Optional[Dict[str, Any]] = None
+    group: Optional[str] = None
+    materialized: Optional[str] = 'view'
+    incremental_strategy: Optional[str] = None
+    persist_docs: Optional[Dict[str, Any]] = None
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
+    quoting: Optional[Dict[str, Any]] = None
+    column_types: Optional[Dict[str, Any]] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
+    grants: Optional[Dict[str, Any]] = None
+    packages: Optional[List[str]] = None
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    contract: Optional[Contract23] = Field(None, title='ContractConfig')
+    access: Optional[Access] = 'protected'
+
+
+class Constraint14(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type12
+    name: Optional[str] = None
+    expression: Optional[str] = None
+    warn_unenforced: Optional[bool] = True
+    warn_unsupported: Optional[bool] = True
+
+
+class Columns13(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    name: str
+    description: Optional[str] = ''
+    meta: Optional[Dict[str, Any]] = None
+    data_type: Optional[str] = None
+    constraints: Optional[List[Constraint14]] = None
+    quote: Optional[bool] = None
+    tags: Optional[List[str]] = None
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
+
+
+class Contract24(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    enforced: Optional[bool] = False
+    alias_types: Optional[bool] = True
+    checksum: Optional[str] = None
+
+
+class Constraint15(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type12
+    name: Optional[str] = None
+    expression: Optional[str] = None
+    warn_unenforced: Optional[bool] = True
+    warn_unsupported: Optional[bool] = True
+    columns: Optional[List[str]] = None
+
+
+class Contract25(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    enforced: Optional[bool] = False
+    alias_types: Optional[bool] = True
+
+
+class Config20(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
+    enabled: Optional[bool] = True
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
+    tags: Optional[Union[List[str], str]] = None
+    meta: Optional[Dict[str, Any]] = None
+    group: Optional[str] = None
+    materialized: Optional[str] = 'view'
+    incremental_strategy: Optional[str] = None
+    persist_docs: Optional[Dict[str, Any]] = None
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
+    quoting: Optional[Dict[str, Any]] = None
+    column_types: Optional[Dict[str, Any]] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
+    grants: Optional[Dict[str, Any]] = None
+    packages: Optional[List[str]] = None
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    contract: Optional[Contract25] = Field(None, title='ContractConfig')
+
+
+class DeferRelation4(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
+    schema_: str = Field(..., alias='schema')
+    alias: str
+    relation_name: Optional[str] = None
+    resource_type: ResourceType
+    name: str
+    description: str
+    compiled_code: Optional[str] = None
+    meta: Dict[str, Any]
+    tags: List[str]
+    config: Optional[Config20] = None
+
+
+class Disabled4(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
+    schema_: str = Field(..., alias='schema')
+    name: str
+    resource_type: Literal['model']
+    package_name: str
+    path: str
+    original_file_path: str
+    unique_id: str
+    fqn: List[str]
+    alias: str
+    checksum: Checksum = Field(..., title='FileHash')
+    config: Optional[Config19] = Field(None, title='ModelConfig')
+    tags: Optional[List[str]] = None
+    description: Optional[str] = ''
+    columns: Optional[Dict[str, Columns13]] = None
+    meta: Optional[Dict[str, Any]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
+    unrendered_config: Optional[Dict[str, Any]] = None
+    created_at: Optional[float] = None
+    config_call_dict: Optional[Dict[str, Any]] = None
+    relation_name: Optional[str] = None
+    raw_code: Optional[str] = ''
+    language: Optional[str] = 'sql'
+    refs: Optional[List[Ref]] = None
+    sources: Optional[List[List[str]]] = None
+    metrics: Optional[List[List[str]]] = None
+    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    compiled_path: Optional[str] = None
+    compiled: Optional[bool] = False
+    compiled_code: Optional[str] = None
+    extra_ctes_injected: Optional[bool] = False
+    extra_ctes: Optional[List[ExtraCte]] = None
+    field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
+    contract: Optional[Contract24] = Field(None, title='Contract')
+    access: Optional[Access] = 'protected'
+    constraints: Optional[List[Constraint15]] = None
+    version: Optional[Union[str, float]] = None
+    latest_version: Optional[Union[str, float]] = None
+    deprecation_date: Optional[str] = None
+    defer_relation: Optional[DeferRelation4] = None
+    primary_key: Optional[List[str]] = None
+
+
+class Config21(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
+    enabled: Optional[bool] = True
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
+    tags: Optional[Union[List[str], str]] = None
+    meta: Optional[Dict[str, Any]] = None
+    group: Optional[str] = None
+    materialized: Optional[str] = 'view'
+    incremental_strategy: Optional[str] = None
+    persist_docs: Optional[Dict[str, Any]] = None
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
+    quoting: Optional[Dict[str, Any]] = None
+    column_types: Optional[Dict[str, Any]] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
+    grants: Optional[Dict[str, Any]] = None
+    packages: Optional[List[str]] = None
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    contract: Optional[Contract25] = Field(None, title='ContractConfig')
+
+
+class Constraint16(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type12
+    name: Optional[str] = None
+    expression: Optional[str] = None
+    warn_unenforced: Optional[bool] = True
+    warn_unsupported: Optional[bool] = True
+
+
+class Columns14(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    name: str
+    description: Optional[str] = ''
+    meta: Optional[Dict[str, Any]] = None
+    data_type: Optional[str] = None
+    constraints: Optional[List[Constraint16]] = None
+    quote: Optional[bool] = None
+    tags: Optional[List[str]] = None
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
+
+
+class Contract27(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    enforced: Optional[bool] = False
+    alias_types: Optional[bool] = True
+    checksum: Optional[str] = None
+
+
+class Disabled5(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
+    schema_: str = Field(..., alias='schema')
+    name: str
+    resource_type: Literal['sql_operation']
+    package_name: str
+    path: str
+    original_file_path: str
+    unique_id: str
+    fqn: List[str]
+    alias: str
+    checksum: Checksum = Field(..., title='FileHash')
+    config: Optional[Config21] = Field(None, title='NodeConfig')
+    tags: Optional[List[str]] = None
+    description: Optional[str] = ''
+    columns: Optional[Dict[str, Columns14]] = None
+    meta: Optional[Dict[str, Any]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
+    unrendered_config: Optional[Dict[str, Any]] = None
+    created_at: Optional[float] = None
+    config_call_dict: Optional[Dict[str, Any]] = None
+    relation_name: Optional[str] = None
+    raw_code: Optional[str] = ''
+    language: Optional[str] = 'sql'
+    refs: Optional[List[Ref]] = None
+    sources: Optional[List[List[str]]] = None
+    metrics: Optional[List[List[str]]] = None
+    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    compiled_path: Optional[str] = None
+    compiled: Optional[bool] = False
+    compiled_code: Optional[str] = None
+    extra_ctes_injected: Optional[bool] = False
+    extra_ctes: Optional[List[ExtraCte]] = None
+    field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
+    contract: Optional[Contract27] = Field(None, title='Contract')
+
+
+class Config22(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
+    enabled: Optional[bool] = True
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field('dbt_test__audit', alias='schema')
+    database: Optional[str] = None
+    tags: Optional[Union[List[str], str]] = None
+    meta: Optional[Dict[str, Any]] = None
+    group: Optional[str] = None
+    materialized: Optional[str] = 'test'
+    severity: Optional[
+        constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
+    ] = 'ERROR'
+    store_failures: Optional[bool] = None
+    store_failures_as: Optional[str] = None
+    where: Optional[str] = None
+    limit: Optional[int] = None
+    fail_calc: Optional[str] = 'count(*)'
+    warn_if: Optional[str] = '!= 0'
+    error_if: Optional[str] = '!= 0'
+
+
+class Constraint17(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type12
+    name: Optional[str] = None
+    expression: Optional[str] = None
+    warn_unenforced: Optional[bool] = True
+    warn_unsupported: Optional[bool] = True
+
+
+class Columns15(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    name: str
+    description: Optional[str] = ''
+    meta: Optional[Dict[str, Any]] = None
+    data_type: Optional[str] = None
+    constraints: Optional[List[Constraint17]] = None
+    quote: Optional[bool] = None
+    tags: Optional[List[str]] = None
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
+
+
+class Disabled6(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
+    schema_: str = Field(..., alias='schema')
+    name: str
+    resource_type: Literal['test']
+    package_name: str
+    path: str
+    original_file_path: str
+    unique_id: str
+    fqn: List[str]
+    alias: str
+    checksum: Checksum = Field(..., title='FileHash')
+    config: Optional[Config22] = Field(None, title='TestConfig')
+    tags: Optional[List[str]] = None
+    description: Optional[str] = ''
+    columns: Optional[Dict[str, Columns15]] = None
+    meta: Optional[Dict[str, Any]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
+    unrendered_config: Optional[Dict[str, Any]] = None
+    created_at: Optional[float] = None
+    config_call_dict: Optional[Dict[str, Any]] = None
+    relation_name: Optional[str] = None
+    raw_code: Optional[str] = ''
+    language: Optional[str] = 'sql'
+    refs: Optional[List[Ref]] = None
+    sources: Optional[List[List[str]]] = None
+    metrics: Optional[List[List[str]]] = None
+    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    compiled_path: Optional[str] = None
+    compiled: Optional[bool] = False
+    compiled_code: Optional[str] = None
+    extra_ctes_injected: Optional[bool] = False
+    extra_ctes: Optional[List[ExtraCte]] = None
+    field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
+    contract: Optional[Contract27] = Field(None, title='Contract')
+    column_name: Optional[str] = None
+    file_key_name: Optional[str] = None
+    attached_node: Optional[str] = None
+    test_metadata: Optional[TestMetadata] = Field(None, title='TestMetadata')
+
+
+class Contract29(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    enforced: Optional[bool] = False
+    alias_types: Optional[bool] = True
+
+
+class Config23(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
+    enabled: Optional[bool] = True
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
+    tags: Optional[Union[List[str], str]] = None
+    meta: Optional[Dict[str, Any]] = None
+    group: Optional[str] = None
+    materialized: Optional[str] = 'snapshot'
+    incremental_strategy: Optional[str] = None
+    persist_docs: Optional[Dict[str, Any]] = None
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
+    quoting: Optional[Dict[str, Any]] = None
+    column_types: Optional[Dict[str, Any]] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[str] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
+    grants: Optional[Dict[str, Any]] = None
+    packages: Optional[List[str]] = None
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    contract: Optional[Contract29] = Field(None, title='ContractConfig')
+    strategy: Optional[str] = None
+    target_schema: Optional[str] = None
+    target_database: Optional[str] = None
+    updated_at: Optional[str] = None
+    check_cols: Optional[Union[str, List[str]]] = None
+
+
+class Constraint18(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type12
+    name: Optional[str] = None
+    expression: Optional[str] = None
+    warn_unenforced: Optional[bool] = True
+    warn_unsupported: Optional[bool] = True
+
+
+class Columns16(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    name: str
+    description: Optional[str] = ''
+    meta: Optional[Dict[str, Any]] = None
+    data_type: Optional[str] = None
+    constraints: Optional[List[Constraint18]] = None
+    quote: Optional[bool] = None
+    tags: Optional[List[str]] = None
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
+
+
+class Contract30(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    enforced: Optional[bool] = False
+    alias_types: Optional[bool] = True
+    checksum: Optional[str] = None
+
+
+class Contract31(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    enforced: Optional[bool] = False
+    alias_types: Optional[bool] = True
+
+
+class Config24(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
+    enabled: Optional[bool] = True
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
+    tags: Optional[Union[List[str], str]] = None
+    meta: Optional[Dict[str, Any]] = None
+    group: Optional[str] = None
+    materialized: Optional[str] = 'view'
+    incremental_strategy: Optional[str] = None
+    persist_docs: Optional[Dict[str, Any]] = None
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
+    quoting: Optional[Dict[str, Any]] = None
+    column_types: Optional[Dict[str, Any]] = None
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
+    on_configuration_change: Optional[OnConfigurationChange] = None
+    grants: Optional[Dict[str, Any]] = None
+    packages: Optional[List[str]] = None
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    contract: Optional[Contract31] = Field(None, title='ContractConfig')
+
+
+class DeferRelation5(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
+    schema_: str = Field(..., alias='schema')
+    alias: str
+    relation_name: Optional[str] = None
+    resource_type: ResourceType
+    name: str
+    description: str
+    compiled_code: Optional[str] = None
+    meta: Dict[str, Any]
+    tags: List[str]
+    config: Optional[Config24] = None
+
+
+class Disabled7(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
+    schema_: str = Field(..., alias='schema')
+    name: str
+    resource_type: Literal['snapshot']
+    package_name: str
+    path: str
+    original_file_path: str
+    unique_id: str
+    fqn: List[str]
+    alias: str
+    checksum: Checksum = Field(..., title='FileHash')
+    config: Config23 = Field(..., title='SnapshotConfig')
     tags: Optional[List[str]] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns16]] = None
     meta: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    docs: Optional[Docs34] = Field(None, title='Docs')
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    group: Optional[str] = None
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     unrendered_config: Optional[Dict[str, Any]] = None
     created_at: Optional[float] = None
     config_call_dict: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
-    refs: Optional[List[Ref15]] = None
+    refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn18] = Field(None, title='DependsOn')
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
-    extra_ctes: Optional[List[ExtraCte13]] = None
-    _pre_injected_sql: Optional[Optional[str]] = None
+    extra_ctes: Optional[List[ExtraCte]] = None
+    field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
     contract: Optional[Contract30] = Field(None, title='Contract')
-    defer_relation: Optional[Optional[DeferRelationItem5]] = None
+    defer_relation: Optional[DeferRelation5] = None
 
 
-class Quoting1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[Optional[bool]] = None
-    schema_: Optional[Optional[bool]] = Field(None, alias='schema')
-    identifier: Optional[Optional[bool]] = None
-    column: Optional[Optional[bool]] = None
+class WarnAfter1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    count: Optional[int] = None
+    period: Optional[Period] = None
 
 
-class PeriodEnum2(Enum):
-    minute = 'minute'
-    hour = 'hour'
-    day = 'day'
+class ErrorAfter1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    count: Optional[int] = None
+    period: Optional[Period] = None
 
 
-class WarnAfterItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    count: Optional[Optional[int]] = None
-    period: Optional[Optional[PeriodEnum2]] = None
-
-
-class PeriodEnum3(Enum):
-    minute = 'minute'
-    hour = 'hour'
-    day = 'day'
+class Freshness1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    warn_after: Optional[WarnAfter1] = None
+    error_after: Optional[ErrorAfter1] = None
+    filter: Optional[str] = None
 
 
-class ErrorAfterItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    count: Optional[Optional[int]] = None
-    period: Optional[Optional[PeriodEnum3]] = None
-
-
-class Freshnes1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    warn_after: Optional[Optional[WarnAfterItem1]] = None
-    error_after: Optional[Optional[ErrorAfterItem1]] = None
-    filter: Optional[Optional[str]] = None
-
-
-class Partition1(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
-    name: Optional[str] = ''
-    description: Optional[str] = ''
-    data_type: Optional[str] = ''
-    meta: Optional[Dict[str, Any]] = None
-
-
-class ExternalItem1(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
-    location: Optional[Optional[str]] = None
-    file_format: Optional[Optional[str]] = None
-    row_format: Optional[Optional[str]] = None
-    tbl_properties: Optional[Optional[str]] = None
-    partitions: Optional[Optional[Union[List[str], List[Partition1]]]] = None
-
-
-class Type21(Enum):
-    check = 'check'
-    not_null = 'not_null'
-    unique = 'unique'
-    primary_key = 'primary_key'
-    foreign_key = 'foreign_key'
-    custom = 'custom'
+class External1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
+    location: Optional[str] = None
+    file_format: Optional[str] = None
+    row_format: Optional[str] = None
+    tbl_properties: Optional[str] = None
+    partitions: Optional[Union[List[str], List[Partition]]] = None
 
 
 class Constraint19(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    type: Type21
-    name: Optional[Optional[str]] = None
-    expression: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type12
+    name: Optional[str] = None
+    expression: Optional[str] = None
     warn_unenforced: Optional[bool] = True
     warn_unsupported: Optional[bool] = True
 
 
 class Columns17(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: str
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
-    data_type: Optional[Optional[str]] = None
+    data_type: Optional[str] = None
     constraints: Optional[List[Constraint19]] = None
-    quote: Optional[Optional[bool]] = None
+    quote: Optional[bool] = None
     tags: Optional[List[str]] = None
-    _extra: Optional[Dict[str, Any]] = None
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Config19(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config25(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
 
 
-class DisabledItem8(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[str]
+class Disabled8(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
-    resource_type: Any
+    resource_type: Literal['source']
     package_name: str
     path: str
     original_file_path: str
@@ -4553,19 +2877,19 @@ class DisabledItem8(BaseParserModel):
     source_description: str
     loader: str
     identifier: str
-    quoting: Optional[Quoting1] = Field(None, title='Quoting')
-    loaded_at_field: Optional[Optional[str]] = None
-    freshness: Optional[Optional[Freshnes1]] = None
-    external: Optional[Optional[ExternalItem1]] = None
+    quoting: Optional[Quoting] = Field(None, title='Quoting')
+    loaded_at_field: Optional[str] = None
+    freshness: Optional[Freshness1] = None
+    external: Optional[External1] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns17]] = None
     meta: Optional[Dict[str, Any]] = None
     source_meta: Optional[Dict[str, Any]] = None
     tags: Optional[List[str]] = None
-    config: Optional[Config19] = Field(None, title='SourceConfig')
-    patch_path: Optional[Optional[str]] = None
+    config: Optional[Config25] = Field(None, title='SourceConfig')
+    patch_path: Optional[str] = None
     unrendered_config: Optional[Dict[str, Any]] = None
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     created_at: Optional[float] = None
 
 
@@ -4577,69 +2901,29 @@ class Type22(Enum):
     application = 'application'
 
 
-class Owner2(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
-    email: Optional[Optional[str]] = None
-    name: Optional[Optional[str]] = None
-
-
-class MaturityEnum1(Enum):
-    low = 'low'
-    medium = 'medium'
-    high = 'high'
-
-
-class Config20(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
-    enabled: Optional[bool] = True
-
-
-class DependsOn19(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class Ref16(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Disabled9(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class DisabledItem9(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    resource_type: Any
+    resource_type: Literal['exposure']
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     type: Type22
-    owner: Owner2 = Field(..., title='Owner')
+    owner: Owner = Field(..., title='Owner')
     description: Optional[str] = ''
-    label: Optional[Optional[str]] = None
-    maturity: Optional[Optional[MaturityEnum1]] = None
+    label: Optional[str] = None
+    maturity: Optional[Maturity] = None
     meta: Optional[Dict[str, Any]] = None
     tags: Optional[List[str]] = None
-    config: Optional[Config20] = Field(None, title='ExposureConfig')
+    config: Optional[Config25] = Field(None, title='ExposureConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
-    url: Optional[Optional[str]] = None
-    depends_on: Optional[DependsOn19] = Field(None, title='DependsOn')
-    refs: Optional[List[Ref16]] = None
+    url: Optional[str] = None
+    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
     created_at: Optional[float] = None
@@ -4653,398 +2937,230 @@ class Type23(Enum):
     conversion = 'conversion'
 
 
-class WhereFilter8(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class FilterItem8(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter8]
+class Filter8(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
-class MeasureItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Measure1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    filter: Optional[Optional[FilterItem8]] = None
-    alias: Optional[Optional[str]] = None
+    filter: Optional[Filter8] = None
+    alias: Optional[str] = None
     join_to_timespine: Optional[bool] = False
-    fill_nulls_with: Optional[Optional[int]] = None
+    fill_nulls_with: Optional[int] = None
 
 
-class WhereFilter9(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class FilterItem9(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter9]
+class Filter9(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
 class InputMeasure1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    filter: Optional[Optional[FilterItem9]] = None
-    alias: Optional[Optional[str]] = None
+    filter: Optional[Filter9] = None
+    alias: Optional[str] = None
     join_to_timespine: Optional[bool] = False
-    fill_nulls_with: Optional[Optional[int]] = None
+    fill_nulls_with: Optional[int] = None
 
 
-class WhereFilter10(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class FilterItem10(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter10]
+class Filter10(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
-class Granularity5(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
-
-
-class OffsetWindowItem3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class OffsetWindow3(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     count: int
-    granularity: Granularity5
+    granularity: Granularity
 
 
-class OffsetToGrainEnum3(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
-
-
-class NumeratorItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Numerator1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    filter: Optional[Optional[FilterItem10]] = None
-    alias: Optional[Optional[str]] = None
-    offset_window: Optional[Optional[OffsetWindowItem3]] = None
-    offset_to_grain: Optional[Optional[OffsetToGrainEnum3]] = None
+    filter: Optional[Filter10] = None
+    alias: Optional[str] = None
+    offset_window: Optional[OffsetWindow3] = None
+    offset_to_grain: Optional[OffsetToGrain] = None
 
 
-class WhereFilter11(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class FilterItem11(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter11]
+class Filter11(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
-class Granularity6(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
-
-
-class OffsetWindowItem4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class OffsetWindow4(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     count: int
-    granularity: Granularity6
+    granularity: Granularity
 
 
-class OffsetToGrainEnum4(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
-
-
-class DenominatorItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Denominator1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    filter: Optional[Optional[FilterItem11]] = None
-    alias: Optional[Optional[str]] = None
-    offset_window: Optional[Optional[OffsetWindowItem4]] = None
-    offset_to_grain: Optional[Optional[OffsetToGrainEnum4]] = None
+    filter: Optional[Filter11] = None
+    alias: Optional[str] = None
+    offset_window: Optional[OffsetWindow4] = None
+    offset_to_grain: Optional[OffsetToGrain] = None
 
 
-class Granularity7(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
-
-
-class WindowItem2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Window2(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     count: int
-    granularity: Granularity7
+    granularity: Granularity
 
 
-class GrainToDateEnum1(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
+class Filter12(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
-class WhereFilter12(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class FilterItem12(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter12]
-
-
-class Granularity8(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
-
-
-class OffsetWindowItem5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class OffsetWindow5(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     count: int
-    granularity: Granularity8
-
-
-class OffsetToGrainEnum5(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
+    granularity: Granularity
 
 
 class Metric1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    filter: Optional[Optional[FilterItem12]] = None
-    alias: Optional[Optional[str]] = None
-    offset_window: Optional[Optional[OffsetWindowItem5]] = None
-    offset_to_grain: Optional[Optional[OffsetToGrainEnum5]] = None
+    filter: Optional[Filter12] = None
+    alias: Optional[str] = None
+    offset_window: Optional[OffsetWindow5] = None
+    offset_to_grain: Optional[OffsetToGrain] = None
 
 
-class WhereFilter13(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class FilterItem13(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter13]
+class Filter13(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
 class BaseMeasure1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    filter: Optional[Optional[FilterItem13]] = None
-    alias: Optional[Optional[str]] = None
+    filter: Optional[Filter13] = None
+    alias: Optional[str] = None
     join_to_timespine: Optional[bool] = False
-    fill_nulls_with: Optional[Optional[int]] = None
+    fill_nulls_with: Optional[int] = None
 
 
-class WhereFilter14(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class FilterItem14(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter14]
+class Filter14(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
 class ConversionMeasure1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    filter: Optional[Optional[FilterItem14]] = None
-    alias: Optional[Optional[str]] = None
+    filter: Optional[Filter14] = None
+    alias: Optional[str] = None
     join_to_timespine: Optional[bool] = False
-    fill_nulls_with: Optional[Optional[int]] = None
+    fill_nulls_with: Optional[int] = None
 
 
-class Calculation1(Enum):
-    conversions = 'conversions'
-    conversion_rate = 'conversion_rate'
-
-
-class Granularity9(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
-
-
-class WindowItem3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Window3(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     count: int
-    granularity: Granularity9
+    granularity: Granularity
 
 
-class ConstantProperty1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    base_property: str
-    conversion_property: str
-
-
-class ConversionTypeParam1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class ConversionTypeParams1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     base_measure: BaseMeasure1 = Field(..., title='MetricInputMeasure')
     conversion_measure: ConversionMeasure1 = Field(..., title='MetricInputMeasure')
     entity: str
-    calculation: Optional[Calculation1] = 'conversion_rate'
-    window: Optional[Optional[WindowItem3]] = None
-    constant_properties: Optional[Optional[List[ConstantProperty1]]] = None
+    calculation: Optional[Calculation] = 'conversion_rate'
+    window: Optional[Window3] = None
+    constant_properties: Optional[List[ConstantProperty]] = None
 
 
 class TypeParams1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    measure: Optional[Optional[MeasureItem1]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    measure: Optional[Measure1] = None
     input_measures: Optional[List[InputMeasure1]] = None
-    numerator: Optional[Optional[NumeratorItem1]] = None
-    denominator: Optional[Optional[DenominatorItem1]] = None
-    expr: Optional[Optional[str]] = None
-    window: Optional[Optional[WindowItem2]] = None
-    grain_to_date: Optional[Optional[GrainToDateEnum1]] = None
-    metrics: Optional[Optional[List[Metric1]]] = None
-    conversion_type_params: Optional[Optional[ConversionTypeParam1]] = None
+    numerator: Optional[Numerator1] = None
+    denominator: Optional[Denominator1] = None
+    expr: Optional[str] = None
+    window: Optional[Window2] = None
+    grain_to_date: Optional[GrainToDate] = None
+    metrics: Optional[List[Metric1]] = None
+    conversion_type_params: Optional[ConversionTypeParams1] = None
 
 
-class WhereFilter15(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class FilterItem15(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter15]
+class Filter15(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
-class FileSlice1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    filename: str
-    content: str
-    start_line_number: int
-    end_line_number: int
-
-
-class Metadatum1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Metadata2(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     repo_file_path: str
-    file_slice: FileSlice1 = Field(..., title='FileSlice')
+    file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class Config21(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config27(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None
 
 
-class DependsOn20(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class Ref17(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Disabled10(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class DisabledItem10(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    resource_type: Any
+    resource_type: Literal['metric']
     package_name: str
     path: str
     original_file_path: str
@@ -5054,62 +3170,34 @@ class DisabledItem10(BaseParserModel):
     label: str
     type: Type23
     type_params: TypeParams1 = Field(..., title='MetricTypeParams')
-    filter: Optional[Optional[FilterItem15]] = None
-    metadata: Optional[Optional[Metadatum1]] = None
+    filter: Optional[Filter15] = None
+    metadata: Optional[Metadata2] = None
     meta: Optional[Dict[str, Any]] = None
     tags: Optional[List[str]] = None
-    config: Optional[Config21] = Field(None, title='MetricConfig')
+    config: Optional[Config27] = Field(None, title='MetricConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
     sources: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn20] = Field(None, title='DependsOn')
-    refs: Optional[List[Ref17]] = None
+    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    refs: Optional[List[Ref]] = None
     metrics: Optional[List[List[str]]] = None
     created_at: Optional[float] = None
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
 
 
-class ResourceType6(Enum):
-    model = 'model'
-    analysis = 'analysis'
-    test = 'test'
-    snapshot = 'snapshot'
-    operation = 'operation'
-    seed = 'seed'
-    rpc = 'rpc'
-    sql_operation = 'sql_operation'
-    doc = 'doc'
-    source = 'source'
-    macro = 'macro'
-    exposure = 'exposure'
-    metric = 'metric'
-    group = 'group'
-    saved_query = 'saved_query'
-    semantic_model = 'semantic_model'
-    unit_test = 'unit_test'
-    fixture = 'fixture'
-
-
-class WhereFilter16(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class WhereItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter16]
+class Where(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
 class QueryParams(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     metrics: List[str]
     group_by: List[str]
-    where: Optional[WhereItem]
+    where: Optional[Where] = None
 
 
 class ExportAs(Enum):
@@ -5117,90 +3205,58 @@ class ExportAs(Enum):
     view = 'view'
 
 
-class Config22(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Config28(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     export_as: ExportAs
-    schema_name: Optional[Optional[str]] = None
-    alias: Optional[Optional[str]] = None
-    database: Optional[Optional[str]] = None
+    schema_name: Optional[str] = None
+    alias: Optional[str] = None
+    database: Optional[str] = None
 
 
 class Export(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    config: Config22 = Field(..., title='ExportConfig')
+    config: Config28 = Field(..., title='ExportConfig')
 
 
-class FileSlice2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    filename: str
-    content: str
-    start_line_number: int
-    end_line_number: int
-
-
-class Metadatum2(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Metadata3(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     repo_file_path: str
-    file_slice: FileSlice2 = Field(..., title='FileSlice')
-
-
-class ExportA(Enum):
-    table = 'table'
-    view = 'view'
+    file_slice: FileSlice = Field(..., title='FileSlice')
 
 
 class Cache(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     enabled: Optional[bool] = False
 
 
-class Config23(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config29(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None
-    export_as: Optional[Optional[ExportA]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
+    export_as: Optional[ExportAs] = None
+    schema_: Optional[str] = Field(None, alias='schema')
     cache: Optional[Cache] = Field(None, title='SavedQueryCache')
 
 
-class DependsOn21(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class Ref18(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Disabled11(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class DisabledItem11(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    resource_type: ResourceType6
+    resource_type: ResourceType
     package_name: str
     path: str
     original_file_path: str
@@ -5208,53 +3264,32 @@ class DisabledItem11(BaseParserModel):
     fqn: List[str]
     query_params: QueryParams = Field(..., title='QueryParams')
     exports: List[Export]
-    description: Optional[Optional[str]] = None
-    label: Optional[Optional[str]] = None
-    metadata: Optional[Optional[Metadatum2]] = None
-    config: Optional[Config23] = Field(None, title='SavedQueryConfig')
+    description: Optional[str] = None
+    label: Optional[str] = None
+    metadata: Optional[Metadata3] = None
+    config: Optional[Config29] = Field(None, title='SavedQueryConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    depends_on: Optional[DependsOn21] = Field(None, title='DependsOn')
+    group: Optional[str] = None
+    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
     created_at: Optional[float] = None
-    refs: Optional[List[Ref18]] = None
+    refs: Optional[List[Ref]] = None
 
 
-class ResourceType7(Enum):
-    model = 'model'
-    analysis = 'analysis'
-    test = 'test'
-    snapshot = 'snapshot'
-    operation = 'operation'
-    seed = 'seed'
-    rpc = 'rpc'
-    sql_operation = 'sql_operation'
-    doc = 'doc'
-    source = 'source'
-    macro = 'macro'
-    exposure = 'exposure'
-    metric = 'metric'
-    group = 'group'
-    saved_query = 'saved_query'
-    semantic_model = 'semantic_model'
-    unit_test = 'unit_test'
-    fixture = 'fixture'
-
-
-class NodeRelationItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class NodeRelation(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     alias: str
     schema_name: str
-    database: Optional[Optional[str]] = None
-    relation_name: Optional[Optional[str]] = ''
+    database: Optional[str] = None
+    relation_name: Optional[str] = ''
 
 
-class Default(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    agg_time_dimension: Optional[Optional[str]] = None
+class Defaults(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    agg_time_dimension: Optional[str] = None
 
 
 class Type24(Enum):
@@ -5265,15 +3300,15 @@ class Type24(Enum):
 
 
 class Entity(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
     type: Type24
-    description: Optional[Optional[str]] = None
-    label: Optional[Optional[str]] = None
-    role: Optional[Optional[str]] = None
-    expr: Optional[Optional[str]] = None
+    description: Optional[str] = None
+    label: Optional[str] = None
+    role: Optional[str] = None
+    expr: Optional[str] = None
 
 
 class Agg(Enum):
@@ -5288,11 +3323,11 @@ class Agg(Enum):
     count = 'count'
 
 
-class AggParam(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    percentile: Optional[Optional[float]] = None
+class AggParams(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    percentile: Optional[float] = None
     use_discrete_percentile: Optional[bool] = False
     use_approximate_percentile: Optional[bool] = False
 
@@ -5309,28 +3344,28 @@ class WindowChoice(Enum):
     count = 'count'
 
 
-class NonAdditiveDimensionItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class NonAdditiveDimension(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
     window_choice: WindowChoice
     window_groupings: List[str]
 
 
-class Measure(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Measure2(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
     agg: Agg
-    description: Optional[Optional[str]] = None
-    label: Optional[Optional[str]] = None
+    description: Optional[str] = None
+    label: Optional[str] = None
     create_metric: Optional[bool] = False
-    expr: Optional[Optional[str]] = None
-    agg_params: Optional[Optional[AggParam]] = None
-    non_additive_dimension: Optional[Optional[NonAdditiveDimensionItem]] = None
-    agg_time_dimension: Optional[Optional[str]] = None
+    expr: Optional[str] = None
+    agg_params: Optional[AggParams] = None
+    non_additive_dimension: Optional[NonAdditiveDimension] = None
+    agg_time_dimension: Optional[str] = None
 
 
 class Type25(Enum):
@@ -5346,126 +3381,89 @@ class TimeGranularity(Enum):
     year = 'year'
 
 
-class ValidityParam(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class ValidityParams(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     is_start: Optional[bool] = False
     is_end: Optional[bool] = False
 
 
-class TypeParam(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class TypeParams2(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     time_granularity: TimeGranularity
-    validity_params: Optional[Optional[ValidityParam]] = None
+    validity_params: Optional[ValidityParams] = None
 
 
-class FileSlice3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    filename: str
-    content: str
-    start_line_number: int
-    end_line_number: int
-
-
-class Metadatum3(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Metadata4(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     repo_file_path: str
-    file_slice: FileSlice3 = Field(..., title='FileSlice')
+    file_slice: FileSlice = Field(..., title='FileSlice')
 
 
 class Dimension(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
     type: Type25
-    description: Optional[Optional[str]] = None
-    label: Optional[Optional[str]] = None
+    description: Optional[str] = None
+    label: Optional[str] = None
     is_partition: Optional[bool] = False
-    type_params: Optional[Optional[TypeParam]] = None
-    expr: Optional[Optional[str]] = None
-    metadata: Optional[Optional[Metadatum3]] = None
+    type_params: Optional[TypeParams2] = None
+    expr: Optional[str] = None
+    metadata: Optional[Metadata4] = None
 
 
-class FileSlice4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    filename: str
-    content: str
-    start_line_number: int
-    end_line_number: int
-
-
-class Metadatum4(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Metadata5(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     repo_file_path: str
-    file_slice: FileSlice4 = Field(..., title='FileSlice')
+    file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class DependsOn22(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class Ref19(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class Config24(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config30(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None
 
 
-class DisabledItem12(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Disabled12(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    resource_type: ResourceType7
+    resource_type: ResourceType
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     model: str
-    node_relation: Optional[NodeRelationItem]
-    description: Optional[Optional[str]] = None
-    label: Optional[Optional[str]] = None
-    defaults: Optional[Optional[Default]] = None
+    node_relation: Optional[NodeRelation] = None
+    description: Optional[str] = None
+    label: Optional[str] = None
+    defaults: Optional[Defaults] = None
     entities: Optional[List[Entity]] = None
-    measures: Optional[List[Measure]] = None
+    measures: Optional[List[Measure2]] = None
     dimensions: Optional[List[Dimension]] = None
-    metadata: Optional[Optional[Metadatum4]] = None
-    depends_on: Optional[DependsOn22] = Field(None, title='DependsOn')
-    refs: Optional[List[Ref19]] = None
+    metadata: Optional[Metadata5] = None
+    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    refs: Optional[List[Ref]] = None
     created_at: Optional[float] = None
-    config: Optional[Config24] = Field(None, title='SemanticModelConfig')
+    config: Optional[Config30] = Field(None, title='SemanticModelConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
-    primary_entity: Optional[Optional[str]] = None
-    group: Optional[Optional[str]] = None
+    primary_entity: Optional[str] = None
+    group: Optional[str] = None
 
 
 class Format(Enum):
@@ -5475,243 +3473,136 @@ class Format(Enum):
 
 
 class GivenItem(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     input: str
-    rows: Optional[Optional[Union[str, List[Dict[str, Any]]]]] = None
+    rows: Optional[Union[str, List[Dict[str, Any]]]] = None
     format: Optional[Format] = 'dict'
-    fixture: Optional[Optional[str]] = None
-
-
-class Format1(Enum):
-    csv = 'csv'
-    dict = 'dict'
-    sql = 'sql'
+    fixture: Optional[str] = None
 
 
 class Expect(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    rows: Optional[Optional[Union[str, List[Dict[str, Any]]]]] = None
-    format: Optional[Format1] = 'dict'
-    fixture: Optional[Optional[str]] = None
-
-
-class ResourceType8(Enum):
-    model = 'model'
-    analysis = 'analysis'
-    test = 'test'
-    snapshot = 'snapshot'
-    operation = 'operation'
-    seed = 'seed'
-    rpc = 'rpc'
-    sql_operation = 'sql_operation'
-    doc = 'doc'
-    source = 'source'
-    macro = 'macro'
-    exposure = 'exposure'
-    metric = 'metric'
-    group = 'group'
-    saved_query = 'saved_query'
-    semantic_model = 'semantic_model'
-    unit_test = 'unit_test'
-    fixture = 'fixture'
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    rows: Optional[Union[str, List[Dict[str, Any]]]] = None
+    format: Optional[Format] = 'dict'
+    fixture: Optional[str] = None
 
 
-class Override(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Overrides(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     macros: Optional[Dict[str, Any]] = None
     vars: Optional[Dict[str, Any]] = None
     env_vars: Optional[Dict[str, Any]] = None
 
 
-class DependsOn23(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class Config25(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config31(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
 
 
-class Version(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
+class Versions(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    include: Optional[List[Union[str, float]]] = None
+    exclude: Optional[List[Union[str, float]]] = None
 
-    include: Optional[Optional[List[Union[str, float]]]] = None
-    exclude: Optional[Optional[List[Union[str, float]]]] = None
 
-
-class DisabledItem13(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Disabled13(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     model: str
     given: List[GivenItem]
     expect: Expect = Field(..., title='UnitTestOutputFixture')
     name: str
-    resource_type: ResourceType8
+    resource_type: ResourceType
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     description: Optional[str] = ''
-    overrides: Optional[Optional[Override]] = None
-    depends_on: Optional[DependsOn23] = Field(None, title='DependsOn')
-    config: Optional[Config25] = Field(None, title='UnitTestConfig')
-    checksum: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
+    overrides: Optional[Overrides] = None
+    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    config: Optional[Config31] = Field(None, title='UnitTestConfig')
+    checksum: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
     created_at: Optional[float] = None
-    versions: Optional[Optional[Version]] = None
-    version: Optional[Optional[Union[str, float]]] = None
+    versions: Optional[Versions] = None
+    version: Optional[Union[str, float]] = None
 
 
-class ResourceType9(Enum):
-    model = 'model'
-    analysis = 'analysis'
-    test = 'test'
-    snapshot = 'snapshot'
-    operation = 'operation'
-    seed = 'seed'
-    rpc = 'rpc'
-    sql_operation = 'sql_operation'
-    doc = 'doc'
-    source = 'source'
-    macro = 'macro'
-    exposure = 'exposure'
-    metric = 'metric'
-    group = 'group'
-    saved_query = 'saved_query'
-    semantic_model = 'semantic_model'
-    unit_test = 'unit_test'
-    fixture = 'fixture'
-
-
-class WhereFilter17(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_sql_template: str
-
-
-class WhereItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    where_filters: List[WhereFilter17]
+class Where1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    where_filters: List[WhereFilter]
 
 
 class QueryParams1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     metrics: List[str]
     group_by: List[str]
-    where: Optional[WhereItem1]
+    where: Optional[Where1] = None
 
 
-class ExportAs1(Enum):
-    table = 'table'
-    view = 'view'
-
-
-class Config26(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    export_as: ExportAs1
-    schema_name: Optional[Optional[str]] = None
-    alias: Optional[Optional[str]] = None
-    database: Optional[Optional[str]] = None
+class Config32(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    export_as: ExportAs
+    schema_name: Optional[str] = None
+    alias: Optional[str] = None
+    database: Optional[str] = None
 
 
 class Export1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    config: Config26 = Field(..., title='ExportConfig')
+    config: Config32 = Field(..., title='ExportConfig')
 
 
-class FileSlice5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    filename: str
-    content: str
-    start_line_number: int
-    end_line_number: int
-
-
-class Metadatum5(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Metadata6(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     repo_file_path: str
-    file_slice: FileSlice5 = Field(..., title='FileSlice')
+    file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class ExportA1(Enum):
-    table = 'table'
-    view = 'view'
-
-
-class Cache1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    enabled: Optional[bool] = False
-
-
-class Config27(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config33(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None
-    export_as: Optional[Optional[ExportA1]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    cache: Optional[Cache1] = Field(None, title='SavedQueryCache')
-
-
-class DependsOn24(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class Ref20(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
+    export_as: Optional[ExportAs] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    cache: Optional[Cache] = Field(None, title='SavedQueryCache')
 
 
 class SavedQueries(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    resource_type: ResourceType9
+    resource_type: ResourceType
     package_name: str
     path: str
     original_file_path: str
@@ -5719,53 +3610,15 @@ class SavedQueries(BaseParserModel):
     fqn: List[str]
     query_params: QueryParams1 = Field(..., title='QueryParams')
     exports: List[Export1]
-    description: Optional[Optional[str]] = None
-    label: Optional[Optional[str]] = None
-    metadata: Optional[Optional[Metadatum5]] = None
-    config: Optional[Config27] = Field(None, title='SavedQueryConfig')
+    description: Optional[str] = None
+    label: Optional[str] = None
+    metadata: Optional[Metadata6] = None
+    config: Optional[Config33] = Field(None, title='SavedQueryConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
-    group: Optional[Optional[str]] = None
-    depends_on: Optional[DependsOn24] = Field(None, title='DependsOn')
+    group: Optional[str] = None
+    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
     created_at: Optional[float] = None
-    refs: Optional[List[Ref20]] = None
-
-
-class ResourceType10(Enum):
-    model = 'model'
-    analysis = 'analysis'
-    test = 'test'
-    snapshot = 'snapshot'
-    operation = 'operation'
-    seed = 'seed'
-    rpc = 'rpc'
-    sql_operation = 'sql_operation'
-    doc = 'doc'
-    source = 'source'
-    macro = 'macro'
-    exposure = 'exposure'
-    metric = 'metric'
-    group = 'group'
-    saved_query = 'saved_query'
-    semantic_model = 'semantic_model'
-    unit_test = 'unit_test'
-    fixture = 'fixture'
-
-
-class NodeRelationItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    alias: str
-    schema_name: str
-    database: Optional[Optional[str]] = None
-    relation_name: Optional[Optional[str]] = ''
-
-
-class Default1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    agg_time_dimension: Optional[Optional[str]] = None
+    refs: Optional[List[Ref]] = None
 
 
 class Type26(Enum):
@@ -5776,72 +3629,39 @@ class Type26(Enum):
 
 
 class Entity1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
     type: Type26
-    description: Optional[Optional[str]] = None
-    label: Optional[Optional[str]] = None
-    role: Optional[Optional[str]] = None
-    expr: Optional[Optional[str]] = None
+    description: Optional[str] = None
+    label: Optional[str] = None
+    role: Optional[str] = None
+    expr: Optional[str] = None
 
 
-class Agg1(Enum):
-    sum = 'sum'
-    min = 'min'
-    max = 'max'
-    count_distinct = 'count_distinct'
-    sum_boolean = 'sum_boolean'
-    average = 'average'
-    percentile = 'percentile'
-    median = 'median'
-    count = 'count'
-
-
-class AggParam1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    percentile: Optional[Optional[float]] = None
-    use_discrete_percentile: Optional[bool] = False
-    use_approximate_percentile: Optional[bool] = False
-
-
-class WindowChoice1(Enum):
-    sum = 'sum'
-    min = 'min'
-    max = 'max'
-    count_distinct = 'count_distinct'
-    sum_boolean = 'sum_boolean'
-    average = 'average'
-    percentile = 'percentile'
-    median = 'median'
-    count = 'count'
-
-
-class NonAdditiveDimensionItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class NonAdditiveDimension1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    window_choice: WindowChoice1
+    window_choice: WindowChoice
     window_groupings: List[str]
 
 
-class Measure1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Measure3(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    agg: Agg1
-    description: Optional[Optional[str]] = None
-    label: Optional[Optional[str]] = None
+    agg: Agg
+    description: Optional[str] = None
+    label: Optional[str] = None
     create_metric: Optional[bool] = False
-    expr: Optional[Optional[str]] = None
-    agg_params: Optional[Optional[AggParam1]] = None
-    non_additive_dimension: Optional[Optional[NonAdditiveDimensionItem1]] = None
-    agg_time_dimension: Optional[Optional[str]] = None
+    expr: Optional[str] = None
+    agg_params: Optional[AggParams] = None
+    non_additive_dimension: Optional[NonAdditiveDimension1] = None
+    agg_time_dimension: Optional[str] = None
 
 
 class Type27(Enum):
@@ -5849,256 +3669,145 @@ class Type27(Enum):
     time = 'time'
 
 
-class TimeGranularity1(Enum):
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
+class TypeParams3(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    time_granularity: TimeGranularity
+    validity_params: Optional[ValidityParams] = None
 
 
-class ValidityParam1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    is_start: Optional[bool] = False
-    is_end: Optional[bool] = False
-
-
-class TypeParam1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    time_granularity: TimeGranularity1
-    validity_params: Optional[Optional[ValidityParam1]] = None
-
-
-class FileSlice6(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    filename: str
-    content: str
-    start_line_number: int
-    end_line_number: int
-
-
-class Metadatum6(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Metadata7(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     repo_file_path: str
-    file_slice: FileSlice6 = Field(..., title='FileSlice')
+    file_slice: FileSlice = Field(..., title='FileSlice')
 
 
 class Dimension1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
     type: Type27
-    description: Optional[Optional[str]] = None
-    label: Optional[Optional[str]] = None
+    description: Optional[str] = None
+    label: Optional[str] = None
     is_partition: Optional[bool] = False
-    type_params: Optional[Optional[TypeParam1]] = None
-    expr: Optional[Optional[str]] = None
-    metadata: Optional[Optional[Metadatum6]] = None
+    type_params: Optional[TypeParams3] = None
+    expr: Optional[str] = None
+    metadata: Optional[Metadata7] = None
 
 
-class FileSlice7(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    filename: str
-    content: str
-    start_line_number: int
-    end_line_number: int
-
-
-class Metadatum7(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+class Metadata8(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     repo_file_path: str
-    file_slice: FileSlice7 = Field(..., title='FileSlice')
+    file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class DependsOn25(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class Ref21(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    name: str
-    package: Optional[Optional[str]] = None
-    version: Optional[Optional[Union[str, float]]] = None
-
-
-class Config28(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config34(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     enabled: Optional[bool] = True
-    group: Optional[Optional[str]] = None
+    group: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None
 
 
 class SemanticModels(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    resource_type: ResourceType10
+    resource_type: ResourceType
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     model: str
-    node_relation: Optional[NodeRelationItem1]
-    description: Optional[Optional[str]] = None
-    label: Optional[Optional[str]] = None
-    defaults: Optional[Optional[Default1]] = None
+    node_relation: Optional[NodeRelation] = None
+    description: Optional[str] = None
+    label: Optional[str] = None
+    defaults: Optional[Defaults] = None
     entities: Optional[List[Entity1]] = None
-    measures: Optional[List[Measure1]] = None
+    measures: Optional[List[Measure3]] = None
     dimensions: Optional[List[Dimension1]] = None
-    metadata: Optional[Optional[Metadatum7]] = None
-    depends_on: Optional[DependsOn25] = Field(None, title='DependsOn')
-    refs: Optional[List[Ref21]] = None
+    metadata: Optional[Metadata8] = None
+    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    refs: Optional[List[Ref]] = None
     created_at: Optional[float] = None
-    config: Optional[Config28] = Field(None, title='SemanticModelConfig')
+    config: Optional[Config34] = Field(None, title='SemanticModelConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
-    primary_entity: Optional[Optional[str]] = None
-    group: Optional[Optional[str]] = None
-
-
-class Format2(Enum):
-    csv = 'csv'
-    dict = 'dict'
-    sql = 'sql'
+    primary_entity: Optional[str] = None
+    group: Optional[str] = None
 
 
 class GivenItem1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     input: str
-    rows: Optional[Optional[Union[str, List[Dict[str, Any]]]]] = None
-    format: Optional[Format2] = 'dict'
-    fixture: Optional[Optional[str]] = None
-
-
-class Format3(Enum):
-    csv = 'csv'
-    dict = 'dict'
-    sql = 'sql'
+    rows: Optional[Union[str, List[Dict[str, Any]]]] = None
+    format: Optional[Format] = 'dict'
+    fixture: Optional[str] = None
 
 
 class Expect1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    rows: Optional[Optional[Union[str, List[Dict[str, Any]]]]] = None
-    format: Optional[Format3] = 'dict'
-    fixture: Optional[Optional[str]] = None
-
-
-class ResourceType11(Enum):
-    model = 'model'
-    analysis = 'analysis'
-    test = 'test'
-    snapshot = 'snapshot'
-    operation = 'operation'
-    seed = 'seed'
-    rpc = 'rpc'
-    sql_operation = 'sql_operation'
-    doc = 'doc'
-    source = 'source'
-    macro = 'macro'
-    exposure = 'exposure'
-    metric = 'metric'
-    group = 'group'
-    saved_query = 'saved_query'
-    semantic_model = 'semantic_model'
-    unit_test = 'unit_test'
-    fixture = 'fixture'
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    rows: Optional[Union[str, List[Dict[str, Any]]]] = None
+    format: Optional[Format] = 'dict'
+    fixture: Optional[str] = None
 
 
-class Override1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[Dict[str, Any]] = None
-    vars: Optional[Dict[str, Any]] = None
-    env_vars: Optional[Dict[str, Any]] = None
-
-
-class DependsOn26(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    macros: Optional[List[str]] = None
-    nodes: Optional[List[str]] = None
-
-
-class Config29(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    _extra: Optional[Dict[str, Any]] = None
+class Config35(BaseParserModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
     tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
 
 
-class Version1(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    include: Optional[Optional[List[Union[str, float]]]] = None
-    exclude: Optional[Optional[List[Union[str, float]]]] = None
-
-
 class UnitTests(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     model: str
     given: List[GivenItem1]
     expect: Expect1 = Field(..., title='UnitTestOutputFixture')
     name: str
-    resource_type: ResourceType11
+    resource_type: ResourceType
     package_name: str
     path: str
     original_file_path: str
     unique_id: str
     fqn: List[str]
     description: Optional[str] = ''
-    overrides: Optional[Optional[Override1]] = None
-    depends_on: Optional[DependsOn26] = Field(None, title='DependsOn')
-    config: Optional[Config29] = Field(None, title='UnitTestConfig')
-    checksum: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
+    overrides: Optional[Overrides] = None
+    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    config: Optional[Config35] = Field(None, title='UnitTestConfig')
+    checksum: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
     created_at: Optional[float] = None
-    versions: Optional[Optional[Version1]] = None
-    version: Optional[Optional[Union[str, float]]] = None
+    versions: Optional[Versions] = None
+    version: Optional[Union[str, float]] = None
 
 
 class ManifestV12(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     metadata: Metadata = Field(
         ..., description='Metadata about the manifest', title='ManifestMetadata'
     )
     nodes: Dict[
-        str, Union[Node, Node1, Node2, Node3, Node4, Node5, Node6, Node7]
+        str, Union[Nodes, Nodes1, Nodes2, Nodes3, Nodes4, Nodes5, Nodes6, Nodes7]
     ] = Field(
         ..., description='The nodes defined in the dbt project and its dependencies'
     )
@@ -6128,20 +3837,20 @@ class ManifestV12(BaseParserModel):
             str,
             List[
                 Union[
-                    DisabledItem,
-                    DisabledItem1,
-                    DisabledItem2,
-                    DisabledItem3,
-                    DisabledItem4,
-                    DisabledItem5,
-                    DisabledItem6,
-                    DisabledItem7,
-                    DisabledItem8,
-                    DisabledItem9,
-                    DisabledItem10,
-                    DisabledItem11,
-                    DisabledItem12,
-                    DisabledItem13,
+                    Disabled,
+                    Disabled1,
+                    Disabled2,
+                    Disabled3,
+                    Disabled4,
+                    Disabled5,
+                    Disabled6,
+                    Disabled7,
+                    Disabled8,
+                    Disabled9,
+                    Disabled10,
+                    Disabled11,
+                    Disabled12,
+                    Disabled13,
                 ]
             ],
         ]
