@@ -6,10 +6,24 @@
 <img src="https://img.shields.io/pypi/pyversions/dbt-artifacts-parser.svg?color=%2334D058" alt="Supported Python versions">
 </a>
 
-
 # dbt-artifacts-parser
+
 This is a dbt artifacts parse in python.
 It enables us to deal with `catalog.json`, `manifest.json`, `run-results.json` and `sources.json` as python objects.
+
+## Supported Versions and Compatibility
+
+> **⚠️ Important Note:**
+>
+> - **Pydantic v1 will not be supported for dbt 1.9 or later.**
+> - **To parse dbt 1.9 or later, please migrate your code to pydantic v2.**
+> - **We will reassess version compatibility upon the release of pydantic v3.**
+
+| Version | Supported dbt Version | Supported pydantic Version |
+|---------|-----------------------|----------------------------|
+|  0.7    | dbt 1.5 to 1.8        | pydantic v2                |
+|  0.6    | dbt 1.5 to 1.8        | pydantic v1                |
+|  0.5    | dbt 1.5 to 1.7        | pydantic v1                |
 
 ## Installation
 
