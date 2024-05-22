@@ -28,11 +28,13 @@ from dbt_artifacts_parser.parsers.manifest.manifest_v8 import ManifestV8
 from dbt_artifacts_parser.parsers.manifest.manifest_v9 import ManifestV9
 from dbt_artifacts_parser.parsers.manifest.manifest_v10 import ManifestV10
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
+from dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
 from dbt_artifacts_parser.parsers.run_results.run_results_v1 import RunResultsV1
 from dbt_artifacts_parser.parsers.run_results.run_results_v2 import RunResultsV2
 from dbt_artifacts_parser.parsers.run_results.run_results_v3 import RunResultsV3
 from dbt_artifacts_parser.parsers.run_results.run_results_v4 import RunResultsV4
 from dbt_artifacts_parser.parsers.run_results.run_results_v5 import RunResultsV5
+from dbt_artifacts_parser.parsers.run_results.run_results_v6 import RunResultsV6
 from dbt_artifacts_parser.parsers.sources.sources_v1 import SourcesV1
 from dbt_artifacts_parser.parsers.sources.sources_v2 import SourcesV2
 from dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
@@ -83,6 +85,7 @@ Manifest: TypeAlias = Union[
         ManifestV9,
         ManifestV10,
         ManifestV11,
+        ManifestV12,
 ]
 
 
@@ -118,6 +121,8 @@ def parse_manifest(manifest: dict) -> Manifest:
         return ManifestV10(**manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V11.value.dbt_schema_version:
         return ManifestV11(**manifest)
+    elif dbt_schema_version == ArtifactTypes.MANIFEST_V12.value.dbt_schema_version:
+        return ManifestV12(**manifest)
     raise ValueError("Not a manifest.json")
 
 
@@ -169,7 +174,7 @@ def parse_manifest_v6(manifest: dict) -> ManifestV6:
     raise ValueError("Not a manifest.json v6")
 
 
-def parse_manifest_v7(manifest: dict) -> ManifestV6:
+def parse_manifest_v7(manifest: dict) -> ManifestV7:
     """Parse manifest.json ver.7"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V7.value.dbt_schema_version:
@@ -177,7 +182,7 @@ def parse_manifest_v7(manifest: dict) -> ManifestV6:
     raise ValueError("Not a manifest.json v7")
 
 
-def parse_manifest_v8(manifest: dict) -> ManifestV6:
+def parse_manifest_v8(manifest: dict) -> ManifestV8:
     """Parse manifest.json ver.8"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V8.value.dbt_schema_version:
@@ -185,14 +190,14 @@ def parse_manifest_v8(manifest: dict) -> ManifestV6:
     raise ValueError("Not a manifest.json v8")
 
 
-def parse_manifest_v9(manifest: dict) -> ManifestV6:
+def parse_manifest_v9(manifest: dict) -> ManifestV9:
     """Parse manifest.json ver.9"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V9.value.dbt_schema_version:
         return ManifestV9(**manifest)
     raise ValueError("Not a manifest.json v9")
 
-def parse_manifest_v10(manifest: dict) -> ManifestV6:
+def parse_manifest_v10(manifest: dict) -> ManifestV10:
     """Parse manifest.json ver.10"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V10.value.dbt_schema_version:
@@ -200,7 +205,7 @@ def parse_manifest_v10(manifest: dict) -> ManifestV6:
     raise ValueError("Not a manifest.json v10")
 
 
-def parse_manifest_v11(manifest: dict) -> ManifestV6:
+def parse_manifest_v11(manifest: dict) -> ManifestV11:
     """Parse manifest.json ver.11"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V11.value.dbt_schema_version:
@@ -208,10 +213,25 @@ def parse_manifest_v11(manifest: dict) -> ManifestV6:
     raise ValueError("Not a manifest.json v11")
 
 
+def parse_manifest_v12(manifest: dict) -> ManifestV12:
+    """Parse manifest.json ver.12"""
+    dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
+    if dbt_schema_version == ArtifactTypes.MANIFEST_V12.value.dbt_schema_version:
+        return ManifestV12(**manifest)
+    raise ValueError("Not a manifest.json v12")
+
+
 #
 # run-results
 #
-RunResults: TypeAlias = Union[RunResultsV1, RunResultsV2, RunResultsV3, RunResultsV4, RunResultsV5]
+RunResults: TypeAlias = Union[
+    RunResultsV1,
+    RunResultsV2,
+    RunResultsV3,
+    RunResultsV4,
+    RunResultsV5,
+    RunResultsV6
+]
 
 
 def parse_run_results(run_results: dict) -> RunResults:
@@ -234,6 +254,8 @@ def parse_run_results(run_results: dict) -> RunResults:
         return RunResultsV4(**run_results)
     elif dbt_schema_version == ArtifactTypes.RUN_RESULTS_V5.value.dbt_schema_version:
         return RunResultsV5(**run_results)
+    elif dbt_schema_version == ArtifactTypes.RUN_RESULTS_V6.value.dbt_schema_version:
+        return RunResultsV6(**run_results)
     raise ValueError("Not a manifest.json")
 
 
@@ -275,6 +297,13 @@ def parse_run_results_v5(run_results: dict) -> RunResultsV5:
         return RunResultsV5(**run_results)
     raise ValueError("Not a run-results.json v5")
 
+
+def parse_run_results_v6(run_results: dict) -> RunResultsV6:
+    """Parse run-results.json v6"""
+    dbt_schema_version = get_dbt_schema_version(artifact_json=run_results)
+    if dbt_schema_version == ArtifactTypes.RUN_RESULTS_V6.value.dbt_schema_version:
+        return RunResultsV6(**run_results)
+    raise ValueError("Not a run-results.json v6")
 
 #
 # sources

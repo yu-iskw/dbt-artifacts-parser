@@ -6,10 +6,24 @@
 <img src="https://img.shields.io/pypi/pyversions/dbt-artifacts-parser.svg?color=%2334D058" alt="Supported Python versions">
 </a>
 
-
 # dbt-artifacts-parser
+
 This is a dbt artifacts parse in python.
 It enables us to deal with `catalog.json`, `manifest.json`, `run-results.json` and `sources.json` as python objects.
+
+## Supported Versions and Compatibility
+
+> **⚠️ Important Note:**
+>
+> - **Pydantic v1 will not be supported for dbt 1.9 or later.**
+> - **To parse dbt 1.9 or later, please migrate your code to pydantic v2.**
+> - **We will reassess version compatibility upon the release of pydantic v3.**
+
+| Version | Supported dbt Version | Supported pydantic Version |
+|---------|-----------------------|----------------------------|
+|  0.7    | dbt 1.5 to 1.8        | pydantic v2                |
+|  0.6    | dbt 1.5 to 1.8        | pydantic v1                |
+|  0.5    | dbt 1.5 to 1.7        | pydantic v1                |
 
 ## Installation
 
@@ -35,6 +49,7 @@ Those are the classes to parse dbt artifacts.
 - [ManifestV9](dbt_artifacts_parser/parsers/manifest/manifest_v9.py) for manifest.json v9
 - [ManifestV10](dbt_artifacts_parser/parsers/manifest/manifest_v10.py) for manifest.json v10
 - [ManifestV11](dbt_artifacts_parser/parsers/manifest/manifest_v11.py) for manifest.json v11
+- [ManifestV12](dbt_artifacts_parser/parsers/manifest/manifest_v12.py) for manifest.json v12
 
 ### Run Results
 - [RunResultsV1](dbt_artifacts_parser/parsers/manifest/manifest_v1.py) for run_results.json v1
@@ -42,6 +57,7 @@ Those are the classes to parse dbt artifacts.
 - [RunResultsV3](dbt_artifacts_parser/parsers/manifest/manifest_v3.py) for run_results.json v3
 - [RunResultsV4](dbt_artifacts_parser/parsers/manifest/manifest_v4.py) for run_results.json v4
 - [RunResultsV5](dbt_artifacts_parser/parsers/manifest/manifest_v5.py) for run_results.json v5
+- [RunResultsV6](dbt_artifacts_parser/parsers/manifest/manifest_v6.py) for run_results.json v6
 
 ### Sources
 - [SourcesV1](dbt_artifacts_parser/parsers/sources/sources_v1.py) for sources.json v1
@@ -157,6 +173,13 @@ from dbt_artifacts_parser.parser import parse_manifest_v11
 with open("path/to/manifest.json", "r") as fp:
     manifest_dict = json.load(fp)
     manifest_obj = parse_manifest_v11(manifest=manifest_dict)
+
+# parse manifest.json v12
+from dbt_artifacts_parser.parser import parse_manifest_v12
+
+with open("path/to/manifest.json", "r") as fp:
+    manifest_dict = json.load(fp)
+    manifest_obj = parse_manifest_v12(manifest=manifest_dict)
 ```
 
 ### Parse run-results.json
@@ -205,6 +228,13 @@ from dbt_artifacts_parser.parser import parse_run_results_v5
 with open("path/to/run-results.json", "r") as fp:
     run_results_dict = json.load(fp)
     run_results_obj = parse_run_results_v5(run_results=run_results_dict)
+
+# parse run-results.json v6
+from dbt_artifacts_parser.parser import parse_run_results_v6
+
+with open("path/to/run-results.json", "r") as fp:
+    run_results_dict = json.load(fp)
+    run_results_obj = parse_run_results_v6(run_results=run_results_dict)
 ```
 
 ### Parse sources.json

@@ -3,40 +3,35 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import Extra, Field, constr
+from pydantic import AwareDatetime, ConfigDict, Field, constr
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 
 class ManifestMetadata(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     dbt_schema_version: Optional[
         str
     ] = 'https://schemas.getdbt.com/dbt/manifest/v8.json'
     dbt_version: Optional[str] = '1.4.1'
-    generated_at: Optional[datetime] = '2023-02-09T10:04:47.350768Z'
-    invocation_id: Optional[Optional[str]] = 'f795bc66-f417-4007-af6e-f2e513d33790'
+    generated_at: Optional[AwareDatetime] = '2023-02-09T10:04:47.350768Z'
+    invocation_id: Optional[str] = 'f795bc66-f417-4007-af6e-f2e513d33790'
     env: Optional[Dict[str, str]] = {}
-    project_id: Optional[Optional[str]] = Field(
+    project_id: Optional[str] = Field(
         None, description='A unique identifier for the project'
     )
     user_id: Optional[
-        Optional[
-            constr(
-                regex=r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
-            )
-        ]
+        constr(pattern=r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}')
     ] = Field(None, description='A unique identifier for the user')
-    send_anonymous_usage_stats: Optional[Optional[bool]] = Field(
+    send_anonymous_usage_stats: Optional[bool] = Field(
         None, description='Whether dbt is configured to send anonymous usage statistics'
     )
-    adapter_type: Optional[Optional[str]] = Field(
+    adapter_type: Optional[str] = Field(
         None, description='The type name of the adapter'
     )
 
@@ -46,54 +41,54 @@ class ResourceType(Enum):
 
 
 class FileHash(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
     checksum: str
 
 
 class Hook(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     sql: str
     transaction: Optional[bool] = True
-    index: Optional[Optional[int]] = None
+    index: Optional[int] = None
 
 
 class Docs(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
+    node_color: Optional[str] = None
 
 
 class ColumnInfo(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: str
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = {}
-    data_type: Optional[Optional[str]] = None
-    quote: Optional[Optional[bool]] = None
+    data_type: Optional[str] = None
+    quote: Optional[bool] = None
     tags: Optional[List[str]] = []
 
 
 class DependsOn(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     macros: Optional[List[str]] = []
     nodes: Optional[List[str]] = []
 
 
 class InjectedCTE(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     id: str
     sql: str
 
@@ -103,22 +98,22 @@ class ResourceType1(Enum):
 
 
 class TestConfig(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field('dbt_test__audit', alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field('dbt_test__audit', alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = []
     meta: Optional[Dict[str, Any]] = {}
     materialized: Optional[str] = 'test'
     severity: Optional[
-        constr(regex=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
+        constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
     ] = 'ERROR'
-    store_failures: Optional[Optional[bool]] = None
-    where: Optional[Optional[str]] = None
-    limit: Optional[Optional[int]] = None
+    store_failures: Optional[bool] = None
+    where: Optional[str] = None
+    limit: Optional[int] = None
     fail_calc: Optional[str] = 'count(*)'
     warn_if: Optional[str] = '!= 0'
     error_if: Optional[str] = '!= 0'
@@ -145,12 +140,12 @@ class ResourceType6(Enum):
 
 
 class TestMetadata(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
     kwargs: Optional[Dict[str, Any]] = {}
-    namespace: Optional[Optional[str]] = None
+    namespace: Optional[str] = None
 
 
 class ResourceType7(Enum):
@@ -158,33 +153,35 @@ class ResourceType7(Enum):
 
 
 class SnapshotConfig(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = []
     meta: Optional[Dict[str, Any]] = {}
     materialized: Optional[str] = 'snapshot'
-    incremental_strategy: Optional[Optional[str]] = None
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = {}
     post_hook: Optional[List[Hook]] = Field([], alias='post-hook')
     pre_hook: Optional[List[Hook]] = Field([], alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = {}
     column_types: Optional[Dict[str, Any]] = {}
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[str]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[str] = None
+    on_schema_change: Optional[str] = 'ignore'
     grants: Optional[Dict[str, Any]] = {}
     packages: Optional[List[str]] = []
-    docs: Optional[Docs] = {'show': True, 'node_color': None}
-    strategy: Optional[Optional[str]] = None
-    target_schema: Optional[Optional[str]] = None
-    target_database: Optional[Optional[str]] = None
-    updated_at: Optional[Optional[str]] = None
-    check_cols: Optional[Optional[Union[str, List[str]]]] = None
+    docs: Optional[Docs] = Field(
+        default_factory=lambda: Docs.model_validate({'show': True, 'node_color': None})
+    )
+    strategy: Optional[str] = None
+    target_schema: Optional[str] = None
+    target_database: Optional[str] = None
+    updated_at: Optional[str] = None
+    check_cols: Optional[Union[str, List[str]]] = None
 
 
 class ResourceType8(Enum):
@@ -192,35 +189,37 @@ class ResourceType8(Enum):
 
 
 class SeedConfig(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = []
     meta: Optional[Dict[str, Any]] = {}
     materialized: Optional[str] = 'seed'
-    incremental_strategy: Optional[Optional[str]] = None
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = {}
     post_hook: Optional[List[Hook]] = Field([], alias='post-hook')
     pre_hook: Optional[List[Hook]] = Field([], alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = {}
     column_types: Optional[Dict[str, Any]] = {}
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
     grants: Optional[Dict[str, Any]] = {}
     packages: Optional[List[str]] = []
-    docs: Optional[Docs] = {'show': True, 'node_color': None}
-    quote_columns: Optional[Optional[bool]] = None
+    docs: Optional[Docs] = Field(
+        default_factory=lambda: Docs.model_validate({'show': True, 'node_color': None})
+    )
+    quote_columns: Optional[bool] = None
 
 
 class MacroDependsOn(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     macros: Optional[List[str]] = []
 
 
@@ -229,23 +228,23 @@ class ResourceType9(Enum):
 
 
 class Quoting(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[Optional[bool]] = None
-    schema_: Optional[Optional[bool]] = Field(None, alias='schema')
-    identifier: Optional[Optional[bool]] = None
-    column: Optional[Optional[bool]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[bool] = None
+    schema_: Optional[bool] = Field(None, alias='schema')
+    identifier: Optional[bool] = None
+    column: Optional[bool] = None
 
 
 class FreshnessMetadata(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     dbt_schema_version: Optional[str] = 'https://schemas.getdbt.com/dbt/sources/v3.json'
     dbt_version: Optional[str] = '1.4.1'
-    generated_at: Optional[datetime] = '2023-02-09T10:04:47.347023Z'
-    invocation_id: Optional[Optional[str]] = 'f795bc66-f417-4007-af6e-f2e513d33790'
+    generated_at: Optional[AwareDatetime] = '2023-02-09T10:04:47.347023Z'
+    invocation_id: Optional[str] = 'f795bc66-f417-4007-af6e-f2e513d33790'
     env: Optional[Dict[str, str]] = {}
 
 
@@ -254,11 +253,11 @@ class Status(Enum):
 
 
 class SourceFreshnessRuntimeError(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     unique_id: str
-    error: Optional[Optional[Union[str, int]]] = None
+    error: Optional[Union[str, int]] = None
     status: Status
 
 
@@ -269,33 +268,33 @@ class Status1(Enum):
     runtime_error = 'runtime error'
 
 
-class PeriodEnum(Enum):
+class Period(Enum):
     minute = 'minute'
     hour = 'hour'
     day = 'day'
 
 
 class Time(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    count: Optional[Optional[int]] = None
-    period: Optional[Optional[PeriodEnum]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    count: Optional[int] = None
+    period: Optional[Period] = None
 
 
 class TimingInfo(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    started_at: Optional[Optional[datetime]] = None
-    completed_at: Optional[Optional[datetime]] = None
+    started_at: Optional[AwareDatetime] = None
+    completed_at: Optional[AwareDatetime] = None
 
 
 class ExternalPartition(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     name: Optional[str] = ''
     description: Optional[str] = ''
     data_type: Optional[str] = ''
@@ -303,9 +302,9 @@ class ExternalPartition(BaseParserModel):
 
 
 class SourceConfig(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     enabled: Optional[bool] = True
 
 
@@ -319,11 +318,11 @@ class SupportedLanguage(Enum):
 
 
 class MacroArgument(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
-    type: Optional[Optional[str]] = None
+    type: Optional[str] = None
     description: Optional[str] = ''
 
 
@@ -332,9 +331,9 @@ class ResourceType11(Enum):
 
 
 class Documentation(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
     resource_type: ResourceType11
     package_name: str
@@ -356,24 +355,24 @@ class Type(Enum):
     application = 'application'
 
 
-class MaturityEnum(Enum):
+class Maturity(Enum):
     low = 'low'
     medium = 'medium'
     high = 'high'
 
 
 class ExposureOwner(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     email: str
-    name: Optional[Optional[str]] = None
+    name: Optional[str] = None
 
 
 class ExposureConfig(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     enabled: Optional[bool] = True
 
 
@@ -382,15 +381,15 @@ class ResourceType13(Enum):
 
 
 class MetricFilter(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     field: str
     operator: str
     value: str
 
 
-class PeriodEnum1(Enum):
+class Period1(Enum):
     day = 'day'
     week = 'week'
     month = 'month'
@@ -398,50 +397,52 @@ class PeriodEnum1(Enum):
 
 
 class MetricTime(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    count: Optional[Optional[int]] = None
-    period: Optional[Optional[PeriodEnum1]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    count: Optional[int] = None
+    period: Optional[Period1] = None
 
 
 class MetricConfig(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     enabled: Optional[bool] = True
 
 
 class NodeConfig(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
+    model_config = ConfigDict(
+        extra='allow',
+    )
     enabled: Optional[bool] = True
-    alias: Optional[Optional[str]] = None
-    schema_: Optional[Optional[str]] = Field(None, alias='schema')
-    database: Optional[Optional[str]] = None
+    alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
+    database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = []
     meta: Optional[Dict[str, Any]] = {}
     materialized: Optional[str] = 'view'
-    incremental_strategy: Optional[Optional[str]] = None
+    incremental_strategy: Optional[str] = None
     persist_docs: Optional[Dict[str, Any]] = {}
     post_hook: Optional[List[Hook]] = Field([], alias='post-hook')
     pre_hook: Optional[List[Hook]] = Field([], alias='pre-hook')
     quoting: Optional[Dict[str, Any]] = {}
     column_types: Optional[Dict[str, Any]] = {}
-    full_refresh: Optional[Optional[bool]] = None
-    unique_key: Optional[Optional[Union[str, List[str]]]] = None
-    on_schema_change: Optional[Optional[str]] = 'ignore'
+    full_refresh: Optional[bool] = None
+    unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
     grants: Optional[Dict[str, Any]] = {}
     packages: Optional[List[str]] = []
-    docs: Optional[Docs] = {'show': True, 'node_color': None}
+    docs: Optional[Docs] = Field(
+        default_factory=lambda: Docs.model_validate({'show': True, 'node_color': None})
+    )
 
 
 class SingularTestNode(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
     resource_type: ResourceType1
@@ -452,52 +453,60 @@ class SingularTestNode(BaseParserModel):
     fqn: List[str]
     alias: str
     checksum: FileHash
-    config: Optional[TestConfig] = {
-        'enabled': True,
-        'alias': None,
-        'schema': 'dbt_test__audit',
-        'database': None,
-        'tags': [],
-        'meta': {},
-        'materialized': 'test',
-        'severity': 'ERROR',
-        'store_failures': None,
-        'where': None,
-        'limit': None,
-        'fail_calc': 'count(*)',
-        'warn_if': '!= 0',
-        'error_if': '!= 0',
-    }
+    config: Optional[TestConfig] = Field(
+        default_factory=lambda: TestConfig.model_validate(
+            {
+                'enabled': True,
+                'alias': None,
+                'schema': 'dbt_test__audit',
+                'database': None,
+                'tags': [],
+                'meta': {},
+                'materialized': 'test',
+                'severity': 'ERROR',
+                'store_failures': None,
+                'where': None,
+                'limit': None,
+                'fail_calc': 'count(*)',
+                'warn_if': '!= 0',
+                'error_if': '!= 0',
+            }
+        )
+    )
     tags: Optional[List[str]] = []
     description: Optional[str] = ''
     columns: Optional[Dict[str, ColumnInfo]] = {}
     meta: Optional[Dict[str, Any]] = {}
-    docs: Optional[Docs] = {'show': True, 'node_color': None}
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    docs: Optional[Docs] = Field(
+        default_factory=lambda: Docs.model_validate({'show': True, 'node_color': None})
+    )
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     deferred: Optional[bool] = False
     unrendered_config: Optional[Dict[str, Any]] = {}
     created_at: Optional[float] = 1675937087.355371
     config_call_dict: Optional[Dict[str, Any]] = {}
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
     refs: Optional[List[List[str]]] = []
     sources: Optional[List[List[str]]] = []
     metrics: Optional[List[List[str]]] = []
-    depends_on: Optional[DependsOn] = {'macros': [], 'nodes': []}
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn] = Field(
+        default_factory=lambda: DependsOn.model_validate({'macros': [], 'nodes': []})
+    )
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
     extra_ctes: Optional[List[InjectedCTE]] = []
 
 
 class HookNode(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
     resource_type: ResourceType2
@@ -508,58 +517,66 @@ class HookNode(BaseParserModel):
     fqn: List[str]
     alias: str
     checksum: FileHash
-    config: Optional[NodeConfig] = {
-        'enabled': True,
-        'alias': None,
-        'schema': None,
-        'database': None,
-        'tags': [],
-        'meta': {},
-        'materialized': 'view',
-        'incremental_strategy': None,
-        'persist_docs': {},
-        'quoting': {},
-        'column_types': {},
-        'full_refresh': None,
-        'unique_key': None,
-        'on_schema_change': 'ignore',
-        'grants': {},
-        'packages': [],
-        'docs': {'show': True, 'node_color': None},
-        'post-hook': [],
-        'pre-hook': [],
-    }
+    config: Optional[NodeConfig] = Field(
+        default_factory=lambda: NodeConfig.model_validate(
+            {
+                'enabled': True,
+                'alias': None,
+                'schema': None,
+                'database': None,
+                'tags': [],
+                'meta': {},
+                'materialized': 'view',
+                'incremental_strategy': None,
+                'persist_docs': {},
+                'quoting': {},
+                'column_types': {},
+                'full_refresh': None,
+                'unique_key': None,
+                'on_schema_change': 'ignore',
+                'grants': {},
+                'packages': [],
+                'docs': {'show': True, 'node_color': None},
+                'post-hook': [],
+                'pre-hook': [],
+            }
+        )
+    )
     tags: Optional[List[str]] = []
     description: Optional[str] = ''
     columns: Optional[Dict[str, ColumnInfo]] = {}
     meta: Optional[Dict[str, Any]] = {}
-    docs: Optional[Docs] = {'show': True, 'node_color': None}
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    docs: Optional[Docs] = Field(
+        default_factory=lambda: Docs.model_validate({'show': True, 'node_color': None})
+    )
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     deferred: Optional[bool] = False
     unrendered_config: Optional[Dict[str, Any]] = {}
     created_at: Optional[float] = 1675937087.356482
     config_call_dict: Optional[Dict[str, Any]] = {}
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
     refs: Optional[List[List[str]]] = []
     sources: Optional[List[List[str]]] = []
     metrics: Optional[List[List[str]]] = []
-    depends_on: Optional[DependsOn] = {'macros': [], 'nodes': []}
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn] = Field(
+        default_factory=lambda: DependsOn.model_validate({'macros': [], 'nodes': []})
+    )
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
     extra_ctes: Optional[List[InjectedCTE]] = []
-    index: Optional[Optional[int]] = None
+    index: Optional[int] = None
 
 
 class ModelNode(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
     resource_type: ResourceType3
@@ -570,57 +587,65 @@ class ModelNode(BaseParserModel):
     fqn: List[str]
     alias: str
     checksum: FileHash
-    config: Optional[NodeConfig] = {
-        'enabled': True,
-        'alias': None,
-        'schema': None,
-        'database': None,
-        'tags': [],
-        'meta': {},
-        'materialized': 'view',
-        'incremental_strategy': None,
-        'persist_docs': {},
-        'quoting': {},
-        'column_types': {},
-        'full_refresh': None,
-        'unique_key': None,
-        'on_schema_change': 'ignore',
-        'grants': {},
-        'packages': [],
-        'docs': {'show': True, 'node_color': None},
-        'post-hook': [],
-        'pre-hook': [],
-    }
+    config: Optional[NodeConfig] = Field(
+        default_factory=lambda: NodeConfig.model_validate(
+            {
+                'enabled': True,
+                'alias': None,
+                'schema': None,
+                'database': None,
+                'tags': [],
+                'meta': {},
+                'materialized': 'view',
+                'incremental_strategy': None,
+                'persist_docs': {},
+                'quoting': {},
+                'column_types': {},
+                'full_refresh': None,
+                'unique_key': None,
+                'on_schema_change': 'ignore',
+                'grants': {},
+                'packages': [],
+                'docs': {'show': True, 'node_color': None},
+                'post-hook': [],
+                'pre-hook': [],
+            }
+        )
+    )
     tags: Optional[List[str]] = []
     description: Optional[str] = ''
     columns: Optional[Dict[str, ColumnInfo]] = {}
     meta: Optional[Dict[str, Any]] = {}
-    docs: Optional[Docs] = {'show': True, 'node_color': None}
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    docs: Optional[Docs] = Field(
+        default_factory=lambda: Docs.model_validate({'show': True, 'node_color': None})
+    )
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     deferred: Optional[bool] = False
     unrendered_config: Optional[Dict[str, Any]] = {}
     created_at: Optional[float] = 1675937087.357701
     config_call_dict: Optional[Dict[str, Any]] = {}
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
     refs: Optional[List[List[str]]] = []
     sources: Optional[List[List[str]]] = []
     metrics: Optional[List[List[str]]] = []
-    depends_on: Optional[DependsOn] = {'macros': [], 'nodes': []}
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn] = Field(
+        default_factory=lambda: DependsOn.model_validate({'macros': [], 'nodes': []})
+    )
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
     extra_ctes: Optional[List[InjectedCTE]] = []
 
 
 class RPCNode(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
     resource_type: ResourceType4
@@ -631,57 +656,65 @@ class RPCNode(BaseParserModel):
     fqn: List[str]
     alias: str
     checksum: FileHash
-    config: Optional[NodeConfig] = {
-        'enabled': True,
-        'alias': None,
-        'schema': None,
-        'database': None,
-        'tags': [],
-        'meta': {},
-        'materialized': 'view',
-        'incremental_strategy': None,
-        'persist_docs': {},
-        'quoting': {},
-        'column_types': {},
-        'full_refresh': None,
-        'unique_key': None,
-        'on_schema_change': 'ignore',
-        'grants': {},
-        'packages': [],
-        'docs': {'show': True, 'node_color': None},
-        'post-hook': [],
-        'pre-hook': [],
-    }
+    config: Optional[NodeConfig] = Field(
+        default_factory=lambda: NodeConfig.model_validate(
+            {
+                'enabled': True,
+                'alias': None,
+                'schema': None,
+                'database': None,
+                'tags': [],
+                'meta': {},
+                'materialized': 'view',
+                'incremental_strategy': None,
+                'persist_docs': {},
+                'quoting': {},
+                'column_types': {},
+                'full_refresh': None,
+                'unique_key': None,
+                'on_schema_change': 'ignore',
+                'grants': {},
+                'packages': [],
+                'docs': {'show': True, 'node_color': None},
+                'post-hook': [],
+                'pre-hook': [],
+            }
+        )
+    )
     tags: Optional[List[str]] = []
     description: Optional[str] = ''
     columns: Optional[Dict[str, ColumnInfo]] = {}
     meta: Optional[Dict[str, Any]] = {}
-    docs: Optional[Docs] = {'show': True, 'node_color': None}
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    docs: Optional[Docs] = Field(
+        default_factory=lambda: Docs.model_validate({'show': True, 'node_color': None})
+    )
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     deferred: Optional[bool] = False
     unrendered_config: Optional[Dict[str, Any]] = {}
     created_at: Optional[float] = 1675937087.358761
     config_call_dict: Optional[Dict[str, Any]] = {}
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
     refs: Optional[List[List[str]]] = []
     sources: Optional[List[List[str]]] = []
     metrics: Optional[List[List[str]]] = []
-    depends_on: Optional[DependsOn] = {'macros': [], 'nodes': []}
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn] = Field(
+        default_factory=lambda: DependsOn.model_validate({'macros': [], 'nodes': []})
+    )
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
     extra_ctes: Optional[List[InjectedCTE]] = []
 
 
 class SqlNode(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
     resource_type: ResourceType5
@@ -692,58 +725,66 @@ class SqlNode(BaseParserModel):
     fqn: List[str]
     alias: str
     checksum: FileHash
-    config: Optional[NodeConfig] = {
-        'enabled': True,
-        'alias': None,
-        'schema': None,
-        'database': None,
-        'tags': [],
-        'meta': {},
-        'materialized': 'view',
-        'incremental_strategy': None,
-        'persist_docs': {},
-        'quoting': {},
-        'column_types': {},
-        'full_refresh': None,
-        'unique_key': None,
-        'on_schema_change': 'ignore',
-        'grants': {},
-        'packages': [],
-        'docs': {'show': True, 'node_color': None},
-        'post-hook': [],
-        'pre-hook': [],
-    }
+    config: Optional[NodeConfig] = Field(
+        default_factory=lambda: NodeConfig.model_validate(
+            {
+                'enabled': True,
+                'alias': None,
+                'schema': None,
+                'database': None,
+                'tags': [],
+                'meta': {},
+                'materialized': 'view',
+                'incremental_strategy': None,
+                'persist_docs': {},
+                'quoting': {},
+                'column_types': {},
+                'full_refresh': None,
+                'unique_key': None,
+                'on_schema_change': 'ignore',
+                'grants': {},
+                'packages': [],
+                'docs': {'show': True, 'node_color': None},
+                'post-hook': [],
+                'pre-hook': [],
+            }
+        )
+    )
     tags: Optional[List[str]] = []
     description: Optional[str] = ''
     columns: Optional[Dict[str, ColumnInfo]] = {}
     meta: Optional[Dict[str, Any]] = {}
-    docs: Optional[Docs] = {'show': True, 'node_color': None}
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    docs: Optional[Docs] = Field(
+        default_factory=lambda: Docs.model_validate({'show': True, 'node_color': None})
+    )
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     deferred: Optional[bool] = False
     unrendered_config: Optional[Dict[str, Any]] = {}
     created_at: Optional[float] = 1675937087.359803
     config_call_dict: Optional[Dict[str, Any]] = {}
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
     refs: Optional[List[List[str]]] = []
     sources: Optional[List[List[str]]] = []
     metrics: Optional[List[List[str]]] = []
-    depends_on: Optional[DependsOn] = {'macros': [], 'nodes': []}
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn] = Field(
+        default_factory=lambda: DependsOn.model_validate({'macros': [], 'nodes': []})
+    )
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
     extra_ctes: Optional[List[InjectedCTE]] = []
 
 
 class GenericTestNode(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     test_metadata: TestMetadata
-    database: Optional[Optional[str]] = None
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
     resource_type: ResourceType6
@@ -754,54 +795,62 @@ class GenericTestNode(BaseParserModel):
     fqn: List[str]
     alias: str
     checksum: FileHash
-    config: Optional[TestConfig] = {
-        'enabled': True,
-        'alias': None,
-        'schema': 'dbt_test__audit',
-        'database': None,
-        'tags': [],
-        'meta': {},
-        'materialized': 'test',
-        'severity': 'ERROR',
-        'store_failures': None,
-        'where': None,
-        'limit': None,
-        'fail_calc': 'count(*)',
-        'warn_if': '!= 0',
-        'error_if': '!= 0',
-    }
+    config: Optional[TestConfig] = Field(
+        default_factory=lambda: TestConfig.model_validate(
+            {
+                'enabled': True,
+                'alias': None,
+                'schema': 'dbt_test__audit',
+                'database': None,
+                'tags': [],
+                'meta': {},
+                'materialized': 'test',
+                'severity': 'ERROR',
+                'store_failures': None,
+                'where': None,
+                'limit': None,
+                'fail_calc': 'count(*)',
+                'warn_if': '!= 0',
+                'error_if': '!= 0',
+            }
+        )
+    )
     tags: Optional[List[str]] = []
     description: Optional[str] = ''
     columns: Optional[Dict[str, ColumnInfo]] = {}
     meta: Optional[Dict[str, Any]] = {}
-    docs: Optional[Docs] = {'show': True, 'node_color': None}
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    docs: Optional[Docs] = Field(
+        default_factory=lambda: Docs.model_validate({'show': True, 'node_color': None})
+    )
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     deferred: Optional[bool] = False
     unrendered_config: Optional[Dict[str, Any]] = {}
     created_at: Optional[float] = 1675937087.361009
     config_call_dict: Optional[Dict[str, Any]] = {}
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
     refs: Optional[List[List[str]]] = []
     sources: Optional[List[List[str]]] = []
     metrics: Optional[List[List[str]]] = []
-    depends_on: Optional[DependsOn] = {'macros': [], 'nodes': []}
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn] = Field(
+        default_factory=lambda: DependsOn.model_validate({'macros': [], 'nodes': []})
+    )
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
     extra_ctes: Optional[List[InjectedCTE]] = []
-    column_name: Optional[Optional[str]] = None
-    file_key_name: Optional[Optional[str]] = None
+    column_name: Optional[str] = None
+    file_key_name: Optional[str] = None
 
 
 class SnapshotNode(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
     resource_type: ResourceType7
@@ -817,32 +866,36 @@ class SnapshotNode(BaseParserModel):
     description: Optional[str] = ''
     columns: Optional[Dict[str, ColumnInfo]] = {}
     meta: Optional[Dict[str, Any]] = {}
-    docs: Optional[Docs] = {'show': True, 'node_color': None}
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    docs: Optional[Docs] = Field(
+        default_factory=lambda: Docs.model_validate({'show': True, 'node_color': None})
+    )
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     deferred: Optional[bool] = False
     unrendered_config: Optional[Dict[str, Any]] = {}
     created_at: Optional[float] = 1675937087.364386
     config_call_dict: Optional[Dict[str, Any]] = {}
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
     refs: Optional[List[List[str]]] = []
     sources: Optional[List[List[str]]] = []
     metrics: Optional[List[List[str]]] = []
-    depends_on: Optional[DependsOn] = {'macros': [], 'nodes': []}
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn] = Field(
+        default_factory=lambda: DependsOn.model_validate({'macros': [], 'nodes': []})
+    )
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
     extra_ctes: Optional[List[InjectedCTE]] = []
 
 
 class SeedNode(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
     resource_type: ResourceType8
@@ -853,61 +906,69 @@ class SeedNode(BaseParserModel):
     fqn: List[str]
     alias: str
     checksum: FileHash
-    config: Optional[SeedConfig] = {
-        'enabled': True,
-        'alias': None,
-        'schema': None,
-        'database': None,
-        'tags': [],
-        'meta': {},
-        'materialized': 'seed',
-        'incremental_strategy': None,
-        'persist_docs': {},
-        'quoting': {},
-        'column_types': {},
-        'full_refresh': None,
-        'unique_key': None,
-        'on_schema_change': 'ignore',
-        'grants': {},
-        'packages': [],
-        'docs': {'show': True, 'node_color': None},
-        'quote_columns': None,
-        'post-hook': [],
-        'pre-hook': [],
-    }
+    config: Optional[SeedConfig] = Field(
+        default_factory=lambda: SeedConfig.model_validate(
+            {
+                'enabled': True,
+                'alias': None,
+                'schema': None,
+                'database': None,
+                'tags': [],
+                'meta': {},
+                'materialized': 'seed',
+                'incremental_strategy': None,
+                'persist_docs': {},
+                'quoting': {},
+                'column_types': {},
+                'full_refresh': None,
+                'unique_key': None,
+                'on_schema_change': 'ignore',
+                'grants': {},
+                'packages': [],
+                'docs': {'show': True, 'node_color': None},
+                'quote_columns': None,
+                'post-hook': [],
+                'pre-hook': [],
+            }
+        )
+    )
     tags: Optional[List[str]] = []
     description: Optional[str] = ''
     columns: Optional[Dict[str, ColumnInfo]] = {}
     meta: Optional[Dict[str, Any]] = {}
-    docs: Optional[Docs] = {'show': True, 'node_color': None}
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    docs: Optional[Docs] = Field(
+        default_factory=lambda: Docs.model_validate({'show': True, 'node_color': None})
+    )
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     deferred: Optional[bool] = False
     unrendered_config: Optional[Dict[str, Any]] = {}
     created_at: Optional[float] = 1675937087.366245
     config_call_dict: Optional[Dict[str, Any]] = {}
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
-    root_path: Optional[Optional[str]] = None
-    depends_on: Optional[MacroDependsOn] = {'macros': []}
+    root_path: Optional[str] = None
+    depends_on: Optional[MacroDependsOn] = Field(
+        default_factory=lambda: MacroDependsOn.model_validate({'macros': []})
+    )
 
 
 class FreshnessThreshold(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    warn_after: Optional[Optional[Time]] = {'count': None, 'period': None}
-    error_after: Optional[Optional[Time]] = {'count': None, 'period': None}
-    filter: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    warn_after: Optional[Time] = {'count': None, 'period': None}
+    error_after: Optional[Time] = {'count': None, 'period': None}
+    filter: Optional[str] = None
 
 
 class SourceFreshnessOutput(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     unique_id: str
-    max_loaded_at: datetime
-    snapshotted_at: datetime
+    max_loaded_at: AwareDatetime
+    snapshotted_at: AwareDatetime
     max_loaded_at_time_ago_in_s: float
     status: Status1
     criteria: FreshnessThreshold
@@ -918,20 +979,20 @@ class SourceFreshnessOutput(BaseParserModel):
 
 
 class ExternalTable(BaseParserModel):
-    class Config:
-        extra = Extra.allow
-
-    location: Optional[Optional[str]] = None
-    file_format: Optional[Optional[str]] = None
-    row_format: Optional[Optional[str]] = None
-    tbl_properties: Optional[Optional[str]] = None
-    partitions: Optional[Optional[Union[List[str], List[ExternalPartition]]]] = None
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    location: Optional[str] = None
+    file_format: Optional[str] = None
+    row_format: Optional[str] = None
+    tbl_properties: Optional[str] = None
+    partitions: Optional[Union[List[str], List[ExternalPartition]]] = None
 
 
 class Macro(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
     resource_type: ResourceType10
     package_name: str
@@ -939,20 +1000,24 @@ class Macro(BaseParserModel):
     original_file_path: str
     unique_id: str
     macro_sql: str
-    depends_on: Optional[MacroDependsOn] = {'macros': []}
+    depends_on: Optional[MacroDependsOn] = Field(
+        default_factory=lambda: MacroDependsOn.model_validate({'macros': []})
+    )
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = {}
-    docs: Optional[Docs] = {'show': True, 'node_color': None}
-    patch_path: Optional[Optional[str]] = None
+    docs: Optional[Docs] = Field(
+        default_factory=lambda: Docs.model_validate({'show': True, 'node_color': None})
+    )
+    patch_path: Optional[str] = None
     arguments: Optional[List[MacroArgument]] = []
     created_at: Optional[float] = 1675937087.368656
-    supported_languages: Optional[Optional[List[SupportedLanguage]]] = None
+    supported_languages: Optional[List[SupportedLanguage]] = None
 
 
 class Exposure(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
     resource_type: ResourceType12
     package_name: str
@@ -963,14 +1028,18 @@ class Exposure(BaseParserModel):
     type: Type
     owner: ExposureOwner
     description: Optional[str] = ''
-    label: Optional[Optional[str]] = None
-    maturity: Optional[Optional[MaturityEnum]] = None
+    label: Optional[str] = None
+    maturity: Optional[Maturity] = None
     meta: Optional[Dict[str, Any]] = {}
     tags: Optional[List[str]] = []
-    config: Optional[ExposureConfig] = {'enabled': True}
+    config: Optional[ExposureConfig] = Field(
+        default_factory=lambda: ExposureConfig.model_validate({'enabled': True})
+    )
     unrendered_config: Optional[Dict[str, Any]] = {}
-    url: Optional[Optional[str]] = None
-    depends_on: Optional[DependsOn] = {'macros': [], 'nodes': []}
+    url: Optional[str] = None
+    depends_on: Optional[DependsOn] = Field(
+        default_factory=lambda: DependsOn.model_validate({'macros': [], 'nodes': []})
+    )
     refs: Optional[List[List[str]]] = []
     sources: Optional[List[List[str]]] = []
     metrics: Optional[List[List[str]]] = []
@@ -978,9 +1047,9 @@ class Exposure(BaseParserModel):
 
 
 class Metric(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     name: str
     resource_type: ResourceType13
     package_name: str
@@ -995,26 +1064,30 @@ class Metric(BaseParserModel):
     filters: List[MetricFilter]
     time_grains: List[str]
     dimensions: List[str]
-    timestamp: Optional[Optional[str]] = None
-    window: Optional[Optional[MetricTime]] = None
-    model: Optional[Optional[str]] = None
-    model_unique_id: Optional[Optional[str]] = None
+    timestamp: Optional[str] = None
+    window: Optional[MetricTime] = None
+    model: Optional[str] = None
+    model_unique_id: Optional[str] = None
     meta: Optional[Dict[str, Any]] = {}
     tags: Optional[List[str]] = []
-    config: Optional[MetricConfig] = {'enabled': True}
+    config: Optional[MetricConfig] = Field(
+        default_factory=lambda: MetricConfig.model_validate({'enabled': True})
+    )
     unrendered_config: Optional[Dict[str, Any]] = {}
     sources: Optional[List[List[str]]] = []
-    depends_on: Optional[DependsOn] = {'macros': [], 'nodes': []}
+    depends_on: Optional[DependsOn] = Field(
+        default_factory=lambda: DependsOn.model_validate({'macros': [], 'nodes': []})
+    )
     refs: Optional[List[List[str]]] = []
     metrics: Optional[List[List[str]]] = []
     created_at: Optional[float] = 1675937087.371092
 
 
 class AnalysisNode(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
     resource_type: ResourceType
@@ -1025,57 +1098,65 @@ class AnalysisNode(BaseParserModel):
     fqn: List[str]
     alias: str
     checksum: FileHash
-    config: Optional[NodeConfig] = {
-        'enabled': True,
-        'alias': None,
-        'schema': None,
-        'database': None,
-        'tags': [],
-        'meta': {},
-        'materialized': 'view',
-        'incremental_strategy': None,
-        'persist_docs': {},
-        'quoting': {},
-        'column_types': {},
-        'full_refresh': None,
-        'unique_key': None,
-        'on_schema_change': 'ignore',
-        'grants': {},
-        'packages': [],
-        'docs': {'show': True, 'node_color': None},
-        'post-hook': [],
-        'pre-hook': [],
-    }
+    config: Optional[NodeConfig] = Field(
+        default_factory=lambda: NodeConfig.model_validate(
+            {
+                'enabled': True,
+                'alias': None,
+                'schema': None,
+                'database': None,
+                'tags': [],
+                'meta': {},
+                'materialized': 'view',
+                'incremental_strategy': None,
+                'persist_docs': {},
+                'quoting': {},
+                'column_types': {},
+                'full_refresh': None,
+                'unique_key': None,
+                'on_schema_change': 'ignore',
+                'grants': {},
+                'packages': [],
+                'docs': {'show': True, 'node_color': None},
+                'post-hook': [],
+                'pre-hook': [],
+            }
+        )
+    )
     tags: Optional[List[str]] = []
     description: Optional[str] = ''
     columns: Optional[Dict[str, ColumnInfo]] = {}
     meta: Optional[Dict[str, Any]] = {}
-    docs: Optional[Docs] = {'show': True, 'node_color': None}
-    patch_path: Optional[Optional[str]] = None
-    build_path: Optional[Optional[str]] = None
+    docs: Optional[Docs] = Field(
+        default_factory=lambda: Docs.model_validate({'show': True, 'node_color': None})
+    )
+    patch_path: Optional[str] = None
+    build_path: Optional[str] = None
     deferred: Optional[bool] = False
     unrendered_config: Optional[Dict[str, Any]] = {}
     created_at: Optional[float] = 1675937087.353436
     config_call_dict: Optional[Dict[str, Any]] = {}
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     language: Optional[str] = 'sql'
     refs: Optional[List[List[str]]] = []
     sources: Optional[List[List[str]]] = []
     metrics: Optional[List[List[str]]] = []
-    depends_on: Optional[DependsOn] = {'macros': [], 'nodes': []}
-    compiled_path: Optional[Optional[str]] = None
+    depends_on: Optional[DependsOn] = Field(
+        default_factory=lambda: DependsOn.model_validate({'macros': [], 'nodes': []})
+    )
+    compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
-    compiled_code: Optional[Optional[str]] = None
+    compiled_code: Optional[str] = None
     extra_ctes_injected: Optional[bool] = False
     extra_ctes: Optional[List[InjectedCTE]] = []
 
 
 class SourceDefinition(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
-    database: Optional[Optional[str]] = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
     name: str
     resource_type: ResourceType9
@@ -1088,31 +1169,32 @@ class SourceDefinition(BaseParserModel):
     source_description: str
     loader: str
     identifier: str
-    quoting: Optional[Quoting] = {
-        'database': None,
-        'schema': None,
-        'identifier': None,
-        'column': None,
-    }
-    loaded_at_field: Optional[Optional[str]] = None
-    freshness: Optional[Optional[FreshnessThreshold]] = None
-    external: Optional[Optional[ExternalTable]] = None
+    quoting: Optional[Quoting] = Field(
+        default_factory=lambda: Quoting.model_validate(
+            {'database': None, 'schema': None, 'identifier': None, 'column': None}
+        )
+    )
+    loaded_at_field: Optional[str] = None
+    freshness: Optional[FreshnessThreshold] = None
+    external: Optional[ExternalTable] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, ColumnInfo]] = {}
     meta: Optional[Dict[str, Any]] = {}
     source_meta: Optional[Dict[str, Any]] = {}
     tags: Optional[List[str]] = []
-    config: Optional[SourceConfig] = {'enabled': True}
-    patch_path: Optional[Optional[str]] = None
+    config: Optional[SourceConfig] = Field(
+        default_factory=lambda: SourceConfig.model_validate({'enabled': True})
+    )
+    patch_path: Optional[str] = None
     unrendered_config: Optional[Dict[str, Any]] = {}
-    relation_name: Optional[Optional[str]] = None
+    relation_name: Optional[str] = None
     created_at: Optional[float] = 1675937087.368067
 
 
 class ManifestV8(BaseParserModel):
-    class Config:
-        extra = Extra.forbid
-
+    model_config = ConfigDict(
+        extra='forbid',
+    )
     metadata: ManifestMetadata = Field(..., description='Metadata about the manifest')
     nodes: Dict[
         str,
@@ -1149,29 +1231,27 @@ class ManifestV8(BaseParserModel):
         ..., description='The selectors defined in selectors.yml'
     )
     disabled: Optional[
-        Optional[
-            Dict[
-                str,
-                List[
-                    Union[
-                        AnalysisNode,
-                        SingularTestNode,
-                        HookNode,
-                        ModelNode,
-                        RPCNode,
-                        SqlNode,
-                        GenericTestNode,
-                        SnapshotNode,
-                        SeedNode,
-                        SourceDefinition,
-                    ]
-                ],
-            ]
+        Dict[
+            str,
+            List[
+                Union[
+                    AnalysisNode,
+                    SingularTestNode,
+                    HookNode,
+                    ModelNode,
+                    RPCNode,
+                    SqlNode,
+                    GenericTestNode,
+                    SnapshotNode,
+                    SeedNode,
+                    SourceDefinition,
+                ]
+            ],
         ]
     ] = Field(None, description='A mapping of the disabled nodes in the target')
-    parent_map: Optional[Optional[Dict[str, List[str]]]] = Field(
+    parent_map: Optional[Dict[str, List[str]]] = Field(
         None, description='A mapping from\xa0child nodes to their dependencies'
     )
-    child_map: Optional[Optional[Dict[str, List[str]]]] = Field(
+    child_map: Optional[Dict[str, List[str]]] = Field(
         None, description='A mapping from parent nodes to their dependents'
     )
