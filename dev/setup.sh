@@ -21,6 +21,6 @@ MODULE_DIR="$(dirname "$SCRIPT_DIR")"
 
 cd "$MODULE_DIR"
 
-FLIT_VERSION="3.7.1"
+FLIT_VERSION="3.9.0"
 pip install -U flit=="$FLIT_VERSION"
 flit install --deps develop --symlink
