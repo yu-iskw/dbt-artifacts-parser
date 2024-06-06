@@ -274,56 +274,60 @@ with open("path/to/sources.json", "r") as fp:
 ## Contributors
 <!-- readme: contributors -start -->
 <table>
-<tr>
-    <td align="center">
-        <a href="https://github.com/yu-iskw">
-            <img src="https://avatars.githubusercontent.com/u/1523515?v=4" width="100;" alt="yu-iskw"/>
-            <br />
-            <sub><b>Yu Ishikawa</b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/dlawin">
-            <img src="https://avatars.githubusercontent.com/u/11282254?v=4" width="100;" alt="dlawin"/>
-            <br />
-            <sub><b>Null</b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/bbrewington">
-            <img src="https://avatars.githubusercontent.com/u/10573749?v=4" width="100;" alt="bbrewington"/>
-            <br />
-            <sub><b>Brent Brewington</b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/judahrand">
-            <img src="https://avatars.githubusercontent.com/u/17158624?v=4" width="100;" alt="judahrand"/>
-            <br />
-            <sub><b>Judah Rand</b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/nabilm">
-            <img src="https://avatars.githubusercontent.com/u/987369?v=4" width="100;" alt="nabilm"/>
-            <br />
-            <sub><b>Mohamed Nabil Mahmoud Hafez</b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/OnkarVO7">
-            <img src="https://avatars.githubusercontent.com/u/28966081?v=4" width="100;" alt="OnkarVO7"/>
-            <br />
-            <sub><b>Onkar Ravgan</b></sub>
-        </a>
-    </td></tr>
-<tr>
-    <td align="center">
-        <a href="https://github.com/meyer-glean">
-            <img src="https://avatars.githubusercontent.com/u/134302890?v=4" width="100;" alt="meyer-glean"/>
-            <br />
-            <sub><b>Null</b></sub>
-        </a>
-    </td></tr>
+	<tbody>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/yu-iskw">
+                    <img src="https://avatars.githubusercontent.com/u/1523515?v=4" width="100;" alt="yu-iskw"/>
+                    <br />
+                    <sub><b>Yu Ishikawa</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/dlawin">
+                    <img src="https://avatars.githubusercontent.com/u/11282254?v=4" width="100;" alt="dlawin"/>
+                    <br />
+                    <sub><b>Null</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/bbrewington">
+                    <img src="https://avatars.githubusercontent.com/u/10573749?v=4" width="100;" alt="bbrewington"/>
+                    <br />
+                    <sub><b>Brent Brewington</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/judahrand">
+                    <img src="https://avatars.githubusercontent.com/u/17158624?v=4" width="100;" alt="judahrand"/>
+                    <br />
+                    <sub><b>Judah Rand</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/nabilm">
+                    <img src="https://avatars.githubusercontent.com/u/987369?v=4" width="100;" alt="nabilm"/>
+                    <br />
+                    <sub><b>Mohamed Nabil Mahmoud Hafez</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/OnkarVO7">
+                    <img src="https://avatars.githubusercontent.com/u/28966081?v=4" width="100;" alt="OnkarVO7"/>
+                    <br />
+                    <sub><b>Onkar Ravgan</b></sub>
+                </a>
+            </td>
+		</tr>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/meyer-glean">
+                    <img src="https://avatars.githubusercontent.com/u/134302890?v=4" width="100;" alt="meyer-glean"/>
+                    <br />
+                    <sub><b>Null</b></sub>
+                </a>
+            </td>
+		</tr>
+	<tbody>
 </table>
 <!-- readme: contributors -end -->
