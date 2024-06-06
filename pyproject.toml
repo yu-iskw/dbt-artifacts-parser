@@ -52,7 +52,7 @@ Home = "https://github.com/yu-iskw/dbt-artifacts-parser"
 
 [project.optional-dependencies]
 test = [
-    "pytest >=6.2.4,<7.0.0",
+    "pytest >=6.2.4,<9.0.0",
     "pylint >=2.12.0",
     "mypy ==1.10.0",
     "flake8 >=3.8.3,<4.0.0",
