@@ -1720,6 +1720,8 @@ class ParsedMetric(BaseParserModel):
     refs: Optional[List[List[str]]] = []
     metrics: Optional[List[List[str]]] = []
     created_at: Optional[float] = 1663187715.38939
+    
+    model_config = ConfigDict(protected_namespaces=())
 
 
 class CompiledAnalysisNode(BaseParserModel):
