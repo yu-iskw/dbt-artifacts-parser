@@ -13,7 +13,7 @@ from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 class ManifestMetadata(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     dbt_schema_version: Optional[
         str
@@ -42,7 +42,7 @@ class ResourceType(Enum):
 
 class FileHash(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     name: str
     checksum: str
@@ -50,7 +50,7 @@ class FileHash(BaseParserModel):
 
 class Hook(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     sql: str
     transaction: Optional[bool] = True
@@ -59,7 +59,7 @@ class Hook(BaseParserModel):
 
 class Docs(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     show: Optional[bool] = True
     node_color: Optional[str] = None
@@ -79,7 +79,7 @@ class ColumnInfo(BaseParserModel):
 
 class DependsOn(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     macros: Optional[List[str]] = []
     nodes: Optional[List[str]] = []
@@ -87,7 +87,7 @@ class DependsOn(BaseParserModel):
 
 class InjectedCTE(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     id: str
     sql: str
@@ -141,7 +141,7 @@ class ResourceType6(Enum):
 
 class TestMetadata(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     name: str
     kwargs: Optional[Dict[str, Any]] = {}
@@ -218,7 +218,7 @@ class SeedConfig(BaseParserModel):
 
 class MacroDependsOn(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     macros: Optional[List[str]] = []
 
@@ -229,7 +229,7 @@ class ResourceType9(Enum):
 
 class Quoting(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     database: Optional[bool] = None
     schema_: Optional[bool] = Field(None, alias='schema')
@@ -239,7 +239,7 @@ class Quoting(BaseParserModel):
 
 class FreshnessMetadata(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     dbt_schema_version: Optional[str] = 'https://schemas.getdbt.com/dbt/sources/v3.json'
     dbt_version: Optional[str] = '1.4.1'
@@ -254,7 +254,7 @@ class Status(Enum):
 
 class SourceFreshnessRuntimeError(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     unique_id: str
     error: Optional[Union[str, int]] = None
@@ -276,7 +276,7 @@ class Period(Enum):
 
 class Time(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     count: Optional[int] = None
     period: Optional[Period] = None
@@ -284,7 +284,7 @@ class Time(BaseParserModel):
 
 class TimingInfo(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     name: str
     started_at: Optional[AwareDatetime] = None
@@ -319,7 +319,7 @@ class SupportedLanguage(Enum):
 
 class MacroArgument(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     name: str
     type: Optional[str] = None
@@ -332,7 +332,7 @@ class ResourceType11(Enum):
 
 class Documentation(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     name: str
     resource_type: ResourceType11
@@ -363,7 +363,7 @@ class Maturity(Enum):
 
 class ExposureOwner(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     email: str
     name: Optional[str] = None
@@ -382,7 +382,7 @@ class ResourceType13(Enum):
 
 class MetricFilter(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     field: str
     operator: str
@@ -398,7 +398,7 @@ class Period1(Enum):
 
 class MetricTime(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     count: Optional[int] = None
     period: Optional[Period1] = None
@@ -440,7 +440,7 @@ class NodeConfig(BaseParserModel):
 
 class SingularTestNode(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
@@ -504,7 +504,7 @@ class SingularTestNode(BaseParserModel):
 
 class HookNode(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
@@ -574,7 +574,7 @@ class HookNode(BaseParserModel):
 
 class ModelNode(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
@@ -643,7 +643,7 @@ class ModelNode(BaseParserModel):
 
 class RPCNode(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
@@ -712,7 +712,7 @@ class RPCNode(BaseParserModel):
 
 class SqlNode(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
@@ -781,7 +781,7 @@ class SqlNode(BaseParserModel):
 
 class GenericTestNode(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     test_metadata: TestMetadata
     database: Optional[str] = None
@@ -848,7 +848,7 @@ class GenericTestNode(BaseParserModel):
 
 class SnapshotNode(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
@@ -893,7 +893,7 @@ class SnapshotNode(BaseParserModel):
 
 class SeedNode(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
@@ -955,7 +955,7 @@ class SeedNode(BaseParserModel):
 
 class FreshnessThreshold(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     warn_after: Optional[Time] = {'count': None, 'period': None}
     error_after: Optional[Time] = {'count': None, 'period': None}
@@ -964,7 +964,7 @@ class FreshnessThreshold(BaseParserModel):
 
 class SourceFreshnessOutput(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     unique_id: str
     max_loaded_at: AwareDatetime
@@ -991,7 +991,7 @@ class ExternalTable(BaseParserModel):
 
 class Macro(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     name: str
     resource_type: ResourceType10
@@ -1016,7 +1016,7 @@ class Macro(BaseParserModel):
 
 class Exposure(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     name: str
     resource_type: ResourceType12
@@ -1048,7 +1048,7 @@ class Exposure(BaseParserModel):
 
 class Metric(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     name: str
     resource_type: ResourceType13
@@ -1085,7 +1085,7 @@ class Metric(BaseParserModel):
 
 class AnalysisNode(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
@@ -1154,7 +1154,7 @@ class AnalysisNode(BaseParserModel):
 
 class SourceDefinition(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias='schema')
@@ -1193,7 +1193,7 @@ class SourceDefinition(BaseParserModel):
 
 class ManifestV8(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     metadata: ManifestMetadata = Field(..., description='Metadata about the manifest')
     nodes: Dict[

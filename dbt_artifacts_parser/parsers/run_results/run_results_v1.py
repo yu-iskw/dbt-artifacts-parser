@@ -13,7 +13,7 @@ from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 class BaseArtifactMetadata(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     dbt_schema_version: str
     dbt_version: Optional[str] = '0.19.0'
@@ -44,7 +44,7 @@ class Status2(Enum):
 
 class TimingInfo(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     name: str
     started_at: Optional[AwareDatetime] = None
@@ -53,7 +53,7 @@ class TimingInfo(BaseParserModel):
 
 class RunResultOutput(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     status: Union[Status, Status1, Status2]
     timing: List[TimingInfo]
@@ -66,7 +66,7 @@ class RunResultOutput(BaseParserModel):
 
 class RunResultsV1(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="allow",
     )
     metadata: BaseArtifactMetadata
     results: List[RunResultOutput]
