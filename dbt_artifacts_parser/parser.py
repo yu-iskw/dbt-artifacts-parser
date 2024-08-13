@@ -35,6 +35,7 @@ from dbt_artifacts_parser.parsers.run_results.run_results_v3 import RunResultsV3
 from dbt_artifacts_parser.parsers.run_results.run_results_v4 import RunResultsV4
 from dbt_artifacts_parser.parsers.run_results.run_results_v5 import RunResultsV5
 from dbt_artifacts_parser.parsers.run_results.run_results_v6 import RunResultsV6
+from dbt_artifacts_parser.parsers.semantic_manifest.semantic_manifest_v1 import SemanticManifestV1
 from dbt_artifacts_parser.parsers.sources.sources_v1 import SourcesV1
 from dbt_artifacts_parser.parsers.sources.sources_v2 import SourcesV2
 from dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
@@ -298,6 +299,22 @@ def parse_run_results_v6(run_results: dict) -> RunResultsV6:
     if dbt_schema_version == ArtifactTypes.RUN_RESULTS_V6.value.dbt_schema_version:
         return RunResultsV6(**run_results)
     raise ValueError("Not a run-results.json v6")
+
+#
+# semantic-manifest
+
+def parse_semantic_manifest(semantic_manifest: dict) -> SemanticManifestV1:
+    """
+    # todo once dbt adds a schema version to their semantic manifest file
+    dbt_schema_version = get_dbt_schema_version(artifact_json=semantic_manifest)
+    if dbt_schema_version == ArtifactTypes.SOURCES_V1.value.dbt_schema_version:
+        return SemanticManifestV1(**semantic_manifest)
+    elif dbt_schema_version == ArtifactTypes.SEMANTIC_MANIFEST_V2.value.dbt_schema_version:
+        return SemanticManifestV2(**semantic_manifest)
+    elif ...
+    raise ValueError("Not a semantic_manifest.json")
+    """
+    return SemanticManifestV1(**semantic_manifest)
 
 #
 # sources

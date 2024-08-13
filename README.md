@@ -237,6 +237,19 @@ with open("path/to/run-results.json", "r") as fp:
     run_results_obj = parse_run_results_v6(run_results=run_results_dict)
 ```
 
+### Parse semantic_manifest.json
+
+```python
+import json
+
+# parse any version of semantic_manifest.json
+from dbt_artifacts_parser.parser import parse_semantic_manifest
+
+with open("path/to/semantic_manifest.json", "r") as fp:
+    semantic_manifest_dict = json.load(fp)
+    semantic_manifest_obj = parse_semantic_manifest(semantic_manifest_dict)
+```
+
 ### Parse sources.json
 
 ```python

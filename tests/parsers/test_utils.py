@@ -35,6 +35,7 @@ from dbt_artifacts_parser.parsers.run_results.run_results_v1 import RunResultsV1
 from dbt_artifacts_parser.parsers.run_results.run_results_v2 import RunResultsV2
 from dbt_artifacts_parser.parsers.run_results.run_results_v3 import RunResultsV3
 from dbt_artifacts_parser.parsers.run_results.run_results_v4 import RunResultsV4
+from dbt_artifacts_parser.parsers.semantic_manifest.semantic_manifest_v1 import SemanticManifestV1
 from dbt_artifacts_parser.parsers.sources.sources_v1 import SourcesV1
 from dbt_artifacts_parser.parsers.sources.sources_v2 import SourcesV2
 from dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
@@ -120,6 +121,8 @@ class TestDbtUtils:
             (ArtifactTypes.MANIFEST_V1, ManifestV1),
             (ArtifactTypes.RUN_RESULTS_V1, RunResultsV1),
             (ArtifactTypes.SOURCES_V1, SourcesV1),
+            # todo: once dbt adds the metadata and schema to the semantic_manifest file
+            # (ArtifactTypes.SEMANTIC_MANIFEST_V1, SemanticManifestV1),
             # v2
             (ArtifactTypes.MANIFEST_V2, ManifestV2),
             (ArtifactTypes.RUN_RESULTS_V2, RunResultsV2),

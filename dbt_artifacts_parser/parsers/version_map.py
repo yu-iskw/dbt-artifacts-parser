@@ -38,6 +38,7 @@ from dbt_artifacts_parser.parsers.run_results.run_results_v3 import RunResultsV3
 from dbt_artifacts_parser.parsers.run_results.run_results_v4 import RunResultsV4
 from dbt_artifacts_parser.parsers.run_results.run_results_v5 import RunResultsV5
 from dbt_artifacts_parser.parsers.run_results.run_results_v6 import RunResultsV6
+from dbt_artifacts_parser.parsers.semantic_manifest.semantic_manifest_v1 import SemanticManifestV1
 from dbt_artifacts_parser.parsers.sources.sources_v1 import SourcesV1
 from dbt_artifacts_parser.parsers.sources.sources_v2 import SourcesV2
 from dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
@@ -93,6 +94,10 @@ class ArtifactTypes(Enum):
         "https://schemas.getdbt.com/dbt/run-results/v5.json", RunResultsV5)
     RUN_RESULTS_V6 = ArtifactType(
         "https://schemas.getdbt.com/dbt/run-results/v6.json", RunResultsV6)
+    # Semantic Manifests
+    SEMANTIC_MANIFEST_V1 = ArtifactType(
+        "https://schemas.getdbt.com/dbt/semantic-manifest/v1.json", SemanticManifestV1
+    )
     # Sources
     SOURCES_V1 = ArtifactType("https://schemas.getdbt.com/dbt/sources/v1.json",
                               SourcesV1)

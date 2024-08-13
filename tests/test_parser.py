@@ -133,6 +133,27 @@ class TestRunResultsParser:
             == f"https://schemas.getdbt.com/dbt/run-results/{version}.json"
         )
 
+# TODO test semantic manifest version parsing
+# @pytest.mark.parametrize("version", ["v1"])
+#     def test_parse_semantic_manifest(self, version):
+#         path = os.path.join(
+#             get_project_root(),
+#             "tests",
+#             "resources",
+#             version,
+#             "jaffle_shop",
+#             "semantic_manifest.json",
+#         )
+#         with open(path, "r", encoding="utf-8") as fp:
+#             semantic_manifest_dict = yaml.safe_load(fp)
+#             semantic_manifest_obj = getattr(parser, f"parse_semantic_manifest_{version}")(
+#                 semantic_manifest_dict
+#             )
+#         assert (
+#             semantic_manifest_obj.metadata.dbt_schema_version
+#             == f"https://schemas.getdbt.com/dbt/run-results/{version}.json"
+#         )
+
 
 # TODO add fixtures of sources.json
 # @pytest.mark.parametrize("version", ["v1", "v2", "v3"])
