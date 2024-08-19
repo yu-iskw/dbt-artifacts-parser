@@ -22,7 +22,6 @@ SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 MODULE_ROOT="$(dirname "${SCRIPT_DIR}")"
 
 # Base class
-base_class="dbt_artifacts_parser.parsers.base.BaseParserModel"
 target_python_version="3.9"
 output_model_type="pydantic_v2.BaseModel"
 
@@ -40,7 +39,7 @@ do
     --target-python-version "${target_python_version}" \
     --output-model-type "${output_model_type}" \
     --disable-timestamp \
-    --base-class "${base_class}" \
+    --base-class "dbt_artifacts_parser.parsers.base.BaseCatalogParserModel" \
     --class-name "Catalog${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/catalog/catalog_${ver}.json" \
     --output "${destination}"
@@ -60,7 +59,7 @@ do
     --target-python-version "${target_python_version}" \
     --output-model-type "${output_model_type}" \
     --disable-timestamp \
-    --base-class "${base_class}" \
+    --base-class "dbt_artifacts_parser.parsers.base.BaseManifestParserModel" \
     --class-name "Manifest${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/manifest/manifest_${ver}.json" \
     --output "${destination}"
@@ -80,7 +79,7 @@ do
     --target-python-version "${target_python_version}" \
     --output-model-type "${output_model_type}" \
     --disable-timestamp \
-    --base-class "${base_class}" \
+    --base-class "dbt_artifacts_parser.parsers.base.BaseRunResultsParserModel" \
     --class-name "RunResults${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/run-results/run-results_${ver}.json" \
     --output "${destination}"
@@ -100,7 +99,7 @@ do
     --target-python-version "${target_python_version}" \
     --output-model-type "${output_model_type}" \
     --disable-timestamp \
-    --base-class "${base_class}" \
+    --base-class "dbt_artifacts_parser.parsers.base.BaseSourcesParserModel" \
     --class-name "Sources${upper_ver}" \
     --input "${MODULE_ROOT}/dbt_artifacts_parser/resources/sources/sources_${ver}.json" \
     --output "${destination}"

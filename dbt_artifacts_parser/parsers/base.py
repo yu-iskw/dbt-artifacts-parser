@@ -17,10 +17,42 @@
 
 # pylint: disable=no-name-in-module
 # pylint: disable=no-self-argument
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class BaseParserModel(BaseModel):
     """
-    The base parser class
+    The base parser class for all dbt artifacts.
+
+    We use this class to centralize the model configuration of all dbt artifacts.
+    """
+
+
+class BaseCatalogParserModel(BaseParserModel):
+    """
+    The base parser model for catalog artifacts.
+    """
+
+
+class BaseManifestParserModel(BaseParserModel):
+    """
+    The base parser model for manifest artifacts.
+    """
+
+    model_config = ConfigDict(
+        # Setting the protected namespaces to an empty tuple to suppress Pydantic warnings
+        # related to conflicts with the default protected namespaces.
+        protected_namespaces=(),
+    )
+
+
+class BaseRunResultsParserModel(BaseParserModel):
+    """
+    The base parser model for run results artifacts.
+    """
+
+
+class BaseSourcesParserModel(BaseParserModel):
+    """
+    The base parser model for source artifacts.
     """
