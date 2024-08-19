@@ -9,10 +9,10 @@ from uuid import UUID
 
 from pydantic import ConfigDict, Field, constr
 
-from dbt_artifacts_parser.parsers.base import BaseParserModel
+from dbt_artifacts_parser.parsers.base import BaseManifestParserModel
 
 
-class Metadata(BaseParserModel):
+class Metadata(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -37,7 +37,7 @@ class Metadata(BaseParserModel):
     )
 
 
-class Checksum(BaseParserModel):
+class Checksum(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -45,7 +45,7 @@ class Checksum(BaseParserModel):
     checksum: str
 
 
-class PostHookItem(BaseParserModel):
+class PostHookItem(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -54,7 +54,7 @@ class PostHookItem(BaseParserModel):
     index: Optional[int] = None
 
 
-class PreHookItem(BaseParserModel):
+class PreHookItem(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -69,7 +69,7 @@ class OnConfigurationChange(Enum):
     fail = 'fail'
 
 
-class Docs(BaseParserModel):
+class Docs(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -77,7 +77,7 @@ class Docs(BaseParserModel):
     node_color: Optional[str] = None
 
 
-class Contract(BaseParserModel):
+class Contract(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -85,7 +85,7 @@ class Contract(BaseParserModel):
     alias_types: Optional[bool] = True
 
 
-class Config(BaseParserModel):
+class Config(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -125,7 +125,7 @@ class Type(Enum):
     custom = 'custom'
 
 
-class Constraint(BaseParserModel):
+class Constraint(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -136,7 +136,7 @@ class Constraint(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns(BaseParserModel):
+class Columns(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -150,7 +150,7 @@ class Columns(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class DependsOn(BaseParserModel):
+class DependsOn(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -178,7 +178,7 @@ class ResourceType(Enum):
     fixture = 'fixture'
 
 
-class Config1(BaseParserModel):
+class Config1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -207,7 +207,7 @@ class Config1(BaseParserModel):
     contract: Optional[Contract] = Field(None, title='ContractConfig')
 
 
-class DeferRelation(BaseParserModel):
+class DeferRelation(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -224,7 +224,7 @@ class DeferRelation(BaseParserModel):
     config: Optional[Config1] = None
 
 
-class Nodes(BaseParserModel):
+class Nodes(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -258,7 +258,7 @@ class Nodes(BaseParserModel):
     defer_relation: Optional[DeferRelation] = None
 
 
-class Config2(BaseParserModel):
+class Config2(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -287,7 +287,7 @@ class Config2(BaseParserModel):
     contract: Optional[Contract] = Field(None, title='ContractConfig')
 
 
-class Constraint1(BaseParserModel):
+class Constraint1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -298,7 +298,7 @@ class Constraint1(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns1(BaseParserModel):
+class Columns1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -312,7 +312,7 @@ class Columns1(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Ref(BaseParserModel):
+class Ref(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -321,7 +321,7 @@ class Ref(BaseParserModel):
     version: Optional[Union[str, float]] = None
 
 
-class DependsOn1(BaseParserModel):
+class DependsOn1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -329,7 +329,7 @@ class DependsOn1(BaseParserModel):
     nodes: Optional[List[str]] = None
 
 
-class ExtraCte(BaseParserModel):
+class ExtraCte(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -337,7 +337,7 @@ class ExtraCte(BaseParserModel):
     sql: str
 
 
-class Contract3(BaseParserModel):
+class Contract3(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -346,7 +346,7 @@ class Contract3(BaseParserModel):
     checksum: Optional[str] = None
 
 
-class Nodes1(BaseParserModel):
+class Nodes1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -389,7 +389,7 @@ class Nodes1(BaseParserModel):
     contract: Optional[Contract3] = Field(None, title='Contract')
 
 
-class Config3(BaseParserModel):
+class Config3(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -402,9 +402,9 @@ class Config3(BaseParserModel):
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
     materialized: Optional[str] = 'test'
-    severity: Optional[
-        constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
-    ] = 'ERROR'
+    severity: Optional[constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')] = (
+        'ERROR'
+    )
     store_failures: Optional[bool] = None
     store_failures_as: Optional[str] = None
     where: Optional[str] = None
@@ -414,7 +414,7 @@ class Config3(BaseParserModel):
     error_if: Optional[str] = '!= 0'
 
 
-class Constraint2(BaseParserModel):
+class Constraint2(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -425,7 +425,7 @@ class Constraint2(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns2(BaseParserModel):
+class Columns2(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -439,7 +439,7 @@ class Columns2(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Nodes2(BaseParserModel):
+class Nodes2(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -482,7 +482,7 @@ class Nodes2(BaseParserModel):
     contract: Optional[Contract3] = Field(None, title='Contract')
 
 
-class Contract5(BaseParserModel):
+class Contract5(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -490,7 +490,7 @@ class Contract5(BaseParserModel):
     alias_types: Optional[bool] = True
 
 
-class Config4(BaseParserModel):
+class Config4(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -519,7 +519,7 @@ class Config4(BaseParserModel):
     contract: Optional[Contract5] = Field(None, title='ContractConfig')
 
 
-class Constraint3(BaseParserModel):
+class Constraint3(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -530,7 +530,7 @@ class Constraint3(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns3(BaseParserModel):
+class Columns3(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -544,7 +544,7 @@ class Columns3(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Contract6(BaseParserModel):
+class Contract6(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -553,7 +553,7 @@ class Contract6(BaseParserModel):
     checksum: Optional[str] = None
 
 
-class Nodes3(BaseParserModel):
+class Nodes3(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -597,7 +597,7 @@ class Nodes3(BaseParserModel):
     index: Optional[int] = None
 
 
-class Contract7(BaseParserModel):
+class Contract7(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -611,7 +611,7 @@ class Access(Enum):
     public = 'public'
 
 
-class Config5(BaseParserModel):
+class Config5(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -641,7 +641,7 @@ class Config5(BaseParserModel):
     access: Optional[Access] = 'protected'
 
 
-class Constraint4(BaseParserModel):
+class Constraint4(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -652,7 +652,7 @@ class Constraint4(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns4(BaseParserModel):
+class Columns4(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -666,7 +666,7 @@ class Columns4(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Contract8(BaseParserModel):
+class Contract8(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -675,7 +675,7 @@ class Contract8(BaseParserModel):
     checksum: Optional[str] = None
 
 
-class Constraint5(BaseParserModel):
+class Constraint5(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -687,7 +687,7 @@ class Constraint5(BaseParserModel):
     columns: Optional[List[str]] = None
 
 
-class Contract9(BaseParserModel):
+class Contract9(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -695,7 +695,7 @@ class Contract9(BaseParserModel):
     alias_types: Optional[bool] = True
 
 
-class Config6(BaseParserModel):
+class Config6(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -724,7 +724,7 @@ class Config6(BaseParserModel):
     contract: Optional[Contract9] = Field(None, title='ContractConfig')
 
 
-class DeferRelation1(BaseParserModel):
+class DeferRelation1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -741,7 +741,7 @@ class DeferRelation1(BaseParserModel):
     config: Optional[Config6] = None
 
 
-class Nodes4(BaseParserModel):
+class Nodes4(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -791,7 +791,7 @@ class Nodes4(BaseParserModel):
     primary_key: Optional[List[str]] = None
 
 
-class Config7(BaseParserModel):
+class Config7(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -820,7 +820,7 @@ class Config7(BaseParserModel):
     contract: Optional[Contract9] = Field(None, title='ContractConfig')
 
 
-class Constraint6(BaseParserModel):
+class Constraint6(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -831,7 +831,7 @@ class Constraint6(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns5(BaseParserModel):
+class Columns5(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -845,7 +845,7 @@ class Columns5(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Contract11(BaseParserModel):
+class Contract11(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -854,7 +854,7 @@ class Contract11(BaseParserModel):
     checksum: Optional[str] = None
 
 
-class Nodes5(BaseParserModel):
+class Nodes5(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -897,7 +897,7 @@ class Nodes5(BaseParserModel):
     contract: Optional[Contract11] = Field(None, title='Contract')
 
 
-class Config8(BaseParserModel):
+class Config8(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -910,9 +910,9 @@ class Config8(BaseParserModel):
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
     materialized: Optional[str] = 'test'
-    severity: Optional[
-        constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
-    ] = 'ERROR'
+    severity: Optional[constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')] = (
+        'ERROR'
+    )
     store_failures: Optional[bool] = None
     store_failures_as: Optional[str] = None
     where: Optional[str] = None
@@ -922,7 +922,7 @@ class Config8(BaseParserModel):
     error_if: Optional[str] = '!= 0'
 
 
-class Constraint7(BaseParserModel):
+class Constraint7(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -933,7 +933,7 @@ class Constraint7(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns6(BaseParserModel):
+class Columns6(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -947,7 +947,7 @@ class Columns6(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class TestMetadata(BaseParserModel):
+class TestMetadata(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -956,7 +956,7 @@ class TestMetadata(BaseParserModel):
     namespace: Optional[str] = None
 
 
-class Nodes6(BaseParserModel):
+class Nodes6(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1003,7 +1003,7 @@ class Nodes6(BaseParserModel):
     test_metadata: Optional[TestMetadata] = Field(None, title='TestMetadata')
 
 
-class Contract13(BaseParserModel):
+class Contract13(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1011,7 +1011,7 @@ class Contract13(BaseParserModel):
     alias_types: Optional[bool] = True
 
 
-class Config9(BaseParserModel):
+class Config9(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -1045,7 +1045,7 @@ class Config9(BaseParserModel):
     check_cols: Optional[Union[str, List[str]]] = None
 
 
-class Constraint8(BaseParserModel):
+class Constraint8(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1056,7 +1056,7 @@ class Constraint8(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns7(BaseParserModel):
+class Columns7(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -1070,7 +1070,7 @@ class Columns7(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Contract14(BaseParserModel):
+class Contract14(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1079,7 +1079,7 @@ class Contract14(BaseParserModel):
     checksum: Optional[str] = None
 
 
-class Contract15(BaseParserModel):
+class Contract15(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1087,7 +1087,7 @@ class Contract15(BaseParserModel):
     alias_types: Optional[bool] = True
 
 
-class Config10(BaseParserModel):
+class Config10(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -1116,7 +1116,7 @@ class Config10(BaseParserModel):
     contract: Optional[Contract15] = Field(None, title='ContractConfig')
 
 
-class DeferRelation2(BaseParserModel):
+class DeferRelation2(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1133,7 +1133,7 @@ class DeferRelation2(BaseParserModel):
     config: Optional[Config10] = None
 
 
-class Nodes7(BaseParserModel):
+class Nodes7(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1177,7 +1177,7 @@ class Nodes7(BaseParserModel):
     defer_relation: Optional[DeferRelation2] = None
 
 
-class Quoting(BaseParserModel):
+class Quoting(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1193,7 +1193,7 @@ class Period(Enum):
     day = 'day'
 
 
-class WarnAfter(BaseParserModel):
+class WarnAfter(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1201,7 +1201,7 @@ class WarnAfter(BaseParserModel):
     period: Optional[Period] = None
 
 
-class ErrorAfter(BaseParserModel):
+class ErrorAfter(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1209,7 +1209,7 @@ class ErrorAfter(BaseParserModel):
     period: Optional[Period] = None
 
 
-class Freshness(BaseParserModel):
+class Freshness(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1218,7 +1218,7 @@ class Freshness(BaseParserModel):
     filter: Optional[str] = None
 
 
-class Partition(BaseParserModel):
+class Partition(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -1229,7 +1229,7 @@ class Partition(BaseParserModel):
     meta: Optional[Dict[str, Any]] = None
 
 
-class External(BaseParserModel):
+class External(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -1241,7 +1241,7 @@ class External(BaseParserModel):
     partitions: Optional[Union[List[str], List[Partition]]] = None
 
 
-class Constraint9(BaseParserModel):
+class Constraint9(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1252,7 +1252,7 @@ class Constraint9(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns8(BaseParserModel):
+class Columns8(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -1266,7 +1266,7 @@ class Columns8(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Config11(BaseParserModel):
+class Config11(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -1274,7 +1274,7 @@ class Config11(BaseParserModel):
     enabled: Optional[bool] = True
 
 
-class Sources(BaseParserModel):
+class Sources(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1307,14 +1307,14 @@ class Sources(BaseParserModel):
     created_at: Optional[float] = None
 
 
-class DependsOn8(BaseParserModel):
+class DependsOn8(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     macros: Optional[List[str]] = None
 
 
-class Argument(BaseParserModel):
+class Argument(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1328,7 +1328,7 @@ class SupportedLanguage(Enum):
     sql = 'sql'
 
 
-class Macros(BaseParserModel):
+class Macros(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1349,7 +1349,7 @@ class Macros(BaseParserModel):
     supported_languages: Optional[List[SupportedLanguage]] = None
 
 
-class Docs18(BaseParserModel):
+class Docs18(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1370,7 +1370,7 @@ class Type10(Enum):
     application = 'application'
 
 
-class Owner(BaseParserModel):
+class Owner(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -1385,7 +1385,7 @@ class Maturity(Enum):
     high = 'high'
 
 
-class DependsOn9(BaseParserModel):
+class DependsOn9(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1393,7 +1393,7 @@ class DependsOn9(BaseParserModel):
     nodes: Optional[List[str]] = None
 
 
-class Exposures(BaseParserModel):
+class Exposures(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1429,21 +1429,21 @@ class Type11(Enum):
     conversion = 'conversion'
 
 
-class WhereFilter(BaseParserModel):
+class WhereFilter(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_sql_template: str
 
 
-class Filter(BaseParserModel):
+class Filter(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class Measure(BaseParserModel):
+class Measure(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1454,14 +1454,14 @@ class Measure(BaseParserModel):
     fill_nulls_with: Optional[int] = None
 
 
-class Filter1(BaseParserModel):
+class Filter1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class InputMeasure(BaseParserModel):
+class InputMeasure(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1472,7 +1472,7 @@ class InputMeasure(BaseParserModel):
     fill_nulls_with: Optional[int] = None
 
 
-class Filter2(BaseParserModel):
+class Filter2(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1487,7 +1487,7 @@ class Granularity(Enum):
     year = 'year'
 
 
-class OffsetWindow(BaseParserModel):
+class OffsetWindow(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1503,7 +1503,7 @@ class OffsetToGrain(Enum):
     year = 'year'
 
 
-class Numerator(BaseParserModel):
+class Numerator(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1514,14 +1514,14 @@ class Numerator(BaseParserModel):
     offset_to_grain: Optional[OffsetToGrain] = None
 
 
-class Filter3(BaseParserModel):
+class Filter3(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class OffsetWindow1(BaseParserModel):
+class OffsetWindow1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1529,7 +1529,7 @@ class OffsetWindow1(BaseParserModel):
     granularity: Granularity
 
 
-class Denominator(BaseParserModel):
+class Denominator(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1540,7 +1540,7 @@ class Denominator(BaseParserModel):
     offset_to_grain: Optional[OffsetToGrain] = None
 
 
-class Window(BaseParserModel):
+class Window(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1556,14 +1556,14 @@ class GrainToDate(Enum):
     year = 'year'
 
 
-class Filter4(BaseParserModel):
+class Filter4(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class OffsetWindow2(BaseParserModel):
+class OffsetWindow2(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1571,7 +1571,7 @@ class OffsetWindow2(BaseParserModel):
     granularity: Granularity
 
 
-class Metric(BaseParserModel):
+class Metric(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1582,14 +1582,14 @@ class Metric(BaseParserModel):
     offset_to_grain: Optional[OffsetToGrain] = None
 
 
-class Filter5(BaseParserModel):
+class Filter5(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class BaseMeasure(BaseParserModel):
+class BaseMeasure(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1600,14 +1600,14 @@ class BaseMeasure(BaseParserModel):
     fill_nulls_with: Optional[int] = None
 
 
-class Filter6(BaseParserModel):
+class Filter6(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class ConversionMeasure(BaseParserModel):
+class ConversionMeasure(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1623,7 +1623,7 @@ class Calculation(Enum):
     conversion_rate = 'conversion_rate'
 
 
-class Window1(BaseParserModel):
+class Window1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1631,7 +1631,7 @@ class Window1(BaseParserModel):
     granularity: Granularity
 
 
-class ConstantProperty(BaseParserModel):
+class ConstantProperty(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1639,7 +1639,7 @@ class ConstantProperty(BaseParserModel):
     conversion_property: str
 
 
-class ConversionTypeParams(BaseParserModel):
+class ConversionTypeParams(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1651,7 +1651,7 @@ class ConversionTypeParams(BaseParserModel):
     constant_properties: Optional[List[ConstantProperty]] = None
 
 
-class TypeParams(BaseParserModel):
+class TypeParams(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1666,14 +1666,14 @@ class TypeParams(BaseParserModel):
     conversion_type_params: Optional[ConversionTypeParams] = None
 
 
-class Filter7(BaseParserModel):
+class Filter7(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class FileSlice(BaseParserModel):
+class FileSlice(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1683,7 +1683,7 @@ class FileSlice(BaseParserModel):
     end_line_number: int
 
 
-class Metadata1(BaseParserModel):
+class Metadata1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1691,7 +1691,7 @@ class Metadata1(BaseParserModel):
     file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class Config13(BaseParserModel):
+class Config13(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -1701,7 +1701,7 @@ class Config13(BaseParserModel):
     meta: Optional[Dict[str, Any]] = None
 
 
-class Metrics(BaseParserModel):
+class Metrics(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1730,7 +1730,7 @@ class Metrics(BaseParserModel):
     group: Optional[str] = None
 
 
-class Groups(BaseParserModel):
+class Groups(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1743,7 +1743,7 @@ class Groups(BaseParserModel):
     owner: Owner = Field(..., title='Owner')
 
 
-class Docs19(BaseParserModel):
+class Docs19(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1751,7 +1751,7 @@ class Docs19(BaseParserModel):
     node_color: Optional[str] = None
 
 
-class Config14(BaseParserModel):
+class Config14(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -1791,7 +1791,7 @@ class Type12(Enum):
     custom = 'custom'
 
 
-class Constraint10(BaseParserModel):
+class Constraint10(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1802,7 +1802,7 @@ class Constraint10(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns9(BaseParserModel):
+class Columns9(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -1816,14 +1816,14 @@ class Columns9(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class DependsOn11(BaseParserModel):
+class DependsOn11(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     macros: Optional[List[str]] = None
 
 
-class Config15(BaseParserModel):
+class Config15(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -1852,7 +1852,7 @@ class Config15(BaseParserModel):
     contract: Optional[Contract15] = Field(None, title='ContractConfig')
 
 
-class DeferRelation3(BaseParserModel):
+class DeferRelation3(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1869,7 +1869,7 @@ class DeferRelation3(BaseParserModel):
     config: Optional[Config15] = None
 
 
-class Disabled(BaseParserModel):
+class Disabled(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1903,7 +1903,7 @@ class Disabled(BaseParserModel):
     defer_relation: Optional[DeferRelation3] = None
 
 
-class Config16(BaseParserModel):
+class Config16(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -1932,7 +1932,7 @@ class Config16(BaseParserModel):
     contract: Optional[Contract15] = Field(None, title='ContractConfig')
 
 
-class Constraint11(BaseParserModel):
+class Constraint11(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1943,7 +1943,7 @@ class Constraint11(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns10(BaseParserModel):
+class Columns10(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -1957,7 +1957,7 @@ class Columns10(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class DependsOn12(BaseParserModel):
+class DependsOn12(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1965,7 +1965,7 @@ class DependsOn12(BaseParserModel):
     nodes: Optional[List[str]] = None
 
 
-class Contract19(BaseParserModel):
+class Contract19(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1974,7 +1974,7 @@ class Contract19(BaseParserModel):
     checksum: Optional[str] = None
 
 
-class Disabled1(BaseParserModel):
+class Disabled1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2017,7 +2017,7 @@ class Disabled1(BaseParserModel):
     contract: Optional[Contract19] = Field(None, title='Contract')
 
 
-class Config17(BaseParserModel):
+class Config17(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2030,9 +2030,9 @@ class Config17(BaseParserModel):
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
     materialized: Optional[str] = 'test'
-    severity: Optional[
-        constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
-    ] = 'ERROR'
+    severity: Optional[constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')] = (
+        'ERROR'
+    )
     store_failures: Optional[bool] = None
     store_failures_as: Optional[str] = None
     where: Optional[str] = None
@@ -2042,7 +2042,7 @@ class Config17(BaseParserModel):
     error_if: Optional[str] = '!= 0'
 
 
-class Constraint12(BaseParserModel):
+class Constraint12(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2053,7 +2053,7 @@ class Constraint12(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns11(BaseParserModel):
+class Columns11(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2067,7 +2067,7 @@ class Columns11(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Disabled2(BaseParserModel):
+class Disabled2(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2110,7 +2110,7 @@ class Disabled2(BaseParserModel):
     contract: Optional[Contract19] = Field(None, title='Contract')
 
 
-class Contract21(BaseParserModel):
+class Contract21(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2118,7 +2118,7 @@ class Contract21(BaseParserModel):
     alias_types: Optional[bool] = True
 
 
-class Config18(BaseParserModel):
+class Config18(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2147,7 +2147,7 @@ class Config18(BaseParserModel):
     contract: Optional[Contract21] = Field(None, title='ContractConfig')
 
 
-class Constraint13(BaseParserModel):
+class Constraint13(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2158,7 +2158,7 @@ class Constraint13(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns12(BaseParserModel):
+class Columns12(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2172,7 +2172,7 @@ class Columns12(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Contract22(BaseParserModel):
+class Contract22(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2181,7 +2181,7 @@ class Contract22(BaseParserModel):
     checksum: Optional[str] = None
 
 
-class Disabled3(BaseParserModel):
+class Disabled3(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2225,7 +2225,7 @@ class Disabled3(BaseParserModel):
     index: Optional[int] = None
 
 
-class Contract23(BaseParserModel):
+class Contract23(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2233,7 +2233,7 @@ class Contract23(BaseParserModel):
     alias_types: Optional[bool] = True
 
 
-class Config19(BaseParserModel):
+class Config19(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2263,7 +2263,7 @@ class Config19(BaseParserModel):
     access: Optional[Access] = 'protected'
 
 
-class Constraint14(BaseParserModel):
+class Constraint14(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2274,7 +2274,7 @@ class Constraint14(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns13(BaseParserModel):
+class Columns13(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2288,7 +2288,7 @@ class Columns13(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Contract24(BaseParserModel):
+class Contract24(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2297,7 +2297,7 @@ class Contract24(BaseParserModel):
     checksum: Optional[str] = None
 
 
-class Constraint15(BaseParserModel):
+class Constraint15(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2309,7 +2309,7 @@ class Constraint15(BaseParserModel):
     columns: Optional[List[str]] = None
 
 
-class Contract25(BaseParserModel):
+class Contract25(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2317,7 +2317,7 @@ class Contract25(BaseParserModel):
     alias_types: Optional[bool] = True
 
 
-class Config20(BaseParserModel):
+class Config20(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2346,7 +2346,7 @@ class Config20(BaseParserModel):
     contract: Optional[Contract25] = Field(None, title='ContractConfig')
 
 
-class DeferRelation4(BaseParserModel):
+class DeferRelation4(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2363,7 +2363,7 @@ class DeferRelation4(BaseParserModel):
     config: Optional[Config20] = None
 
 
-class Disabled4(BaseParserModel):
+class Disabled4(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2413,7 +2413,7 @@ class Disabled4(BaseParserModel):
     primary_key: Optional[List[str]] = None
 
 
-class Config21(BaseParserModel):
+class Config21(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2442,7 +2442,7 @@ class Config21(BaseParserModel):
     contract: Optional[Contract25] = Field(None, title='ContractConfig')
 
 
-class Constraint16(BaseParserModel):
+class Constraint16(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2453,7 +2453,7 @@ class Constraint16(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns14(BaseParserModel):
+class Columns14(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2467,7 +2467,7 @@ class Columns14(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Contract27(BaseParserModel):
+class Contract27(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2476,7 +2476,7 @@ class Contract27(BaseParserModel):
     checksum: Optional[str] = None
 
 
-class Disabled5(BaseParserModel):
+class Disabled5(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2519,7 +2519,7 @@ class Disabled5(BaseParserModel):
     contract: Optional[Contract27] = Field(None, title='Contract')
 
 
-class Config22(BaseParserModel):
+class Config22(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2532,9 +2532,9 @@ class Config22(BaseParserModel):
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
     materialized: Optional[str] = 'test'
-    severity: Optional[
-        constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
-    ] = 'ERROR'
+    severity: Optional[constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')] = (
+        'ERROR'
+    )
     store_failures: Optional[bool] = None
     store_failures_as: Optional[str] = None
     where: Optional[str] = None
@@ -2544,7 +2544,7 @@ class Config22(BaseParserModel):
     error_if: Optional[str] = '!= 0'
 
 
-class Constraint17(BaseParserModel):
+class Constraint17(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2555,7 +2555,7 @@ class Constraint17(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns15(BaseParserModel):
+class Columns15(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2569,7 +2569,7 @@ class Columns15(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Disabled6(BaseParserModel):
+class Disabled6(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2616,7 +2616,7 @@ class Disabled6(BaseParserModel):
     test_metadata: Optional[TestMetadata] = Field(None, title='TestMetadata')
 
 
-class Contract29(BaseParserModel):
+class Contract29(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2624,7 +2624,7 @@ class Contract29(BaseParserModel):
     alias_types: Optional[bool] = True
 
 
-class Config23(BaseParserModel):
+class Config23(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2658,7 +2658,7 @@ class Config23(BaseParserModel):
     check_cols: Optional[Union[str, List[str]]] = None
 
 
-class Constraint18(BaseParserModel):
+class Constraint18(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2669,7 +2669,7 @@ class Constraint18(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns16(BaseParserModel):
+class Columns16(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2683,7 +2683,7 @@ class Columns16(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Contract30(BaseParserModel):
+class Contract30(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2692,7 +2692,7 @@ class Contract30(BaseParserModel):
     checksum: Optional[str] = None
 
 
-class Contract31(BaseParserModel):
+class Contract31(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2700,7 +2700,7 @@ class Contract31(BaseParserModel):
     alias_types: Optional[bool] = True
 
 
-class Config24(BaseParserModel):
+class Config24(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2729,7 +2729,7 @@ class Config24(BaseParserModel):
     contract: Optional[Contract31] = Field(None, title='ContractConfig')
 
 
-class DeferRelation5(BaseParserModel):
+class DeferRelation5(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2746,7 +2746,7 @@ class DeferRelation5(BaseParserModel):
     config: Optional[Config24] = None
 
 
-class Disabled7(BaseParserModel):
+class Disabled7(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2790,7 +2790,7 @@ class Disabled7(BaseParserModel):
     defer_relation: Optional[DeferRelation5] = None
 
 
-class WarnAfter1(BaseParserModel):
+class WarnAfter1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2798,7 +2798,7 @@ class WarnAfter1(BaseParserModel):
     period: Optional[Period] = None
 
 
-class ErrorAfter1(BaseParserModel):
+class ErrorAfter1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2806,7 +2806,7 @@ class ErrorAfter1(BaseParserModel):
     period: Optional[Period] = None
 
 
-class Freshness1(BaseParserModel):
+class Freshness1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2815,7 +2815,7 @@ class Freshness1(BaseParserModel):
     filter: Optional[str] = None
 
 
-class External1(BaseParserModel):
+class External1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2827,7 +2827,7 @@ class External1(BaseParserModel):
     partitions: Optional[Union[List[str], List[Partition]]] = None
 
 
-class Constraint19(BaseParserModel):
+class Constraint19(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2838,7 +2838,7 @@ class Constraint19(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class Columns17(BaseParserModel):
+class Columns17(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2852,7 +2852,7 @@ class Columns17(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias='_extra')
 
 
-class Config25(BaseParserModel):
+class Config25(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -2860,7 +2860,7 @@ class Config25(BaseParserModel):
     enabled: Optional[bool] = True
 
 
-class Disabled8(BaseParserModel):
+class Disabled8(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2901,7 +2901,7 @@ class Type22(Enum):
     application = 'application'
 
 
-class Disabled9(BaseParserModel):
+class Disabled9(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2937,14 +2937,14 @@ class Type23(Enum):
     conversion = 'conversion'
 
 
-class Filter8(BaseParserModel):
+class Filter8(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class Measure1(BaseParserModel):
+class Measure1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2955,14 +2955,14 @@ class Measure1(BaseParserModel):
     fill_nulls_with: Optional[int] = None
 
 
-class Filter9(BaseParserModel):
+class Filter9(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class InputMeasure1(BaseParserModel):
+class InputMeasure1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2973,14 +2973,14 @@ class InputMeasure1(BaseParserModel):
     fill_nulls_with: Optional[int] = None
 
 
-class Filter10(BaseParserModel):
+class Filter10(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class OffsetWindow3(BaseParserModel):
+class OffsetWindow3(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2988,7 +2988,7 @@ class OffsetWindow3(BaseParserModel):
     granularity: Granularity
 
 
-class Numerator1(BaseParserModel):
+class Numerator1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2999,14 +2999,14 @@ class Numerator1(BaseParserModel):
     offset_to_grain: Optional[OffsetToGrain] = None
 
 
-class Filter11(BaseParserModel):
+class Filter11(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class OffsetWindow4(BaseParserModel):
+class OffsetWindow4(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3014,7 +3014,7 @@ class OffsetWindow4(BaseParserModel):
     granularity: Granularity
 
 
-class Denominator1(BaseParserModel):
+class Denominator1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3025,7 +3025,7 @@ class Denominator1(BaseParserModel):
     offset_to_grain: Optional[OffsetToGrain] = None
 
 
-class Window2(BaseParserModel):
+class Window2(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3033,14 +3033,14 @@ class Window2(BaseParserModel):
     granularity: Granularity
 
 
-class Filter12(BaseParserModel):
+class Filter12(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class OffsetWindow5(BaseParserModel):
+class OffsetWindow5(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3048,7 +3048,7 @@ class OffsetWindow5(BaseParserModel):
     granularity: Granularity
 
 
-class Metric1(BaseParserModel):
+class Metric1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3059,14 +3059,14 @@ class Metric1(BaseParserModel):
     offset_to_grain: Optional[OffsetToGrain] = None
 
 
-class Filter13(BaseParserModel):
+class Filter13(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class BaseMeasure1(BaseParserModel):
+class BaseMeasure1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3077,14 +3077,14 @@ class BaseMeasure1(BaseParserModel):
     fill_nulls_with: Optional[int] = None
 
 
-class Filter14(BaseParserModel):
+class Filter14(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class ConversionMeasure1(BaseParserModel):
+class ConversionMeasure1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3095,7 +3095,7 @@ class ConversionMeasure1(BaseParserModel):
     fill_nulls_with: Optional[int] = None
 
 
-class Window3(BaseParserModel):
+class Window3(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3103,7 +3103,7 @@ class Window3(BaseParserModel):
     granularity: Granularity
 
 
-class ConversionTypeParams1(BaseParserModel):
+class ConversionTypeParams1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3115,7 +3115,7 @@ class ConversionTypeParams1(BaseParserModel):
     constant_properties: Optional[List[ConstantProperty]] = None
 
 
-class TypeParams1(BaseParserModel):
+class TypeParams1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3130,14 +3130,14 @@ class TypeParams1(BaseParserModel):
     conversion_type_params: Optional[ConversionTypeParams1] = None
 
 
-class Filter15(BaseParserModel):
+class Filter15(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class Metadata2(BaseParserModel):
+class Metadata2(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3145,7 +3145,7 @@ class Metadata2(BaseParserModel):
     file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class Config27(BaseParserModel):
+class Config27(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -3155,7 +3155,7 @@ class Config27(BaseParserModel):
     meta: Optional[Dict[str, Any]] = None
 
 
-class Disabled10(BaseParserModel):
+class Disabled10(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3184,14 +3184,14 @@ class Disabled10(BaseParserModel):
     group: Optional[str] = None
 
 
-class Where(BaseParserModel):
+class Where(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class QueryParams(BaseParserModel):
+class QueryParams(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3205,7 +3205,7 @@ class ExportAs(Enum):
     view = 'view'
 
 
-class Config28(BaseParserModel):
+class Config28(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3215,7 +3215,7 @@ class Config28(BaseParserModel):
     database: Optional[str] = None
 
 
-class Export(BaseParserModel):
+class Export(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3223,7 +3223,7 @@ class Export(BaseParserModel):
     config: Config28 = Field(..., title='ExportConfig')
 
 
-class Metadata3(BaseParserModel):
+class Metadata3(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3231,14 +3231,14 @@ class Metadata3(BaseParserModel):
     file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class Cache(BaseParserModel):
+class Cache(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     enabled: Optional[bool] = False
 
 
-class Config29(BaseParserModel):
+class Config29(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -3251,7 +3251,7 @@ class Config29(BaseParserModel):
     cache: Optional[Cache] = Field(None, title='SavedQueryCache')
 
 
-class Disabled11(BaseParserModel):
+class Disabled11(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3275,7 +3275,7 @@ class Disabled11(BaseParserModel):
     refs: Optional[List[Ref]] = None
 
 
-class NodeRelation(BaseParserModel):
+class NodeRelation(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3285,7 +3285,7 @@ class NodeRelation(BaseParserModel):
     relation_name: Optional[str] = ''
 
 
-class Defaults(BaseParserModel):
+class Defaults(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3299,7 +3299,7 @@ class Type24(Enum):
     unique = 'unique'
 
 
-class Entity(BaseParserModel):
+class Entity(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3323,7 +3323,7 @@ class Agg(Enum):
     count = 'count'
 
 
-class AggParams(BaseParserModel):
+class AggParams(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3344,7 +3344,7 @@ class WindowChoice(Enum):
     count = 'count'
 
 
-class NonAdditiveDimension(BaseParserModel):
+class NonAdditiveDimension(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3353,7 +3353,7 @@ class NonAdditiveDimension(BaseParserModel):
     window_groupings: List[str]
 
 
-class Measure2(BaseParserModel):
+class Measure2(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3381,7 +3381,7 @@ class TimeGranularity(Enum):
     year = 'year'
 
 
-class ValidityParams(BaseParserModel):
+class ValidityParams(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3389,7 +3389,7 @@ class ValidityParams(BaseParserModel):
     is_end: Optional[bool] = False
 
 
-class TypeParams2(BaseParserModel):
+class TypeParams2(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3397,7 +3397,7 @@ class TypeParams2(BaseParserModel):
     validity_params: Optional[ValidityParams] = None
 
 
-class Metadata4(BaseParserModel):
+class Metadata4(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3405,7 +3405,7 @@ class Metadata4(BaseParserModel):
     file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class Dimension(BaseParserModel):
+class Dimension(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3419,7 +3419,7 @@ class Dimension(BaseParserModel):
     metadata: Optional[Metadata4] = None
 
 
-class Metadata5(BaseParserModel):
+class Metadata5(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3427,7 +3427,7 @@ class Metadata5(BaseParserModel):
     file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class Config30(BaseParserModel):
+class Config30(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -3437,7 +3437,7 @@ class Config30(BaseParserModel):
     meta: Optional[Dict[str, Any]] = None
 
 
-class Disabled12(BaseParserModel):
+class Disabled12(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3472,7 +3472,7 @@ class Format(Enum):
     sql = 'sql'
 
 
-class GivenItem(BaseParserModel):
+class GivenItem(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3482,7 +3482,7 @@ class GivenItem(BaseParserModel):
     fixture: Optional[str] = None
 
 
-class Expect(BaseParserModel):
+class Expect(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3491,7 +3491,7 @@ class Expect(BaseParserModel):
     fixture: Optional[str] = None
 
 
-class Overrides(BaseParserModel):
+class Overrides(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3500,7 +3500,7 @@ class Overrides(BaseParserModel):
     env_vars: Optional[Dict[str, Any]] = None
 
 
-class Config31(BaseParserModel):
+class Config31(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -3509,7 +3509,7 @@ class Config31(BaseParserModel):
     meta: Optional[Dict[str, Any]] = None
 
 
-class Versions(BaseParserModel):
+class Versions(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3517,7 +3517,7 @@ class Versions(BaseParserModel):
     exclude: Optional[List[Union[str, float]]] = None
 
 
-class Disabled13(BaseParserModel):
+class Disabled13(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3542,14 +3542,14 @@ class Disabled13(BaseParserModel):
     version: Optional[Union[str, float]] = None
 
 
-class Where1(BaseParserModel):
+class Where1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     where_filters: List[WhereFilter]
 
 
-class QueryParams1(BaseParserModel):
+class QueryParams1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3558,7 +3558,7 @@ class QueryParams1(BaseParserModel):
     where: Optional[Where1] = None
 
 
-class Config32(BaseParserModel):
+class Config32(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3568,7 +3568,7 @@ class Config32(BaseParserModel):
     database: Optional[str] = None
 
 
-class Export1(BaseParserModel):
+class Export1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3576,7 +3576,7 @@ class Export1(BaseParserModel):
     config: Config32 = Field(..., title='ExportConfig')
 
 
-class Metadata6(BaseParserModel):
+class Metadata6(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3584,7 +3584,7 @@ class Metadata6(BaseParserModel):
     file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class Config33(BaseParserModel):
+class Config33(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -3597,7 +3597,7 @@ class Config33(BaseParserModel):
     cache: Optional[Cache] = Field(None, title='SavedQueryCache')
 
 
-class SavedQueries(BaseParserModel):
+class SavedQueries(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3628,7 +3628,7 @@ class Type26(Enum):
     unique = 'unique'
 
 
-class Entity1(BaseParserModel):
+class Entity1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3640,7 +3640,7 @@ class Entity1(BaseParserModel):
     expr: Optional[str] = None
 
 
-class NonAdditiveDimension1(BaseParserModel):
+class NonAdditiveDimension1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3649,7 +3649,7 @@ class NonAdditiveDimension1(BaseParserModel):
     window_groupings: List[str]
 
 
-class Measure3(BaseParserModel):
+class Measure3(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3669,7 +3669,7 @@ class Type27(Enum):
     time = 'time'
 
 
-class TypeParams3(BaseParserModel):
+class TypeParams3(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3677,7 +3677,7 @@ class TypeParams3(BaseParserModel):
     validity_params: Optional[ValidityParams] = None
 
 
-class Metadata7(BaseParserModel):
+class Metadata7(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3685,7 +3685,7 @@ class Metadata7(BaseParserModel):
     file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class Dimension1(BaseParserModel):
+class Dimension1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3699,7 +3699,7 @@ class Dimension1(BaseParserModel):
     metadata: Optional[Metadata7] = None
 
 
-class Metadata8(BaseParserModel):
+class Metadata8(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3707,7 +3707,7 @@ class Metadata8(BaseParserModel):
     file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class Config34(BaseParserModel):
+class Config34(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -3717,7 +3717,7 @@ class Config34(BaseParserModel):
     meta: Optional[Dict[str, Any]] = None
 
 
-class SemanticModels(BaseParserModel):
+class SemanticModels(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3746,7 +3746,7 @@ class SemanticModels(BaseParserModel):
     group: Optional[str] = None
 
 
-class GivenItem1(BaseParserModel):
+class GivenItem1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3756,7 +3756,7 @@ class GivenItem1(BaseParserModel):
     fixture: Optional[str] = None
 
 
-class Expect1(BaseParserModel):
+class Expect1(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3765,7 +3765,7 @@ class Expect1(BaseParserModel):
     fixture: Optional[str] = None
 
 
-class Config35(BaseParserModel):
+class Config35(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -3774,7 +3774,7 @@ class Config35(BaseParserModel):
     meta: Optional[Dict[str, Any]] = None
 
 
-class UnitTests(BaseParserModel):
+class UnitTests(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3799,7 +3799,7 @@ class UnitTests(BaseParserModel):
     version: Optional[Union[str, float]] = None
 
 
-class ManifestV12(BaseParserModel):
+class ManifestV12(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )

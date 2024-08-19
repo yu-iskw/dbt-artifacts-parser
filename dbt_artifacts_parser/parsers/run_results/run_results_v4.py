@@ -8,10 +8,10 @@ from typing import Any, Dict, List, Optional, Union
 
 from pydantic import AwareDatetime, ConfigDict
 
-from dbt_artifacts_parser.parsers.base import BaseParserModel
+from dbt_artifacts_parser.parsers.base import BaseRunResultsParserModel
 
 
-class BaseArtifactMetadata(BaseParserModel):
+class BaseArtifactMetadata(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -43,7 +43,7 @@ class Status2(Enum):
     runtime_error = 'runtime error'
 
 
-class TimingInfo(BaseParserModel):
+class TimingInfo(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -52,7 +52,7 @@ class TimingInfo(BaseParserModel):
     completed_at: Optional[AwareDatetime] = None
 
 
-class FreshnessMetadata(BaseParserModel):
+class FreshnessMetadata(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -67,7 +67,7 @@ class Status3(Enum):
     runtime_error = 'runtime error'
 
 
-class SourceFreshnessRuntimeError(BaseParserModel):
+class SourceFreshnessRuntimeError(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -89,7 +89,7 @@ class Period(Enum):
     day = 'day'
 
 
-class Time(BaseParserModel):
+class Time(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -97,7 +97,7 @@ class Time(BaseParserModel):
     period: Optional[Period] = None
 
 
-class RunResultOutput(BaseParserModel):
+class RunResultOutput(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -111,7 +111,7 @@ class RunResultOutput(BaseParserModel):
     unique_id: str
 
 
-class FreshnessThreshold(BaseParserModel):
+class FreshnessThreshold(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -120,7 +120,7 @@ class FreshnessThreshold(BaseParserModel):
     filter: Optional[str] = None
 
 
-class RunResultsV4(BaseParserModel):
+class RunResultsV4(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -130,7 +130,7 @@ class RunResultsV4(BaseParserModel):
     args: Optional[Dict[str, Any]] = {}
 
 
-class SourceFreshnessOutput(BaseParserModel):
+class SourceFreshnessOutput(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )

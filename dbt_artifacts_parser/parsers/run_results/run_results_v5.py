@@ -6,12 +6,12 @@ from __future__ import annotations
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import ConfigDict
+from pydantic import ConfigDict, RootModel
 
-from dbt_artifacts_parser.parsers.base import BaseParserModel
+from dbt_artifacts_parser.parsers.base import BaseRunResultsParserModel
 
 
-class BaseArtifactMetadata(BaseParserModel):
+class BaseArtifactMetadata(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -22,7 +22,7 @@ class BaseArtifactMetadata(BaseParserModel):
     env: Optional[Dict[str, str]] = None
 
 
-class TimingInfo(BaseParserModel):
+class TimingInfo(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -52,7 +52,7 @@ class Status2(Enum):
     runtime_error = 'runtime error'
 
 
-class RunResultOutput(BaseParserModel):
+class RunResultOutput(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -69,7 +69,7 @@ class RunResultOutput(BaseParserModel):
     relation_name: Optional[str] = None
 
 
-class RunResultsV5(BaseParserModel):
+class RunResultsArtifact(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -79,6 +79,5 @@ class RunResultsV5(BaseParserModel):
     args: Optional[Dict[str, Any]] = None
 
 
-# NOTE: We manually change the class, as the generated code is not correct.
-# class RunResultsV5(RootModel[RunResultsArtifact]):
-#     root: RunResultsArtifact
+class RunResultsV5(RootModel[RunResultsArtifact]):
+    root: RunResultsArtifact

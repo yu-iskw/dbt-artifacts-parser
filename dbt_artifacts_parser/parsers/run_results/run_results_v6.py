@@ -8,10 +8,10 @@ from typing import Any, Dict, List, Optional, Union
 
 from pydantic import ConfigDict, Field
 
-from dbt_artifacts_parser.parsers.base import BaseParserModel
+from dbt_artifacts_parser.parsers.base import BaseRunResultsParserModel
 
 
-class Metadata(BaseParserModel):
+class Metadata(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -43,7 +43,7 @@ class Status2(Enum):
     runtime_error = 'runtime error'
 
 
-class TimingItem(BaseParserModel):
+class TimingItem(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -52,7 +52,7 @@ class TimingItem(BaseParserModel):
     completed_at: Optional[str] = None
 
 
-class Result(BaseParserModel):
+class Result(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -69,7 +69,7 @@ class Result(BaseParserModel):
     relation_name: Optional[str] = None
 
 
-class RunResultsV6(BaseParserModel):
+class RunResultsV6(BaseRunResultsParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )

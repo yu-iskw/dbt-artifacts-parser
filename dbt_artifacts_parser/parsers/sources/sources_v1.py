@@ -8,10 +8,10 @@ from typing import Any, Dict, List, Optional, Union
 
 from pydantic import AwareDatetime, ConfigDict
 
-from dbt_artifacts_parser.parsers.base import BaseParserModel
+from dbt_artifacts_parser.parsers.base import BaseSourcesParserModel
 
 
-class FreshnessMetadata(BaseParserModel):
+class FreshnessMetadata(BaseSourcesParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -26,7 +26,7 @@ class Status(Enum):
     runtime_error = 'runtime error'
 
 
-class SourceFreshnessRuntimeError(BaseParserModel):
+class SourceFreshnessRuntimeError(BaseSourcesParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -48,7 +48,7 @@ class Period(Enum):
     day = 'day'
 
 
-class Time(BaseParserModel):
+class Time(BaseSourcesParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -56,7 +56,7 @@ class Time(BaseParserModel):
     period: Period
 
 
-class FreshnessThreshold(BaseParserModel):
+class FreshnessThreshold(BaseSourcesParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -65,7 +65,7 @@ class FreshnessThreshold(BaseParserModel):
     filter: Optional[str] = None
 
 
-class SourceFreshnessOutput(BaseParserModel):
+class SourceFreshnessOutput(BaseSourcesParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -78,7 +78,7 @@ class SourceFreshnessOutput(BaseParserModel):
     adapter_response: Dict[str, Any]
 
 
-class SourcesV1(BaseParserModel):
+class SourcesV1(BaseSourcesParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )

@@ -8,16 +8,16 @@ from typing import Any, Dict, List, Optional, Union
 
 from pydantic import AwareDatetime, ConfigDict, Field, constr
 
-from dbt_artifacts_parser.parsers.base import BaseParserModel
+from dbt_artifacts_parser.parsers.base import BaseManifestParserModel
 
 
-class ManifestMetadata(BaseParserModel):
+class ManifestMetadata(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    dbt_schema_version: Optional[
-        str
-    ] = 'https://schemas.getdbt.com/dbt/manifest/v10.json'
+    dbt_schema_version: Optional[str] = (
+        'https://schemas.getdbt.com/dbt/manifest/v10.json'
+    )
     dbt_version: Optional[str] = '1.6.0'
     generated_at: Optional[AwareDatetime] = '2023-08-07T20:10:03.381822Z'
     invocation_id: Optional[str] = '03dee192-ff77-43cc-bc3f-5eeaf6d36344'
@@ -42,7 +42,7 @@ class ResourceType(Enum):
     analysis = 'analysis'
 
 
-class FileHash(BaseParserModel):
+class FileHash(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -56,7 +56,7 @@ class OnConfigurationChange(Enum):
     fail = 'fail'
 
 
-class Hook(BaseParserModel):
+class Hook(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -65,7 +65,7 @@ class Hook(BaseParserModel):
     index: Optional[int] = None
 
 
-class Docs(BaseParserModel):
+class Docs(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -73,7 +73,7 @@ class Docs(BaseParserModel):
     node_color: Optional[str] = None
 
 
-class ContractConfig(BaseParserModel):
+class ContractConfig(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -89,7 +89,7 @@ class Type(Enum):
     custom = 'custom'
 
 
-class ColumnLevelConstraint(BaseParserModel):
+class ColumnLevelConstraint(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -100,7 +100,7 @@ class ColumnLevelConstraint(BaseParserModel):
     warn_unsupported: Optional[bool] = True
 
 
-class RefArgs(BaseParserModel):
+class RefArgs(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -109,7 +109,7 @@ class RefArgs(BaseParserModel):
     version: Optional[Union[str, float]] = None
 
 
-class DependsOn(BaseParserModel):
+class DependsOn(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -117,7 +117,7 @@ class DependsOn(BaseParserModel):
     nodes: Optional[List[str]] = []
 
 
-class InjectedCTE(BaseParserModel):
+class InjectedCTE(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -125,7 +125,7 @@ class InjectedCTE(BaseParserModel):
     sql: str
 
 
-class Contract(BaseParserModel):
+class Contract(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -137,7 +137,7 @@ class ResourceType1(Enum):
     test = 'test'
 
 
-class TestConfig(BaseParserModel):
+class TestConfig(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -149,9 +149,9 @@ class TestConfig(BaseParserModel):
     meta: Optional[Dict[str, Any]] = {}
     group: Optional[str] = None
     materialized: Optional[str] = 'test'
-    severity: Optional[
-        constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
-    ] = 'ERROR'
+    severity: Optional[constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')] = (
+        'ERROR'
+    )
     store_failures: Optional[bool] = None
     where: Optional[str] = None
     limit: Optional[int] = None
@@ -174,7 +174,7 @@ class Access(Enum):
     public = 'public'
 
 
-class ModelLevelConstraint(BaseParserModel):
+class ModelLevelConstraint(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -186,7 +186,7 @@ class ModelLevelConstraint(BaseParserModel):
     columns: Optional[List[str]] = []
 
 
-class DeferRelation(BaseParserModel):
+class DeferRelation(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -208,7 +208,7 @@ class ResourceType6(Enum):
     test = 'test'
 
 
-class TestMetadata(BaseParserModel):
+class TestMetadata(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -221,7 +221,7 @@ class ResourceType7(Enum):
     snapshot = 'snapshot'
 
 
-class SnapshotConfig(BaseParserModel):
+class SnapshotConfig(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -262,7 +262,7 @@ class ResourceType8(Enum):
     seed = 'seed'
 
 
-class SeedConfig(BaseParserModel):
+class SeedConfig(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -295,7 +295,7 @@ class SeedConfig(BaseParserModel):
     quote_columns: Optional[bool] = None
 
 
-class MacroDependsOn(BaseParserModel):
+class MacroDependsOn(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -306,7 +306,7 @@ class ResourceType9(Enum):
     source = 'source'
 
 
-class Quoting(BaseParserModel):
+class Quoting(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -322,7 +322,7 @@ class Period(Enum):
     day = 'day'
 
 
-class Time(BaseParserModel):
+class Time(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -330,7 +330,7 @@ class Time(BaseParserModel):
     period: Optional[Period] = None
 
 
-class ExternalPartition(BaseParserModel):
+class ExternalPartition(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -340,7 +340,7 @@ class ExternalPartition(BaseParserModel):
     meta: Optional[Dict[str, Any]] = {}
 
 
-class SourceConfig(BaseParserModel):
+class SourceConfig(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -356,7 +356,7 @@ class SupportedLanguage(Enum):
     sql = 'sql'
 
 
-class MacroArgument(BaseParserModel):
+class MacroArgument(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -369,7 +369,7 @@ class ResourceType11(Enum):
     doc = 'doc'
 
 
-class Documentation(BaseParserModel):
+class Documentation(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -400,7 +400,7 @@ class Maturity(Enum):
     high = 'high'
 
 
-class Owner(BaseParserModel):
+class Owner(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -408,7 +408,7 @@ class Owner(BaseParserModel):
     name: Optional[str] = None
 
 
-class ExposureConfig(BaseParserModel):
+class ExposureConfig(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -434,7 +434,7 @@ class GrainToDate(Enum):
     year = 'year'
 
 
-class WhereFilter(BaseParserModel):
+class WhereFilter(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -457,7 +457,7 @@ class Granularity(Enum):
     year = 'year'
 
 
-class MetricTimeWindow(BaseParserModel):
+class MetricTimeWindow(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -465,7 +465,7 @@ class MetricTimeWindow(BaseParserModel):
     granularity: Granularity
 
 
-class FileSlice(BaseParserModel):
+class FileSlice(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -475,7 +475,7 @@ class FileSlice(BaseParserModel):
     end_line_number: int
 
 
-class MetricConfig(BaseParserModel):
+class MetricConfig(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -487,7 +487,7 @@ class ResourceType14(Enum):
     group = 'group'
 
 
-class Group(BaseParserModel):
+class Group(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -518,7 +518,7 @@ class ResourceType15(Enum):
     semantic_model = 'semantic_model'
 
 
-class NodeRelation(BaseParserModel):
+class NodeRelation(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -528,7 +528,7 @@ class NodeRelation(BaseParserModel):
     relation_name: Optional[str] = None
 
 
-class Defaults(BaseParserModel):
+class Defaults(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -542,7 +542,7 @@ class Type4(Enum):
     unique = 'unique'
 
 
-class Entity(BaseParserModel):
+class Entity(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -565,7 +565,7 @@ class Agg(Enum):
     count = 'count'
 
 
-class MeasureAggregationParameters(BaseParserModel):
+class MeasureAggregationParameters(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -586,7 +586,7 @@ class WindowChoice(Enum):
     count = 'count'
 
 
-class NonAdditiveDimension(BaseParserModel):
+class NonAdditiveDimension(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -608,7 +608,7 @@ class TimeGranularity(Enum):
     year = 'year'
 
 
-class DimensionValidityParams(BaseParserModel):
+class DimensionValidityParams(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -616,14 +616,14 @@ class DimensionValidityParams(BaseParserModel):
     is_end: Optional[bool] = False
 
 
-class SemanticModelConfig(BaseParserModel):
+class SemanticModelConfig(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
     enabled: Optional[bool] = True
 
 
-class NodeConfig(BaseParserModel):
+class NodeConfig(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -655,7 +655,7 @@ class NodeConfig(BaseParserModel):
     )
 
 
-class ColumnInfo(BaseParserModel):
+class ColumnInfo(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -668,7 +668,7 @@ class ColumnInfo(BaseParserModel):
     tags: Optional[List[str]] = []
 
 
-class SingularTestNode(BaseParserModel):
+class SingularTestNode(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -739,7 +739,7 @@ class SingularTestNode(BaseParserModel):
     )
 
 
-class HookNode(BaseParserModel):
+class HookNode(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -818,7 +818,7 @@ class HookNode(BaseParserModel):
     index: Optional[int] = None
 
 
-class ModelNode(BaseParserModel):
+class ModelNode(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -902,7 +902,7 @@ class ModelNode(BaseParserModel):
     defer_relation: Optional[DeferRelation] = None
 
 
-class RPCNode(BaseParserModel):
+class RPCNode(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -980,7 +980,7 @@ class RPCNode(BaseParserModel):
     )
 
 
-class SqlNode(BaseParserModel):
+class SqlNode(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1058,7 +1058,7 @@ class SqlNode(BaseParserModel):
     )
 
 
-class GenericTestNode(BaseParserModel):
+class GenericTestNode(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1133,7 +1133,7 @@ class GenericTestNode(BaseParserModel):
     attached_node: Optional[str] = None
 
 
-class SnapshotNode(BaseParserModel):
+class SnapshotNode(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1185,7 +1185,7 @@ class SnapshotNode(BaseParserModel):
     defer_relation: Optional[DeferRelation] = None
 
 
-class SeedNode(BaseParserModel):
+class SeedNode(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1252,7 +1252,7 @@ class SeedNode(BaseParserModel):
     defer_relation: Optional[DeferRelation] = None
 
 
-class FreshnessThreshold(BaseParserModel):
+class FreshnessThreshold(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1261,7 +1261,7 @@ class FreshnessThreshold(BaseParserModel):
     filter: Optional[str] = None
 
 
-class ExternalTable(BaseParserModel):
+class ExternalTable(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -1272,7 +1272,7 @@ class ExternalTable(BaseParserModel):
     partitions: Optional[Union[List[str], List[ExternalPartition]]] = None
 
 
-class Macro(BaseParserModel):
+class Macro(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1297,7 +1297,7 @@ class Macro(BaseParserModel):
     supported_languages: Optional[List[SupportedLanguage]] = None
 
 
-class Exposure(BaseParserModel):
+class Exposure(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1329,7 +1329,7 @@ class Exposure(BaseParserModel):
     created_at: Optional[float] = 1691439003.411563
 
 
-class MetricInputMeasure(BaseParserModel):
+class MetricInputMeasure(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1338,7 +1338,7 @@ class MetricInputMeasure(BaseParserModel):
     alias: Optional[str] = None
 
 
-class MetricInput(BaseParserModel):
+class MetricInput(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1349,7 +1349,7 @@ class MetricInput(BaseParserModel):
     offset_to_grain: Optional[OffsetToGrain] = None
 
 
-class SourceFileMetadata(BaseParserModel):
+class SourceFileMetadata(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1357,7 +1357,7 @@ class SourceFileMetadata(BaseParserModel):
     file_slice: FileSlice
 
 
-class Measure(BaseParserModel):
+class Measure(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1371,7 +1371,7 @@ class Measure(BaseParserModel):
     agg_time_dimension: Optional[str] = None
 
 
-class DimensionTypeParams(BaseParserModel):
+class DimensionTypeParams(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1379,7 +1379,7 @@ class DimensionTypeParams(BaseParserModel):
     validity_params: Optional[DimensionValidityParams] = None
 
 
-class AnalysisNode(BaseParserModel):
+class AnalysisNode(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1457,7 +1457,7 @@ class AnalysisNode(BaseParserModel):
     )
 
 
-class SourceDefinition(BaseParserModel):
+class SourceDefinition(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1496,7 +1496,7 @@ class SourceDefinition(BaseParserModel):
     created_at: Optional[float] = 1691439003.408927
 
 
-class MetricTypeParams(BaseParserModel):
+class MetricTypeParams(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1510,7 +1510,7 @@ class MetricTypeParams(BaseParserModel):
     metrics: Optional[List[MetricInput]] = None
 
 
-class Dimension(BaseParserModel):
+class Dimension(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1523,7 +1523,7 @@ class Dimension(BaseParserModel):
     metadata: Optional[SourceFileMetadata] = None
 
 
-class Metric(BaseParserModel):
+class Metric(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1558,7 +1558,7 @@ class Metric(BaseParserModel):
     group: Optional[str] = None
 
 
-class SemanticModel(BaseParserModel):
+class SemanticModel(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1588,7 +1588,7 @@ class SemanticModel(BaseParserModel):
     primary_entity: Optional[str] = None
 
 
-class ManifestV10(BaseParserModel):
+class ManifestV10(BaseManifestParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )

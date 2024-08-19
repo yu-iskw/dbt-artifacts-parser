@@ -7,10 +7,10 @@ from typing import Dict, List, Optional, Union
 
 from pydantic import AwareDatetime, ConfigDict, Field
 
-from dbt_artifacts_parser.parsers.base import BaseParserModel
+from dbt_artifacts_parser.parsers.base import BaseCatalogParserModel
 
 
-class CatalogMetadata(BaseParserModel):
+class CatalogMetadata(BaseCatalogParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -21,7 +21,7 @@ class CatalogMetadata(BaseParserModel):
     env: Optional[Dict[str, str]] = {}
 
 
-class TableMetadata(BaseParserModel):
+class TableMetadata(BaseCatalogParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -33,7 +33,7 @@ class TableMetadata(BaseParserModel):
     owner: Optional[str] = None
 
 
-class ColumnMetadata(BaseParserModel):
+class ColumnMetadata(BaseCatalogParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -43,7 +43,7 @@ class ColumnMetadata(BaseParserModel):
     name: str
 
 
-class StatsItem(BaseParserModel):
+class StatsItem(BaseCatalogParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -54,7 +54,7 @@ class StatsItem(BaseParserModel):
     include: bool
 
 
-class CatalogTable(BaseParserModel):
+class CatalogTable(BaseCatalogParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -64,7 +64,7 @@ class CatalogTable(BaseParserModel):
     unique_id: Optional[str] = None
 
 
-class CatalogV1(BaseParserModel):
+class CatalogV1(BaseCatalogParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
