@@ -1606,7 +1606,7 @@ class ParsedMetric(BaseParserModel):
     refs: Optional[List[List[str]]] = []
     metrics: Optional[List[List[str]]] = []
     created_at: Optional[float] = 1658840564.1985369
-    
+
     model_config = ConfigDict(protected_namespaces=())
 
 
