@@ -789,6 +789,7 @@ class Nodes4(BaseParserModel):
     deprecation_date: Optional[str] = None
     defer_relation: Optional[DeferRelation1] = None
     primary_key: Optional[List[str]] = None
+    time_spine: Optional[str] = None
 
 
 class Config7(BaseParserModel):
