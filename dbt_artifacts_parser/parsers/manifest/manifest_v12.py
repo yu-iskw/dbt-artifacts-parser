@@ -740,6 +740,12 @@ class DeferRelation1(BaseParserModel):
     tags: List[str]
     config: Optional[Config6] = None
 
+class TimeSpine(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    standard_granularity_column: str
+
 
 class Nodes4(BaseParserModel):
     model_config = ConfigDict(
@@ -789,7 +795,7 @@ class Nodes4(BaseParserModel):
     deprecation_date: Optional[str] = None
     defer_relation: Optional[DeferRelation1] = None
     primary_key: Optional[List[str]] = None
-    time_spine: Optional[str] = None
+    time_spine: Optional[TimeSpine] = None
 
 
 class Config7(BaseParserModel):
