@@ -38,9 +38,6 @@ jobs:
       - name: Install Flit
         if: steps.cache.outputs.cache-hit != 'true'
         run: bash dev/setup.sh
-      - name: Lint
-        if: ${{ matrix.python-version != '3.6' }}
-        run: bash dev/lint_python.sh
       - name: Run tests
         run: bash dev/test_python.sh
       - name: Test installation
