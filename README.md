@@ -287,8 +287,8 @@ If you are interested in contributing to this package, please check out the [CON
 
 <!-- readme: contributors -start -->
 <table>
- <tbody>
-  <tr>
+	<tbody>
+		<tr>
             <td align="center">
                 <a href="https://github.com/yu-iskw">
                     <img src="https://avatars.githubusercontent.com/u/1523515?v=4" width="100;" alt="yu-iskw"/>
@@ -331,8 +331,8 @@ If you are interested in contributing to this package, please check out the [CON
                     <sub><b>Onkar Ravgan</b></sub>
                 </a>
             </td>
-  </tr>
-  <tr>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/meyer-glean">
                     <img src="https://avatars.githubusercontent.com/u/134302890?v=4" width="100;" alt="meyer-glean"/>
@@ -340,7 +340,7 @@ If you are interested in contributing to this package, please check out the [CON
                     <sub><b>Null</b></sub>
                 </a>
             </td>
-  </tr>
- <tbody>
+		</tr>
+	<tbody>
 </table>
 <!-- readme: contributors -end -->
