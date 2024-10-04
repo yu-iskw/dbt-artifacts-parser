@@ -11,6 +11,8 @@
 This is a dbt artifacts parse in python.
 It enables us to deal with `catalog.json`, `manifest.json`, `run-results.json` and `sources.json` as python objects.
 
+This package is primarily designed for dbt-core, enabling seamless interaction with dbt artifacts as Python objects. While dbt Cloud provides additional artifact types beyond those of dbt-core, this package does not offer comprehensive support for them.
+
 ## Supported Versions and Compatibility
 
 > **⚠️ Important Note:**
@@ -32,12 +34,15 @@ pip install -U dbt-artifacts-parser
 ```
 
 ## Python classes
+
 Those are the classes to parse dbt artifacts.
 
 ### Catalog
+
 - [CatalogV1](dbt_artifacts_parser/parsers/catalog/catalog_v1.py) for catalog.json v1
 
 ### Manifest
+
 - [ManifestV1](dbt_artifacts_parser/parsers/manifest/manifest_v1.py) for manifest.json v1
 - [ManifestV2](dbt_artifacts_parser/parsers/manifest/manifest_v2.py) for manifest.json v2
 - [ManifestV3](dbt_artifacts_parser/parsers/manifest/manifest_v3.py) for manifest.json v3
@@ -52,6 +57,7 @@ Those are the classes to parse dbt artifacts.
 - [ManifestV12](dbt_artifacts_parser/parsers/manifest/manifest_v12.py) for manifest.json v12
 
 ### Run Results
+
 - [RunResultsV1](dbt_artifacts_parser/parsers/manifest/manifest_v1.py) for run_results.json v1
 - [RunResultsV2](dbt_artifacts_parser/parsers/manifest/manifest_v2.py) for run_results.json v2
 - [RunResultsV3](dbt_artifacts_parser/parsers/manifest/manifest_v3.py) for run_results.json v3
@@ -60,6 +66,7 @@ Those are the classes to parse dbt artifacts.
 - [RunResultsV6](dbt_artifacts_parser/parsers/manifest/manifest_v6.py) for run_results.json v6
 
 ### Sources
+
 - [SourcesV1](dbt_artifacts_parser/parsers/sources/sources_v1.py) for sources.json v1
 - [SourcesV2](dbt_artifacts_parser/parsers/sources/sources_v2.py) for sources.json v2
 - [SourcesV3](dbt_artifacts_parser/parsers/sources/sources_v3.py) for sources.json v3
@@ -67,6 +74,7 @@ Those are the classes to parse dbt artifacts.
 ## Examples
 
 ### Parse catalog.json
+
 ```python
 import json
 
@@ -272,10 +280,15 @@ with open("path/to/sources.json", "r") as fp:
 ```
 
 ## Contributors
+
+Thank you for your contributions!
+
+If you are interested in contributing to this package, please check out the [CONTRIBUTING.md](./CONTRIBUTING.md).
+
 <!-- readme: contributors -start -->
 <table>
-	<tbody>
-		<tr>
+ <tbody>
+  <tr>
             <td align="center">
                 <a href="https://github.com/yu-iskw">
                     <img src="https://avatars.githubusercontent.com/u/1523515?v=4" width="100;" alt="yu-iskw"/>
@@ -318,8 +331,8 @@ with open("path/to/sources.json", "r") as fp:
                     <sub><b>Onkar Ravgan</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
+  </tr>
+  <tr>
             <td align="center">
                 <a href="https://github.com/meyer-glean">
                     <img src="https://avatars.githubusercontent.com/u/134302890?v=4" width="100;" alt="meyer-glean"/>
@@ -327,7 +340,7 @@ with open("path/to/sources.json", "r") as fp:
                     <sub><b>Null</b></sub>
                 </a>
             </td>
-		</tr>
-	<tbody>
+  </tr>
+ <tbody>
 </table>
 <!-- readme: contributors -end -->
