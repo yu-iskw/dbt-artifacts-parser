@@ -661,6 +661,13 @@ class Contract8(BaseParserModel):
     checksum: Optional[str] = None
 
 
+class TimeSpine(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    standard_granularity_column: str
+
+
 class Nodes4(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -704,6 +711,7 @@ class Nodes4(BaseParserModel):
     extra_ctes: Optional[List[ExtraCte]] = None
     field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
     contract: Optional[Contract8] = Field(None, title='Contract')
+    time_spine: Optional[TimeSpine] = None
 
 
 class Contract9(BaseParserModel):
