@@ -16,7 +16,7 @@ class Metadata(BaseParserModel):
         extra='forbid',
     )
     dbt_schema_version: str
-    dbt_version: Optional[str] = '1.8.0a1'
+    dbt_version: Optional[str] = '1.9.0b2'
     generated_at: Optional[str] = None
     invocation_id: Optional[str] = None
     env: Optional[Dict[str, str]] = None
@@ -26,6 +26,7 @@ class Status(Enum):
     success = 'success'
     error = 'error'
     skipped = 'skipped'
+    partial_success = 'partial success'
 
 
 class Status1(Enum):
@@ -52,6 +53,14 @@ class TimingItem(BaseParserModel):
     completed_at: Optional[str] = None
 
 
+class BatchResults(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    successful: Optional[List[List]] = None
+    failed: Optional[List[List]] = None
+
+
 class Result(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -67,6 +76,7 @@ class Result(BaseParserModel):
     compiled: Optional[bool] = None
     compiled_code: Optional[str] = None
     relation_name: Optional[str] = None
+    batch_results: Optional[BatchResults] = None
 
 
 class RunResultsV6(BaseParserModel):

@@ -1,53 +1,24 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
-  "required": [
-    "metadata",
-    "results",
-    "elapsed_time"
-  ],
+  "title": "FreshnessExecutionResultArtifact",
   "properties": {
     "metadata": {
-      "$ref": "#/definitions/FreshnessMetadata"
-    },
-    "results": {
-      "type": "array",
-      "items": {
-        "oneOf": [
-          {
-            "$ref": "#/definitions/SourceFreshnessRuntimeError"
-          },
-          {
-            "$ref": "#/definitions/SourceFreshnessOutput"
-          }
-        ]
-      }
-    },
-    "elapsed_time": {
-      "type": "number"
-    }
-  },
-  "additionalProperties": false,
-  "description": "FreshnessExecutionResultArtifact(metadata: dbt.contracts.results.FreshnessMetadata, results: Sequence[Union[dbt.contracts.results.SourceFreshnessRuntimeError, dbt.contracts.results.SourceFreshnessOutput]], elapsed_time: float)",
-  "definitions": {
-    "FreshnessMetadata": {
       "type": "object",
-      "required": [],
+      "title": "FreshnessMetadata",
       "properties": {
         "dbt_schema_version": {
-          "type": "string",
-          "default": "https://schemas.getdbt.com/dbt/sources/v3.json"
+          "type": "string"
         },
         "dbt_version": {
           "type": "string",
-          "default": "1.0.0b2"
+          "default": "1.9.0b2"
         },
         "generated_at": {
-          "type": "string",
-          "format": "date-time",
-          "default": "2021-11-02T20:18:06.796684Z"
+          "type": "string"
         },
         "invocation_id": {
-          "oneOf": [
+          "anyOf": [
             {
               "type": "string"
             },
@@ -61,220 +32,249 @@
           "additionalProperties": {
             "type": "string"
           },
-          "default": {}
-        }
-      },
-      "additionalProperties": false,
-      "description": "FreshnessMetadata(dbt_schema_version: str = <factory>, dbt_version: str = '1.0.0b2', generated_at: datetime.datetime = <factory>, invocation_id: Union[str, NoneType] = <factory>, env: Dict[str, str] = <factory>)"
-    },
-    "SourceFreshnessRuntimeError": {
-      "type": "object",
-      "required": [
-        "unique_id",
-        "status"
-      ],
-      "properties": {
-        "unique_id": {
-          "type": "string"
-        },
-        "error": {
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "status": {
-          "type": "string",
-          "enum": [
-            "runtime error"
-          ]
-        }
-      },
-      "additionalProperties": false,
-      "description": "SourceFreshnessRuntimeError(unique_id: str, error: Union[str, int, NoneType], status: dbt.contracts.results.FreshnessErrorEnum)"
-    },
-    "SourceFreshnessOutput": {
-      "type": "object",
-      "required": [
-        "unique_id",
-        "max_loaded_at",
-        "snapshotted_at",
-        "max_loaded_at_time_ago_in_s",
-        "status",
-        "criteria",
-        "adapter_response",
-        "timing",
-        "thread_id",
-        "execution_time"
-      ],
-      "properties": {
-        "unique_id": {
-          "type": "string"
-        },
-        "max_loaded_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "snapshotted_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "max_loaded_at_time_ago_in_s": {
-          "type": "number"
-        },
-        "status": {
-          "type": "string",
-          "enum": [
-            "pass",
-            "warn",
-            "error",
-            "runtime error"
-          ]
-        },
-        "criteria": {
-          "$ref": "#/definitions/FreshnessThreshold"
-        },
-        "adapter_response": {
-          "type": "object"
-        },
-        "timing": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/TimingInfo"
+          "propertyNames": {
+            "type": "string"
           }
-        },
-        "thread_id": {
-          "type": "string"
-        },
-        "execution_time": {
-          "type": "number"
         }
       },
-      "additionalProperties": false,
-      "description": "SourceFreshnessOutput(unique_id: str, max_loaded_at: datetime.datetime, snapshotted_at: datetime.datetime, max_loaded_at_time_ago_in_s: float, status: dbt.contracts.results.FreshnessStatus, criteria: dbt.contracts.graph.unparsed.FreshnessThreshold, adapter_response: Dict[str, Any], timing: List[dbt.contracts.results.TimingInfo], thread_id: str, execution_time: float)"
+      "additionalProperties": false
     },
-    "FreshnessThreshold": {
-      "type": "object",
-      "required": [],
-      "properties": {
-        "warn_after": {
-          "oneOf": [
-            {
-              "$ref": "#/definitions/Time"
+    "results": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "object",
+            "title": "SourceFreshnessRuntimeError",
+            "properties": {
+              "unique_id": {
+                "type": "string"
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "status": {
+                "enum": [
+                  "runtime error"
+                ]
+              }
             },
-            {
-              "type": "null"
-            }
-          ],
-          "default": {
-            "count": null,
-            "period": null
+            "additionalProperties": false,
+            "required": [
+              "unique_id",
+              "error",
+              "status"
+            ]
+          },
+          {
+            "type": "object",
+            "title": "SourceFreshnessOutput",
+            "properties": {
+              "unique_id": {
+                "type": "string"
+              },
+              "max_loaded_at": {
+                "type": "string"
+              },
+              "snapshotted_at": {
+                "type": "string"
+              },
+              "max_loaded_at_time_ago_in_s": {
+                "type": "number"
+              },
+              "status": {
+                "enum": [
+                  "pass",
+                  "warn",
+                  "error",
+                  "runtime error"
+                ]
+              },
+              "criteria": {
+                "type": "object",
+                "title": "FreshnessThreshold",
+                "properties": {
+                  "warn_after": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "title": "Time",
+                        "properties": {
+                          "count": {
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
+                          },
+                          "period": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "minute",
+                                  "hour",
+                                  "day"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "error_after": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "title": "Time",
+                        "properties": {
+                          "count": {
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
+                          },
+                          "period": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "minute",
+                                  "hour",
+                                  "day"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "filter": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null
+                  }
+                },
+                "additionalProperties": false
+              },
+              "adapter_response": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                }
+              },
+              "timing": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "title": "TimingInfo",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "started_at": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null
+                    },
+                    "completed_at": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "name"
+                  ]
+                }
+              },
+              "thread_id": {
+                "type": "string"
+              },
+              "execution_time": {
+                "type": "number"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "unique_id",
+              "max_loaded_at",
+              "snapshotted_at",
+              "max_loaded_at_time_ago_in_s",
+              "status",
+              "criteria",
+              "adapter_response",
+              "timing",
+              "thread_id",
+              "execution_time"
+            ]
           }
-        },
-        "error_after": {
-          "oneOf": [
-            {
-              "$ref": "#/definitions/Time"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": {
-            "count": null,
-            "period": null
-          }
-        },
-        "filter": {
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        }
-      },
-      "additionalProperties": false,
-      "description": "FreshnessThreshold(warn_after: Union[dbt.contracts.graph.unparsed.Time, NoneType] = <factory>, error_after: Union[dbt.contracts.graph.unparsed.Time, NoneType] = <factory>, filter: Union[str, NoneType] = None)"
+        ]
+      }
     },
-    "Time": {
-      "type": "object",
-      "required": [],
-      "properties": {
-        "count": {
-          "oneOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "period": {
-          "oneOf": [
-            {
-              "type": "string",
-              "enum": [
-                "minute",
-                "hour",
-                "day"
-              ]
-            },
-            {
-              "type": "null"
-            }
-          ]
-        }
-      },
-      "additionalProperties": false,
-      "description": "Time(count: Union[int, NoneType] = None, period: Union[dbt.contracts.graph.unparsed.TimePeriod, NoneType] = None)"
-    },
-    "TimingInfo": {
-      "type": "object",
-      "required": [
-        "name"
-      ],
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "started_at": {
-          "oneOf": [
-            {
-              "type": "string",
-              "format": "date-time"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "completed_at": {
-          "oneOf": [
-            {
-              "type": "string",
-              "format": "date-time"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        }
-      },
-      "additionalProperties": false,
-      "description": "TimingInfo(name: str, started_at: Union[datetime.datetime, NoneType] = None, completed_at: Union[datetime.datetime, NoneType] = None)"
+    "elapsed_time": {
+      "type": "number"
     }
   },
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "required": [
+    "metadata",
+    "results",
+    "elapsed_time"
+  ],
   "$id": "https://schemas.getdbt.com/dbt/sources/v3.json"
 }
