@@ -287,8 +287,8 @@ If you are interested in contributing to this package, please check out the [CON
 
 <!-- readme: contributors -start -->
 <table>
- <tbody>
-  <tr>
+	<tbody>
+		<tr>
             <td align="center">
                 <a href="https://github.com/yu-iskw">
                     <img src="https://avatars.githubusercontent.com/u/1523515?v=4" width="100;" alt="yu-iskw"/>
@@ -318,12 +318,21 @@ If you are interested in contributing to this package, please check out the [CON
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/ulixius9">
+                    <img src="https://avatars.githubusercontent.com/u/39544459?v=4" width="100;" alt="ulixius9"/>
+                    <br />
+                    <sub><b>Mayur Singal</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/nabilm">
                     <img src="https://avatars.githubusercontent.com/u/987369?v=4" width="100;" alt="nabilm"/>
                     <br />
                     <sub><b>Mohamed Nabil Mahmoud Hafez</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/OnkarVO7">
                     <img src="https://avatars.githubusercontent.com/u/28966081?v=4" width="100;" alt="OnkarVO7"/>
@@ -331,8 +340,6 @@ If you are interested in contributing to this package, please check out the [CON
                     <sub><b>Onkar Ravgan</b></sub>
                 </a>
             </td>
-  </tr>
-  <tr>
             <td align="center">
                 <a href="https://github.com/meyer-glean">
                     <img src="https://avatars.githubusercontent.com/u/134302890?v=4" width="100;" alt="meyer-glean"/>
@@ -340,7 +347,7 @@ If you are interested in contributing to this package, please check out the [CON
                     <sub><b>Null</b></sub>
                 </a>
             </td>
-  </tr>
- <tbody>
+		</tr>
+	<tbody>
 </table>
 <!-- readme: contributors -end -->
