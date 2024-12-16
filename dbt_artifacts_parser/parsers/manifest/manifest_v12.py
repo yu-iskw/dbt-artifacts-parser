@@ -1623,21 +1623,7 @@ class OffsetWindow(BaseParserModel):
         extra='forbid',
     )
     count: int
-    granularity: Granularity
-
-
-class OffsetToGrain(Enum):
-    nanosecond = 'nanosecond'
-    microsecond = 'microsecond'
-    millisecond = 'millisecond'
-    second = 'second'
-    minute = 'minute'
-    hour = 'hour'
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
+    granularity: str
 
 
 class Numerator(BaseParserModel):
@@ -1648,7 +1634,7 @@ class Numerator(BaseParserModel):
     filter: Optional[Filter2] = None
     alias: Optional[str] = None
     offset_window: Optional[OffsetWindow] = None
-    offset_to_grain: Optional[OffsetToGrain] = None
+    offset_to_grain: Optional[str] = None
 
 
 class Filter3(BaseParserModel):
@@ -1658,14 +1644,6 @@ class Filter3(BaseParserModel):
     where_filters: List[WhereFilter]
 
 
-class OffsetWindow1(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
-
-
 class Denominator(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -1673,8 +1651,8 @@ class Denominator(BaseParserModel):
     name: str
     filter: Optional[Filter3] = None
     alias: Optional[str] = None
-    offset_window: Optional[OffsetWindow1] = None
-    offset_to_grain: Optional[OffsetToGrain] = None
+    offset_window: Optional[OffsetWindow] = None
+    offset_to_grain: Optional[str] = None
 
 
 class Window(BaseParserModel):
@@ -1706,14 +1684,6 @@ class Filter4(BaseParserModel):
     where_filters: List[WhereFilter]
 
 
-class OffsetWindow2(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
-
-
 class Metric(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -1721,8 +1691,8 @@ class Metric(BaseParserModel):
     name: str
     filter: Optional[Filter4] = None
     alias: Optional[str] = None
-    offset_window: Optional[OffsetWindow2] = None
-    offset_to_grain: Optional[OffsetToGrain] = None
+    offset_window: Optional[OffsetWindow] = None
+    offset_to_grain: Optional[str] = None
 
 
 class Filter5(BaseParserModel):
@@ -1771,7 +1741,7 @@ class Window1(BaseParserModel):
         extra='forbid',
     )
     count: int
-    granularity: Granularity
+    granularity: str
 
 
 class ConstantProperty(BaseParserModel):
@@ -1794,14 +1764,6 @@ class ConversionTypeParams(BaseParserModel):
     constant_properties: Optional[List[ConstantProperty]] = None
 
 
-class Window2(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
-
-
 class PeriodAgg(Enum):
     first = 'first'
     last = 'last'
@@ -1812,8 +1774,8 @@ class CumulativeTypeParams(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    window: Optional[Window2] = None
-    grain_to_date: Optional[GrainToDate] = None
+    window: Optional[Window1] = None
+    grain_to_date: Optional[str] = None
     period_agg: Optional[PeriodAgg] = 'first'
 
 
@@ -1858,20 +1820,6 @@ class Metadata1(BaseParserModel):
     file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class TimeGranularity(Enum):
-    nanosecond = 'nanosecond'
-    microsecond = 'microsecond'
-    millisecond = 'millisecond'
-    second = 'second'
-    minute = 'minute'
-    hour = 'hour'
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
-
-
 class Config13(BaseParserModel):
     model_config = ConfigDict(
         extra='allow',
@@ -1899,7 +1847,7 @@ class Metrics(BaseParserModel):
     type_params: TypeParams = Field(..., title='MetricTypeParams')
     filter: Optional[Filter7] = None
     metadata: Optional[Metadata1] = None
-    time_granularity: Optional[TimeGranularity] = None
+    time_granularity: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None
     tags: Optional[List[str]] = None
     config: Optional[Config13] = Field(None, title='MetricConfig')
@@ -3268,14 +3216,6 @@ class Filter10(BaseParserModel):
     where_filters: List[WhereFilter]
 
 
-class OffsetWindow3(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
-
-
 class Numerator1(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -3283,8 +3223,8 @@ class Numerator1(BaseParserModel):
     name: str
     filter: Optional[Filter10] = None
     alias: Optional[str] = None
-    offset_window: Optional[OffsetWindow3] = None
-    offset_to_grain: Optional[OffsetToGrain] = None
+    offset_window: Optional[OffsetWindow] = None
+    offset_to_grain: Optional[str] = None
 
 
 class Filter11(BaseParserModel):
@@ -3294,14 +3234,6 @@ class Filter11(BaseParserModel):
     where_filters: List[WhereFilter]
 
 
-class OffsetWindow4(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
-
-
 class Denominator1(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -3309,8 +3241,8 @@ class Denominator1(BaseParserModel):
     name: str
     filter: Optional[Filter11] = None
     alias: Optional[str] = None
-    offset_window: Optional[OffsetWindow4] = None
-    offset_to_grain: Optional[OffsetToGrain] = None
+    offset_window: Optional[OffsetWindow] = None
+    offset_to_grain: Optional[str] = None
 
 
 class Window3(BaseParserModel):
@@ -3328,14 +3260,6 @@ class Filter12(BaseParserModel):
     where_filters: List[WhereFilter]
 
 
-class OffsetWindow5(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
-
-
 class Metric1(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -3343,8 +3267,8 @@ class Metric1(BaseParserModel):
     name: str
     filter: Optional[Filter12] = None
     alias: Optional[str] = None
-    offset_window: Optional[OffsetWindow5] = None
-    offset_to_grain: Optional[OffsetToGrain] = None
+    offset_window: Optional[OffsetWindow] = None
+    offset_to_grain: Optional[str] = None
 
 
 class Filter13(BaseParserModel):
@@ -3388,7 +3312,7 @@ class Window4(BaseParserModel):
         extra='forbid',
     )
     count: int
-    granularity: Granularity
+    granularity: str
 
 
 class ConversionTypeParams1(BaseParserModel):
@@ -3403,20 +3327,12 @@ class ConversionTypeParams1(BaseParserModel):
     constant_properties: Optional[List[ConstantProperty]] = None
 
 
-class Window5(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
-
-
 class CumulativeTypeParams1(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    window: Optional[Window5] = None
-    grain_to_date: Optional[GrainToDate] = None
+    window: Optional[Window4] = None
+    grain_to_date: Optional[str] = None
     period_agg: Optional[PeriodAgg] = 'first'
 
 
@@ -3478,7 +3394,7 @@ class Disabled10(BaseParserModel):
     type_params: TypeParams1 = Field(..., title='MetricTypeParams')
     filter: Optional[Filter15] = None
     metadata: Optional[Metadata2] = None
-    time_granularity: Optional[TimeGranularity] = None
+    time_granularity: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None
     tags: Optional[List[str]] = None
     config: Optional[Config27] = Field(None, title='MetricConfig')
@@ -3681,6 +3597,20 @@ class Measure2(BaseParserModel):
 class Type25(Enum):
     categorical = 'categorical'
     time = 'time'
+
+
+class TimeGranularity(Enum):
+    nanosecond = 'nanosecond'
+    microsecond = 'microsecond'
+    millisecond = 'millisecond'
+    second = 'second'
+    minute = 'minute'
+    hour = 'hour'
+    day = 'day'
+    week = 'week'
+    month = 'month'
+    quarter = 'quarter'
+    year = 'year'
 
 
 class ValidityParams(BaseParserModel):
