@@ -13,7 +13,7 @@
         },
         "dbt_version": {
           "type": "string",
-          "default": "1.8.0b3"
+          "default": "1.9.0b4"
         },
         "generated_at": {
           "type": "string"
@@ -259,6 +259,15 @@
                     ],
                     "default": null
                   },
+                  "batch_size": {
+                    "default": null
+                  },
+                  "lookback": {
+                    "default": 1
+                  },
+                  "begin": {
+                    "default": null
+                  },
                   "persist_docs": {
                     "type": "object",
                     "propertyNames": {
@@ -434,6 +443,12 @@
                     },
                     "additionalProperties": false
                   },
+                  "event_time": {
+                    "default": null
+                  },
+                  "concurrent_batches": {
+                    "default": null
+                  },
                   "delimiter": {
                     "type": "string",
                     "default": ","
@@ -537,6 +552,23 @@
                           "warn_unsupported": {
                             "type": "boolean",
                             "default": true
+                          },
+                          "to": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
+                          },
+                          "to_columns": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         },
                         "additionalProperties": false,
@@ -567,6 +599,29 @@
                       "propertyNames": {
                         "type": "string"
                       }
+                    },
+                    "granularity": {
+                      "anyOf": [
+                        {
+                          "enum": [
+                            "nanosecond",
+                            "microsecond",
+                            "millisecond",
+                            "second",
+                            "minute",
+                            "hour",
+                            "day",
+                            "week",
+                            "month",
+                            "quarter",
+                            "year"
+                          ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null
                     }
                   },
                   "additionalProperties": true,
@@ -649,6 +704,12 @@
                 "type": "number"
               },
               "config_call_dict": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                }
+              },
+              "unrendered_config_call_dict": {
                 "type": "object",
                 "propertyNames": {
                   "type": "string"
@@ -869,6 +930,15 @@
                                 ],
                                 "default": null
                               },
+                              "batch_size": {
+                                "default": null
+                              },
+                              "lookback": {
+                                "default": 1
+                              },
+                              "begin": {
+                                "default": null
+                              },
                               "persist_docs": {
                                 "type": "object",
                                 "propertyNames": {
@@ -1043,6 +1113,12 @@
                                   }
                                 },
                                 "additionalProperties": false
+                              },
+                              "event_time": {
+                                "default": null
+                              },
+                              "concurrent_batches": {
+                                "default": null
                               }
                             },
                             "additionalProperties": true
@@ -1243,6 +1319,15 @@
                     ],
                     "default": null
                   },
+                  "batch_size": {
+                    "default": null
+                  },
+                  "lookback": {
+                    "default": 1
+                  },
+                  "begin": {
+                    "default": null
+                  },
                   "persist_docs": {
                     "type": "object",
                     "propertyNames": {
@@ -1417,6 +1502,12 @@
                       }
                     },
                     "additionalProperties": false
+                  },
+                  "event_time": {
+                    "default": null
+                  },
+                  "concurrent_batches": {
+                    "default": null
                   }
                 },
                 "additionalProperties": true
@@ -1506,6 +1597,23 @@
                           "warn_unsupported": {
                             "type": "boolean",
                             "default": true
+                          },
+                          "to": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
+                          },
+                          "to_columns": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         },
                         "additionalProperties": false,
@@ -1536,6 +1644,29 @@
                       "propertyNames": {
                         "type": "string"
                       }
+                    },
+                    "granularity": {
+                      "anyOf": [
+                        {
+                          "enum": [
+                            "nanosecond",
+                            "microsecond",
+                            "millisecond",
+                            "second",
+                            "minute",
+                            "hour",
+                            "day",
+                            "week",
+                            "month",
+                            "quarter",
+                            "year"
+                          ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null
                     }
                   },
                   "additionalProperties": true,
@@ -1618,6 +1749,12 @@
                 "type": "number"
               },
               "config_call_dict": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                }
+              },
+              "unrendered_config_call_dict": {
                 "type": "object",
                 "propertyNames": {
                   "type": "string"
@@ -2114,6 +2251,23 @@
                           "warn_unsupported": {
                             "type": "boolean",
                             "default": true
+                          },
+                          "to": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
+                          },
+                          "to_columns": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         },
                         "additionalProperties": false,
@@ -2144,6 +2298,29 @@
                       "propertyNames": {
                         "type": "string"
                       }
+                    },
+                    "granularity": {
+                      "anyOf": [
+                        {
+                          "enum": [
+                            "nanosecond",
+                            "microsecond",
+                            "millisecond",
+                            "second",
+                            "minute",
+                            "hour",
+                            "day",
+                            "week",
+                            "month",
+                            "quarter",
+                            "year"
+                          ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null
                     }
                   },
                   "additionalProperties": true,
@@ -2226,6 +2403,12 @@
                 "type": "number"
               },
               "config_call_dict": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                }
+              },
+              "unrendered_config_call_dict": {
                 "type": "object",
                 "propertyNames": {
                   "type": "string"
@@ -2584,6 +2767,15 @@
                     ],
                     "default": null
                   },
+                  "batch_size": {
+                    "default": null
+                  },
+                  "lookback": {
+                    "default": 1
+                  },
+                  "begin": {
+                    "default": null
+                  },
                   "persist_docs": {
                     "type": "object",
                     "propertyNames": {
@@ -2758,6 +2950,12 @@
                       }
                     },
                     "additionalProperties": false
+                  },
+                  "event_time": {
+                    "default": null
+                  },
+                  "concurrent_batches": {
+                    "default": null
                   }
                 },
                 "additionalProperties": true
@@ -2847,6 +3045,23 @@
                           "warn_unsupported": {
                             "type": "boolean",
                             "default": true
+                          },
+                          "to": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
+                          },
+                          "to_columns": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         },
                         "additionalProperties": false,
@@ -2877,6 +3092,29 @@
                       "propertyNames": {
                         "type": "string"
                       }
+                    },
+                    "granularity": {
+                      "anyOf": [
+                        {
+                          "enum": [
+                            "nanosecond",
+                            "microsecond",
+                            "millisecond",
+                            "second",
+                            "minute",
+                            "hour",
+                            "day",
+                            "week",
+                            "month",
+                            "quarter",
+                            "year"
+                          ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null
                     }
                   },
                   "additionalProperties": true,
@@ -2959,6 +3197,12 @@
                 "type": "number"
               },
               "config_call_dict": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                }
+              },
+              "unrendered_config_call_dict": {
                 "type": "object",
                 "propertyNames": {
                   "type": "string"
@@ -3328,6 +3572,15 @@
                     ],
                     "default": null
                   },
+                  "batch_size": {
+                    "default": null
+                  },
+                  "lookback": {
+                    "default": 1
+                  },
+                  "begin": {
+                    "default": null
+                  },
                   "persist_docs": {
                     "type": "object",
                     "propertyNames": {
@@ -3503,6 +3756,12 @@
                     },
                     "additionalProperties": false
                   },
+                  "event_time": {
+                    "default": null
+                  },
+                  "concurrent_batches": {
+                    "default": null
+                  },
                   "access": {
                     "enum": [
                       "private",
@@ -3599,6 +3858,23 @@
                           "warn_unsupported": {
                             "type": "boolean",
                             "default": true
+                          },
+                          "to": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
+                          },
+                          "to_columns": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         },
                         "additionalProperties": false,
@@ -3629,6 +3905,29 @@
                       "propertyNames": {
                         "type": "string"
                       }
+                    },
+                    "granularity": {
+                      "anyOf": [
+                        {
+                          "enum": [
+                            "nanosecond",
+                            "microsecond",
+                            "millisecond",
+                            "second",
+                            "minute",
+                            "hour",
+                            "day",
+                            "week",
+                            "month",
+                            "quarter",
+                            "year"
+                          ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null
                     }
                   },
                   "additionalProperties": true,
@@ -3711,6 +4010,12 @@
                 "type": "number"
               },
               "config_call_dict": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                }
+              },
+              "unrendered_config_call_dict": {
                 "type": "object",
                 "propertyNames": {
                   "type": "string"
@@ -3954,6 +4259,23 @@
                       "type": "boolean",
                       "default": true
                     },
+                    "to": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null
+                    },
+                    "to_columns": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
                     "columns": {
                       "type": "array",
                       "items": {
@@ -4182,6 +4504,15 @@
                                 ],
                                 "default": null
                               },
+                              "batch_size": {
+                                "default": null
+                              },
+                              "lookback": {
+                                "default": 1
+                              },
+                              "begin": {
+                                "default": null
+                              },
                               "persist_docs": {
                                 "type": "object",
                                 "propertyNames": {
@@ -4356,6 +4687,12 @@
                                   }
                                 },
                                 "additionalProperties": false
+                              },
+                              "event_time": {
+                                "default": null
+                              },
+                              "concurrent_batches": {
+                                "default": null
                               }
                             },
                             "additionalProperties": true
@@ -4388,12 +4725,52 @@
                 "default": null
               },
               "primary_key": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "time_spine": {
                 "anyOf": [
                   {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
+                    "type": "object",
+                    "title": "TimeSpine",
+                    "properties": {
+                      "standard_granularity_column": {
+                        "type": "string"
+                      },
+                      "custom_granularities": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "title": "CustomGranularity",
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "column_name": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "default": null
+                            }
+                          },
+                          "additionalProperties": false,
+                          "required": [
+                            "name"
+                          ]
+                        }
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "standard_granularity_column"
+                    ]
                   },
                   {
                     "type": "null"
@@ -4570,6 +4947,15 @@
                     ],
                     "default": null
                   },
+                  "batch_size": {
+                    "default": null
+                  },
+                  "lookback": {
+                    "default": 1
+                  },
+                  "begin": {
+                    "default": null
+                  },
                   "persist_docs": {
                     "type": "object",
                     "propertyNames": {
@@ -4744,6 +5130,12 @@
                       }
                     },
                     "additionalProperties": false
+                  },
+                  "event_time": {
+                    "default": null
+                  },
+                  "concurrent_batches": {
+                    "default": null
                   }
                 },
                 "additionalProperties": true
@@ -4833,6 +5225,23 @@
                           "warn_unsupported": {
                             "type": "boolean",
                             "default": true
+                          },
+                          "to": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
+                          },
+                          "to_columns": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         },
                         "additionalProperties": false,
@@ -4863,6 +5272,29 @@
                       "propertyNames": {
                         "type": "string"
                       }
+                    },
+                    "granularity": {
+                      "anyOf": [
+                        {
+                          "enum": [
+                            "nanosecond",
+                            "microsecond",
+                            "millisecond",
+                            "second",
+                            "minute",
+                            "hour",
+                            "day",
+                            "week",
+                            "month",
+                            "quarter",
+                            "year"
+                          ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null
                     }
                   },
                   "additionalProperties": true,
@@ -4945,6 +5377,12 @@
                 "type": "number"
               },
               "config_call_dict": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                }
+              },
+              "unrendered_config_call_dict": {
                 "type": "object",
                 "propertyNames": {
                   "type": "string"
@@ -5441,6 +5879,23 @@
                           "warn_unsupported": {
                             "type": "boolean",
                             "default": true
+                          },
+                          "to": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
+                          },
+                          "to_columns": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         },
                         "additionalProperties": false,
@@ -5471,6 +5926,29 @@
                       "propertyNames": {
                         "type": "string"
                       }
+                    },
+                    "granularity": {
+                      "anyOf": [
+                        {
+                          "enum": [
+                            "nanosecond",
+                            "microsecond",
+                            "millisecond",
+                            "second",
+                            "minute",
+                            "hour",
+                            "day",
+                            "week",
+                            "month",
+                            "quarter",
+                            "year"
+                          ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null
                     }
                   },
                   "additionalProperties": true,
@@ -5553,6 +6031,12 @@
                 "type": "number"
               },
               "config_call_dict": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                }
+              },
+              "unrendered_config_call_dict": {
                 "type": "object",
                 "propertyNames": {
                   "type": "string"
@@ -5972,6 +6456,15 @@
                     ],
                     "default": null
                   },
+                  "batch_size": {
+                    "default": null
+                  },
+                  "lookback": {
+                    "default": 1
+                  },
+                  "begin": {
+                    "default": null
+                  },
                   "persist_docs": {
                     "type": "object",
                     "propertyNames": {
@@ -6069,6 +6562,12 @@
                         "type": "string"
                       },
                       {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      {
                         "type": "null"
                       }
                     ],
@@ -6141,6 +6640,12 @@
                     },
                     "additionalProperties": false
                   },
+                  "event_time": {
+                    "default": null
+                  },
+                  "concurrent_batches": {
+                    "default": null
+                  },
                   "strategy": {
                     "anyOf": [
                       {
@@ -6195,6 +6700,79 @@
                         "items": {
                           "type": "string"
                         }
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null
+                  },
+                  "snapshot_meta_column_names": {
+                    "type": "object",
+                    "title": "SnapshotMetaColumnNames",
+                    "properties": {
+                      "dbt_valid_to": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "default": null
+                      },
+                      "dbt_valid_from": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "default": null
+                      },
+                      "dbt_scd_id": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "default": null
+                      },
+                      "dbt_updated_at": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "default": null
+                      },
+                      "dbt_is_deleted": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "default": null
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "dbt_valid_to_current": {
+                    "anyOf": [
+                      {
+                        "type": "string"
                       },
                       {
                         "type": "null"
@@ -6290,6 +6868,23 @@
                           "warn_unsupported": {
                             "type": "boolean",
                             "default": true
+                          },
+                          "to": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
+                          },
+                          "to_columns": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         },
                         "additionalProperties": false,
@@ -6320,6 +6915,29 @@
                       "propertyNames": {
                         "type": "string"
                       }
+                    },
+                    "granularity": {
+                      "anyOf": [
+                        {
+                          "enum": [
+                            "nanosecond",
+                            "microsecond",
+                            "millisecond",
+                            "second",
+                            "minute",
+                            "hour",
+                            "day",
+                            "week",
+                            "month",
+                            "quarter",
+                            "year"
+                          ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null
                     }
                   },
                   "additionalProperties": true,
@@ -6402,6 +7020,12 @@
                 "type": "number"
               },
               "config_call_dict": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                }
+              },
+              "unrendered_config_call_dict": {
                 "type": "object",
                 "propertyNames": {
                   "type": "string"
@@ -6767,6 +7391,15 @@
                                 ],
                                 "default": null
                               },
+                              "batch_size": {
+                                "default": null
+                              },
+                              "lookback": {
+                                "default": 1
+                              },
+                              "begin": {
+                                "default": null
+                              },
                               "persist_docs": {
                                 "type": "object",
                                 "propertyNames": {
@@ -6941,6 +7574,12 @@
                                   }
                                 },
                                 "additionalProperties": false
+                              },
+                              "event_time": {
+                                "default": null
+                              },
+                              "concurrent_batches": {
+                                "default": null
                               }
                             },
                             "additionalProperties": true
@@ -7411,6 +8050,23 @@
                       "warn_unsupported": {
                         "type": "boolean",
                         "default": true
+                      },
+                      "to": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "default": null
+                      },
+                      "to_columns": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
                       }
                     },
                     "additionalProperties": false,
@@ -7441,6 +8097,29 @@
                   "propertyNames": {
                     "type": "string"
                   }
+                },
+                "granularity": {
+                  "anyOf": [
+                    {
+                      "enum": [
+                        "nanosecond",
+                        "microsecond",
+                        "millisecond",
+                        "second",
+                        "minute",
+                        "hour",
+                        "day",
+                        "week",
+                        "month",
+                        "quarter",
+                        "year"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
                 }
               },
               "additionalProperties": true,
@@ -7483,6 +8162,9 @@
               "enabled": {
                 "type": "boolean",
                 "default": true
+              },
+              "event_time": {
+                "default": null
               }
             },
             "additionalProperties": true
@@ -7517,6 +8199,28 @@
           },
           "created_at": {
             "type": "number"
+          },
+          "unrendered_database": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "unrendered_schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
           }
         },
         "additionalProperties": false,
@@ -8256,13 +8960,7 @@
                                 "type": "integer"
                               },
                               "granularity": {
-                                "enum": [
-                                  "day",
-                                  "week",
-                                  "month",
-                                  "quarter",
-                                  "year"
-                                ]
+                                "type": "string"
                               }
                             },
                             "additionalProperties": false,
@@ -8280,13 +8978,7 @@
                       "offset_to_grain": {
                         "anyOf": [
                           {
-                            "enum": [
-                              "day",
-                              "week",
-                              "month",
-                              "quarter",
-                              "year"
-                            ]
+                            "type": "string"
                           },
                           {
                             "type": "null"
@@ -8370,13 +9062,7 @@
                                 "type": "integer"
                               },
                               "granularity": {
-                                "enum": [
-                                  "day",
-                                  "week",
-                                  "month",
-                                  "quarter",
-                                  "year"
-                                ]
+                                "type": "string"
                               }
                             },
                             "additionalProperties": false,
@@ -8394,13 +9080,7 @@
                       "offset_to_grain": {
                         "anyOf": [
                           {
-                            "enum": [
-                              "day",
-                              "week",
-                              "month",
-                              "quarter",
-                              "year"
-                            ]
+                            "type": "string"
                           },
                           {
                             "type": "null"
@@ -8442,6 +9122,12 @@
                       },
                       "granularity": {
                         "enum": [
+                          "nanosecond",
+                          "microsecond",
+                          "millisecond",
+                          "second",
+                          "minute",
+                          "hour",
                           "day",
                           "week",
                           "month",
@@ -8466,6 +9152,12 @@
                 "anyOf": [
                   {
                     "enum": [
+                      "nanosecond",
+                      "microsecond",
+                      "millisecond",
+                      "second",
+                      "minute",
+                      "hour",
                       "day",
                       "week",
                       "month",
@@ -8545,13 +9237,7 @@
                                   "type": "integer"
                                 },
                                 "granularity": {
-                                  "enum": [
-                                    "day",
-                                    "week",
-                                    "month",
-                                    "quarter",
-                                    "year"
-                                  ]
+                                  "type": "string"
                                 }
                               },
                               "additionalProperties": false,
@@ -8569,13 +9255,7 @@
                         "offset_to_grain": {
                           "anyOf": [
                             {
-                              "enum": [
-                                "day",
-                                "week",
-                                "month",
-                                "quarter",
-                                "year"
-                              ]
+                              "type": "string"
                             },
                             {
                               "type": "null"
@@ -8768,13 +9448,7 @@
                                 "type": "integer"
                               },
                               "granularity": {
-                                "enum": [
-                                  "day",
-                                  "week",
-                                  "month",
-                                  "quarter",
-                                  "year"
-                                ]
+                                "type": "string"
                               }
                             },
                             "additionalProperties": false,
@@ -8824,6 +9498,65 @@
                       "conversion_measure",
                       "entity"
                     ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "cumulative_type_params": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "title": "CumulativeTypeParams",
+                    "properties": {
+                      "window": {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "title": "MetricTimeWindow",
+                            "properties": {
+                              "count": {
+                                "type": "integer"
+                              },
+                              "granularity": {
+                                "type": "string"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                              "count",
+                              "granularity"
+                            ]
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "default": null
+                      },
+                      "grain_to_date": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "default": null
+                      },
+                      "period_agg": {
+                        "enum": [
+                          "first",
+                          "last",
+                          "average"
+                        ],
+                        "default": "first"
+                      }
+                    },
+                    "additionalProperties": false
                   },
                   {
                     "type": "null"
@@ -8908,6 +9641,17 @@
                   "repo_file_path",
                   "file_slice"
                 ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "time_granularity": {
+            "anyOf": [
+              {
+                "type": "string"
               },
               {
                 "type": "null"
@@ -9324,6 +10068,15 @@
                           ],
                           "default": null
                         },
+                        "batch_size": {
+                          "default": null
+                        },
+                        "lookback": {
+                          "default": 1
+                        },
+                        "begin": {
+                          "default": null
+                        },
                         "persist_docs": {
                           "type": "object",
                           "propertyNames": {
@@ -9499,6 +10252,12 @@
                           },
                           "additionalProperties": false
                         },
+                        "event_time": {
+                          "default": null
+                        },
+                        "concurrent_batches": {
+                          "default": null
+                        },
                         "delimiter": {
                           "type": "string",
                           "default": ","
@@ -9602,6 +10361,23 @@
                                 "warn_unsupported": {
                                   "type": "boolean",
                                   "default": true
+                                },
+                                "to": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "to_columns": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
                                 }
                               },
                               "additionalProperties": false,
@@ -9632,6 +10408,29 @@
                             "propertyNames": {
                               "type": "string"
                             }
+                          },
+                          "granularity": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "nanosecond",
+                                  "microsecond",
+                                  "millisecond",
+                                  "second",
+                                  "minute",
+                                  "hour",
+                                  "day",
+                                  "week",
+                                  "month",
+                                  "quarter",
+                                  "year"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
                           }
                         },
                         "additionalProperties": true,
@@ -9714,6 +10513,12 @@
                       "type": "number"
                     },
                     "config_call_dict": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      }
+                    },
+                    "unrendered_config_call_dict": {
                       "type": "object",
                       "propertyNames": {
                         "type": "string"
@@ -9934,6 +10739,15 @@
                                       ],
                                       "default": null
                                     },
+                                    "batch_size": {
+                                      "default": null
+                                    },
+                                    "lookback": {
+                                      "default": 1
+                                    },
+                                    "begin": {
+                                      "default": null
+                                    },
                                     "persist_docs": {
                                       "type": "object",
                                       "propertyNames": {
@@ -10108,6 +10922,12 @@
                                         }
                                       },
                                       "additionalProperties": false
+                                    },
+                                    "event_time": {
+                                      "default": null
+                                    },
+                                    "concurrent_batches": {
+                                      "default": null
                                     }
                                   },
                                   "additionalProperties": true
@@ -10308,6 +11128,15 @@
                           ],
                           "default": null
                         },
+                        "batch_size": {
+                          "default": null
+                        },
+                        "lookback": {
+                          "default": 1
+                        },
+                        "begin": {
+                          "default": null
+                        },
                         "persist_docs": {
                           "type": "object",
                           "propertyNames": {
@@ -10482,6 +11311,12 @@
                             }
                           },
                           "additionalProperties": false
+                        },
+                        "event_time": {
+                          "default": null
+                        },
+                        "concurrent_batches": {
+                          "default": null
                         }
                       },
                       "additionalProperties": true
@@ -10571,6 +11406,23 @@
                                 "warn_unsupported": {
                                   "type": "boolean",
                                   "default": true
+                                },
+                                "to": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "to_columns": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
                                 }
                               },
                               "additionalProperties": false,
@@ -10601,6 +11453,29 @@
                             "propertyNames": {
                               "type": "string"
                             }
+                          },
+                          "granularity": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "nanosecond",
+                                  "microsecond",
+                                  "millisecond",
+                                  "second",
+                                  "minute",
+                                  "hour",
+                                  "day",
+                                  "week",
+                                  "month",
+                                  "quarter",
+                                  "year"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
                           }
                         },
                         "additionalProperties": true,
@@ -10683,6 +11558,12 @@
                       "type": "number"
                     },
                     "config_call_dict": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      }
+                    },
+                    "unrendered_config_call_dict": {
                       "type": "object",
                       "propertyNames": {
                         "type": "string"
@@ -11179,6 +12060,23 @@
                                 "warn_unsupported": {
                                   "type": "boolean",
                                   "default": true
+                                },
+                                "to": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "to_columns": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
                                 }
                               },
                               "additionalProperties": false,
@@ -11209,6 +12107,29 @@
                             "propertyNames": {
                               "type": "string"
                             }
+                          },
+                          "granularity": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "nanosecond",
+                                  "microsecond",
+                                  "millisecond",
+                                  "second",
+                                  "minute",
+                                  "hour",
+                                  "day",
+                                  "week",
+                                  "month",
+                                  "quarter",
+                                  "year"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
                           }
                         },
                         "additionalProperties": true,
@@ -11291,6 +12212,12 @@
                       "type": "number"
                     },
                     "config_call_dict": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      }
+                    },
+                    "unrendered_config_call_dict": {
                       "type": "object",
                       "propertyNames": {
                         "type": "string"
@@ -11649,6 +12576,15 @@
                           ],
                           "default": null
                         },
+                        "batch_size": {
+                          "default": null
+                        },
+                        "lookback": {
+                          "default": 1
+                        },
+                        "begin": {
+                          "default": null
+                        },
                         "persist_docs": {
                           "type": "object",
                           "propertyNames": {
@@ -11823,6 +12759,12 @@
                             }
                           },
                           "additionalProperties": false
+                        },
+                        "event_time": {
+                          "default": null
+                        },
+                        "concurrent_batches": {
+                          "default": null
                         }
                       },
                       "additionalProperties": true
@@ -11912,6 +12854,23 @@
                                 "warn_unsupported": {
                                   "type": "boolean",
                                   "default": true
+                                },
+                                "to": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "to_columns": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
                                 }
                               },
                               "additionalProperties": false,
@@ -11942,6 +12901,29 @@
                             "propertyNames": {
                               "type": "string"
                             }
+                          },
+                          "granularity": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "nanosecond",
+                                  "microsecond",
+                                  "millisecond",
+                                  "second",
+                                  "minute",
+                                  "hour",
+                                  "day",
+                                  "week",
+                                  "month",
+                                  "quarter",
+                                  "year"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
                           }
                         },
                         "additionalProperties": true,
@@ -12024,6 +13006,12 @@
                       "type": "number"
                     },
                     "config_call_dict": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      }
+                    },
+                    "unrendered_config_call_dict": {
                       "type": "object",
                       "propertyNames": {
                         "type": "string"
@@ -12393,6 +13381,15 @@
                           ],
                           "default": null
                         },
+                        "batch_size": {
+                          "default": null
+                        },
+                        "lookback": {
+                          "default": 1
+                        },
+                        "begin": {
+                          "default": null
+                        },
                         "persist_docs": {
                           "type": "object",
                           "propertyNames": {
@@ -12568,6 +13565,12 @@
                           },
                           "additionalProperties": false
                         },
+                        "event_time": {
+                          "default": null
+                        },
+                        "concurrent_batches": {
+                          "default": null
+                        },
                         "access": {
                           "enum": [
                             "private",
@@ -12664,6 +13667,23 @@
                                 "warn_unsupported": {
                                   "type": "boolean",
                                   "default": true
+                                },
+                                "to": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "to_columns": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
                                 }
                               },
                               "additionalProperties": false,
@@ -12694,6 +13714,29 @@
                             "propertyNames": {
                               "type": "string"
                             }
+                          },
+                          "granularity": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "nanosecond",
+                                  "microsecond",
+                                  "millisecond",
+                                  "second",
+                                  "minute",
+                                  "hour",
+                                  "day",
+                                  "week",
+                                  "month",
+                                  "quarter",
+                                  "year"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
                           }
                         },
                         "additionalProperties": true,
@@ -12776,6 +13819,12 @@
                       "type": "number"
                     },
                     "config_call_dict": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      }
+                    },
+                    "unrendered_config_call_dict": {
                       "type": "object",
                       "propertyNames": {
                         "type": "string"
@@ -13019,6 +14068,23 @@
                             "type": "boolean",
                             "default": true
                           },
+                          "to": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
+                          },
+                          "to_columns": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
                           "columns": {
                             "type": "array",
                             "items": {
@@ -13247,6 +14313,15 @@
                                       ],
                                       "default": null
                                     },
+                                    "batch_size": {
+                                      "default": null
+                                    },
+                                    "lookback": {
+                                      "default": 1
+                                    },
+                                    "begin": {
+                                      "default": null
+                                    },
                                     "persist_docs": {
                                       "type": "object",
                                       "propertyNames": {
@@ -13421,6 +14496,12 @@
                                         }
                                       },
                                       "additionalProperties": false
+                                    },
+                                    "event_time": {
+                                      "default": null
+                                    },
+                                    "concurrent_batches": {
+                                      "default": null
                                     }
                                   },
                                   "additionalProperties": true
@@ -13453,12 +14534,52 @@
                       "default": null
                     },
                     "primary_key": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "time_spine": {
                       "anyOf": [
                         {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          }
+                          "type": "object",
+                          "title": "TimeSpine",
+                          "properties": {
+                            "standard_granularity_column": {
+                              "type": "string"
+                            },
+                            "custom_granularities": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "title": "CustomGranularity",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "column_name": {
+                                    "anyOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ],
+                                    "default": null
+                                  }
+                                },
+                                "additionalProperties": false,
+                                "required": [
+                                  "name"
+                                ]
+                              }
+                            }
+                          },
+                          "additionalProperties": false,
+                          "required": [
+                            "standard_granularity_column"
+                          ]
                         },
                         {
                           "type": "null"
@@ -13635,6 +14756,15 @@
                           ],
                           "default": null
                         },
+                        "batch_size": {
+                          "default": null
+                        },
+                        "lookback": {
+                          "default": 1
+                        },
+                        "begin": {
+                          "default": null
+                        },
                         "persist_docs": {
                           "type": "object",
                           "propertyNames": {
@@ -13809,6 +14939,12 @@
                             }
                           },
                           "additionalProperties": false
+                        },
+                        "event_time": {
+                          "default": null
+                        },
+                        "concurrent_batches": {
+                          "default": null
                         }
                       },
                       "additionalProperties": true
@@ -13898,6 +15034,23 @@
                                 "warn_unsupported": {
                                   "type": "boolean",
                                   "default": true
+                                },
+                                "to": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "to_columns": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
                                 }
                               },
                               "additionalProperties": false,
@@ -13928,6 +15081,29 @@
                             "propertyNames": {
                               "type": "string"
                             }
+                          },
+                          "granularity": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "nanosecond",
+                                  "microsecond",
+                                  "millisecond",
+                                  "second",
+                                  "minute",
+                                  "hour",
+                                  "day",
+                                  "week",
+                                  "month",
+                                  "quarter",
+                                  "year"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
                           }
                         },
                         "additionalProperties": true,
@@ -14010,6 +15186,12 @@
                       "type": "number"
                     },
                     "config_call_dict": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      }
+                    },
+                    "unrendered_config_call_dict": {
                       "type": "object",
                       "propertyNames": {
                         "type": "string"
@@ -14506,6 +15688,23 @@
                                 "warn_unsupported": {
                                   "type": "boolean",
                                   "default": true
+                                },
+                                "to": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "to_columns": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
                                 }
                               },
                               "additionalProperties": false,
@@ -14536,6 +15735,29 @@
                             "propertyNames": {
                               "type": "string"
                             }
+                          },
+                          "granularity": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "nanosecond",
+                                  "microsecond",
+                                  "millisecond",
+                                  "second",
+                                  "minute",
+                                  "hour",
+                                  "day",
+                                  "week",
+                                  "month",
+                                  "quarter",
+                                  "year"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
                           }
                         },
                         "additionalProperties": true,
@@ -14618,6 +15840,12 @@
                       "type": "number"
                     },
                     "config_call_dict": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      }
+                    },
+                    "unrendered_config_call_dict": {
                       "type": "object",
                       "propertyNames": {
                         "type": "string"
@@ -15037,6 +16265,15 @@
                           ],
                           "default": null
                         },
+                        "batch_size": {
+                          "default": null
+                        },
+                        "lookback": {
+                          "default": 1
+                        },
+                        "begin": {
+                          "default": null
+                        },
                         "persist_docs": {
                           "type": "object",
                           "propertyNames": {
@@ -15134,6 +16371,12 @@
                               "type": "string"
                             },
                             {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            {
                               "type": "null"
                             }
                           ],
@@ -15206,6 +16449,12 @@
                           },
                           "additionalProperties": false
                         },
+                        "event_time": {
+                          "default": null
+                        },
+                        "concurrent_batches": {
+                          "default": null
+                        },
                         "strategy": {
                           "anyOf": [
                             {
@@ -15260,6 +16509,79 @@
                               "items": {
                                 "type": "string"
                               }
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "default": null
+                        },
+                        "snapshot_meta_column_names": {
+                          "type": "object",
+                          "title": "SnapshotMetaColumnNames",
+                          "properties": {
+                            "dbt_valid_to": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "default": null
+                            },
+                            "dbt_valid_from": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "default": null
+                            },
+                            "dbt_scd_id": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "default": null
+                            },
+                            "dbt_updated_at": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "default": null
+                            },
+                            "dbt_is_deleted": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "default": null
+                            }
+                          },
+                          "additionalProperties": false
+                        },
+                        "dbt_valid_to_current": {
+                          "anyOf": [
+                            {
+                              "type": "string"
                             },
                             {
                               "type": "null"
@@ -15355,6 +16677,23 @@
                                 "warn_unsupported": {
                                   "type": "boolean",
                                   "default": true
+                                },
+                                "to": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "to_columns": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
                                 }
                               },
                               "additionalProperties": false,
@@ -15385,6 +16724,29 @@
                             "propertyNames": {
                               "type": "string"
                             }
+                          },
+                          "granularity": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "nanosecond",
+                                  "microsecond",
+                                  "millisecond",
+                                  "second",
+                                  "minute",
+                                  "hour",
+                                  "day",
+                                  "week",
+                                  "month",
+                                  "quarter",
+                                  "year"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
                           }
                         },
                         "additionalProperties": true,
@@ -15467,6 +16829,12 @@
                       "type": "number"
                     },
                     "config_call_dict": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      }
+                    },
+                    "unrendered_config_call_dict": {
                       "type": "object",
                       "propertyNames": {
                         "type": "string"
@@ -15832,6 +17200,15 @@
                                       ],
                                       "default": null
                                     },
+                                    "batch_size": {
+                                      "default": null
+                                    },
+                                    "lookback": {
+                                      "default": 1
+                                    },
+                                    "begin": {
+                                      "default": null
+                                    },
                                     "persist_docs": {
                                       "type": "object",
                                       "propertyNames": {
@@ -16006,6 +17383,12 @@
                                         }
                                       },
                                       "additionalProperties": false
+                                    },
+                                    "event_time": {
+                                      "default": null
+                                    },
+                                    "concurrent_batches": {
+                                      "default": null
                                     }
                                   },
                                   "additionalProperties": true
@@ -16467,6 +17850,23 @@
                                 "warn_unsupported": {
                                   "type": "boolean",
                                   "default": true
+                                },
+                                "to": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "to_columns": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
                                 }
                               },
                               "additionalProperties": false,
@@ -16497,6 +17897,29 @@
                             "propertyNames": {
                               "type": "string"
                             }
+                          },
+                          "granularity": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "nanosecond",
+                                  "microsecond",
+                                  "millisecond",
+                                  "second",
+                                  "minute",
+                                  "hour",
+                                  "day",
+                                  "week",
+                                  "month",
+                                  "quarter",
+                                  "year"
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "default": null
                           }
                         },
                         "additionalProperties": true,
@@ -16539,6 +17962,9 @@
                         "enabled": {
                           "type": "boolean",
                           "default": true
+                        },
+                        "event_time": {
+                          "default": null
                         }
                       },
                       "additionalProperties": true
@@ -16573,6 +17999,28 @@
                     },
                     "created_at": {
                       "type": "number"
+                    },
+                    "unrendered_database": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null
+                    },
+                    "unrendered_schema": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null
                     }
                   },
                   "additionalProperties": false,
@@ -17103,13 +18551,7 @@
                                           "type": "integer"
                                         },
                                         "granularity": {
-                                          "enum": [
-                                            "day",
-                                            "week",
-                                            "month",
-                                            "quarter",
-                                            "year"
-                                          ]
+                                          "type": "string"
                                         }
                                       },
                                       "additionalProperties": false,
@@ -17127,13 +18569,7 @@
                                 "offset_to_grain": {
                                   "anyOf": [
                                     {
-                                      "enum": [
-                                        "day",
-                                        "week",
-                                        "month",
-                                        "quarter",
-                                        "year"
-                                      ]
+                                      "type": "string"
                                     },
                                     {
                                       "type": "null"
@@ -17217,13 +18653,7 @@
                                           "type": "integer"
                                         },
                                         "granularity": {
-                                          "enum": [
-                                            "day",
-                                            "week",
-                                            "month",
-                                            "quarter",
-                                            "year"
-                                          ]
+                                          "type": "string"
                                         }
                                       },
                                       "additionalProperties": false,
@@ -17241,13 +18671,7 @@
                                 "offset_to_grain": {
                                   "anyOf": [
                                     {
-                                      "enum": [
-                                        "day",
-                                        "week",
-                                        "month",
-                                        "quarter",
-                                        "year"
-                                      ]
+                                      "type": "string"
                                     },
                                     {
                                       "type": "null"
@@ -17289,6 +18713,12 @@
                                 },
                                 "granularity": {
                                   "enum": [
+                                    "nanosecond",
+                                    "microsecond",
+                                    "millisecond",
+                                    "second",
+                                    "minute",
+                                    "hour",
                                     "day",
                                     "week",
                                     "month",
@@ -17313,6 +18743,12 @@
                           "anyOf": [
                             {
                               "enum": [
+                                "nanosecond",
+                                "microsecond",
+                                "millisecond",
+                                "second",
+                                "minute",
+                                "hour",
                                 "day",
                                 "week",
                                 "month",
@@ -17392,13 +18828,7 @@
                                             "type": "integer"
                                           },
                                           "granularity": {
-                                            "enum": [
-                                              "day",
-                                              "week",
-                                              "month",
-                                              "quarter",
-                                              "year"
-                                            ]
+                                            "type": "string"
                                           }
                                         },
                                         "additionalProperties": false,
@@ -17416,13 +18846,7 @@
                                   "offset_to_grain": {
                                     "anyOf": [
                                       {
-                                        "enum": [
-                                          "day",
-                                          "week",
-                                          "month",
-                                          "quarter",
-                                          "year"
-                                        ]
+                                        "type": "string"
                                       },
                                       {
                                         "type": "null"
@@ -17615,13 +19039,7 @@
                                           "type": "integer"
                                         },
                                         "granularity": {
-                                          "enum": [
-                                            "day",
-                                            "week",
-                                            "month",
-                                            "quarter",
-                                            "year"
-                                          ]
+                                          "type": "string"
                                         }
                                       },
                                       "additionalProperties": false,
@@ -17671,6 +19089,65 @@
                                 "conversion_measure",
                                 "entity"
                               ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "default": null
+                        },
+                        "cumulative_type_params": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "title": "CumulativeTypeParams",
+                              "properties": {
+                                "window": {
+                                  "anyOf": [
+                                    {
+                                      "type": "object",
+                                      "title": "MetricTimeWindow",
+                                      "properties": {
+                                        "count": {
+                                          "type": "integer"
+                                        },
+                                        "granularity": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "additionalProperties": false,
+                                      "required": [
+                                        "count",
+                                        "granularity"
+                                      ]
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "grain_to_date": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "period_agg": {
+                                  "enum": [
+                                    "first",
+                                    "last",
+                                    "average"
+                                  ],
+                                  "default": "first"
+                                }
+                              },
+                              "additionalProperties": false
                             },
                             {
                               "type": "null"
@@ -17755,6 +19232,17 @@
                             "repo_file_path",
                             "file_slice"
                           ]
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "default": null
+                    },
+                    "time_granularity": {
+                      "anyOf": [
+                        {
+                          "type": "string"
                         },
                         {
                           "type": "null"
@@ -17930,26 +19418,7 @@
                       "type": "string"
                     },
                     "resource_type": {
-                      "enum": [
-                        "model",
-                        "analysis",
-                        "test",
-                        "snapshot",
-                        "operation",
-                        "seed",
-                        "rpc",
-                        "sql_operation",
-                        "doc",
-                        "source",
-                        "macro",
-                        "exposure",
-                        "metric",
-                        "group",
-                        "saved_query",
-                        "semantic_model",
-                        "unit_test",
-                        "fixture"
-                      ]
+                      "const": "saved_query"
                     },
                     "package_name": {
                       "type": "string"
@@ -18017,6 +19486,23 @@
                               "type": "null"
                             }
                           ]
+                        },
+                        "order_by": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "limit": {
+                          "anyOf": [
+                            {
+                              "type": "integer"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "default": null
                         }
                       },
                       "additionalProperties": false,
@@ -18083,6 +19569,15 @@
                             "required": [
                               "export_as"
                             ]
+                          },
+                          "unrendered_config": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "propertyNames": {
+                              "type": "string"
+                            }
                           }
                         },
                         "additionalProperties": false,
@@ -18741,6 +20236,12 @@
                                 "properties": {
                                   "time_granularity": {
                                     "enum": [
+                                      "nanosecond",
+                                      "microsecond",
+                                      "millisecond",
+                                      "second",
+                                      "minute",
+                                      "hour",
                                       "day",
                                       "week",
                                       "month",
@@ -19270,6 +20771,10 @@
                           "propertyNames": {
                             "type": "string"
                           }
+                        },
+                        "enabled": {
+                          "type": "boolean",
+                          "default": true
                         }
                       },
                       "additionalProperties": true
@@ -19468,26 +20973,7 @@
             "type": "string"
           },
           "resource_type": {
-            "enum": [
-              "model",
-              "analysis",
-              "test",
-              "snapshot",
-              "operation",
-              "seed",
-              "rpc",
-              "sql_operation",
-              "doc",
-              "source",
-              "macro",
-              "exposure",
-              "metric",
-              "group",
-              "saved_query",
-              "semantic_model",
-              "unit_test",
-              "fixture"
-            ]
+            "const": "saved_query"
           },
           "package_name": {
             "type": "string"
@@ -19555,6 +21041,23 @@
                     "type": "null"
                   }
                 ]
+              },
+              "order_by": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "limit": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
               }
             },
             "additionalProperties": false,
@@ -19621,6 +21124,15 @@
                   "required": [
                     "export_as"
                   ]
+                },
+                "unrendered_config": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "propertyNames": {
+                    "type": "string"
+                  }
                 }
               },
               "additionalProperties": false,
@@ -20286,6 +21798,12 @@
                       "properties": {
                         "time_granularity": {
                           "enum": [
+                            "nanosecond",
+                            "microsecond",
+                            "millisecond",
+                            "second",
+                            "minute",
+                            "hour",
                             "day",
                             "week",
                             "month",
@@ -20822,6 +22340,10 @@
                 "propertyNames": {
                   "type": "string"
                 }
+              },
+              "enabled": {
+                "type": "boolean",
+                "default": true
               }
             },
             "additionalProperties": true

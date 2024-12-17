@@ -11,6 +11,8 @@
 This is a dbt artifacts parse in python.
 It enables us to deal with `catalog.json`, `manifest.json`, `run-results.json` and `sources.json` as python objects.
 
+This package is primarily designed for dbt-core, enabling seamless interaction with dbt artifacts as Python objects. While dbt Cloud provides additional artifact types beyond those of dbt-core, this package does not offer comprehensive support for them.
+
 ## Supported Versions and Compatibility
 
 > **⚠️ Important Note:**
@@ -21,6 +23,7 @@ It enables us to deal with `catalog.json`, `manifest.json`, `run-results.json` a
 
 | Version | Supported dbt Version | Supported pydantic Version |
 |---------|-----------------------|----------------------------|
+|  0.8    | dbt 1.5 to 1.9        | pydantic v2                |
 |  0.7    | dbt 1.5 to 1.8        | pydantic v2                |
 |  0.6    | dbt 1.5 to 1.8        | pydantic v1                |
 |  0.5    | dbt 1.5 to 1.7        | pydantic v1                |
@@ -32,12 +35,15 @@ pip install -U dbt-artifacts-parser
 ```
 
 ## Python classes
+
 Those are the classes to parse dbt artifacts.
 
 ### Catalog
+
 - [CatalogV1](dbt_artifacts_parser/parsers/catalog/catalog_v1.py) for catalog.json v1
 
 ### Manifest
+
 - [ManifestV1](dbt_artifacts_parser/parsers/manifest/manifest_v1.py) for manifest.json v1
 - [ManifestV2](dbt_artifacts_parser/parsers/manifest/manifest_v2.py) for manifest.json v2
 - [ManifestV3](dbt_artifacts_parser/parsers/manifest/manifest_v3.py) for manifest.json v3
@@ -52,6 +58,7 @@ Those are the classes to parse dbt artifacts.
 - [ManifestV12](dbt_artifacts_parser/parsers/manifest/manifest_v12.py) for manifest.json v12
 
 ### Run Results
+
 - [RunResultsV1](dbt_artifacts_parser/parsers/manifest/manifest_v1.py) for run_results.json v1
 - [RunResultsV2](dbt_artifacts_parser/parsers/manifest/manifest_v2.py) for run_results.json v2
 - [RunResultsV3](dbt_artifacts_parser/parsers/manifest/manifest_v3.py) for run_results.json v3
@@ -60,6 +67,7 @@ Those are the classes to parse dbt artifacts.
 - [RunResultsV6](dbt_artifacts_parser/parsers/manifest/manifest_v6.py) for run_results.json v6
 
 ### Sources
+
 - [SourcesV1](dbt_artifacts_parser/parsers/sources/sources_v1.py) for sources.json v1
 - [SourcesV2](dbt_artifacts_parser/parsers/sources/sources_v2.py) for sources.json v2
 - [SourcesV3](dbt_artifacts_parser/parsers/sources/sources_v3.py) for sources.json v3
@@ -67,6 +75,7 @@ Those are the classes to parse dbt artifacts.
 ## Examples
 
 ### Parse catalog.json
+
 ```python
 import json
 
@@ -272,6 +281,11 @@ with open("path/to/sources.json", "r") as fp:
 ```
 
 ## Contributors
+
+Thank you for your contributions!
+
+If you are interested in contributing to this package, please check out the [CONTRIBUTING.md](./CONTRIBUTING.md).
+
 <!-- readme: contributors -start -->
 <table>
 	<tbody>
@@ -305,12 +319,21 @@ with open("path/to/sources.json", "r") as fp:
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/ulixius9">
+                    <img src="https://avatars.githubusercontent.com/u/39544459?v=4" width="100;" alt="ulixius9"/>
+                    <br />
+                    <sub><b>Mayur Singal</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/nabilm">
                     <img src="https://avatars.githubusercontent.com/u/987369?v=4" width="100;" alt="nabilm"/>
                     <br />
                     <sub><b>Mohamed Nabil Mahmoud Hafez</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/OnkarVO7">
                     <img src="https://avatars.githubusercontent.com/u/28966081?v=4" width="100;" alt="OnkarVO7"/>
@@ -318,8 +341,6 @@ with open("path/to/sources.json", "r") as fp:
                     <sub><b>Onkar Ravgan</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/meyer-glean">
                     <img src="https://avatars.githubusercontent.com/u/134302890?v=4" width="100;" alt="meyer-glean"/>
