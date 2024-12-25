@@ -1,29 +1,13 @@
 [build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
-
-[tool.flit.module]
-name = "dbt_artifacts_parser"
-
-[tool.flit.sdist]
-exclude = [
-    ".github/",
-    ".gitignore",
-    ".pre-commit-config.yaml",
-    ".style.yapf",
-    ".pylintrc",
-    ".pypirc",
-    "Makefile",
-    "dev/",
-    "tests/",
-]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "dbt-artifacts-parser"
 authors = [{name = "yu-iskw"}]
 readme = "README.md"
 license = {file = "LICENSE"}
-requires-python = ">=3.7.0"
+requires-python = ">=3.8.0"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Information Technology",
@@ -42,7 +26,8 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Typing :: Typed",
 ]
-dynamic = ["version", "description"]
+version = "0.8.0"
+dynamic = ["description"]
 dependencies = [
     "pydantic >=2.0,<3.0",
 ]
@@ -61,7 +46,7 @@ test = [
     "yapf >=0.29.0",
 ]
 dev = [
-    "flit ==3.9.0",
+    "uv>=0.5,<0.6",
     "build ==1.2.2",
     "yapf >=0.29.0",
     "pyyaml >=5.3",
@@ -72,3 +57,24 @@ dev = [
 
 [tool.isort]
 profile = "black"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    ".github/",
+    ".gitignore",
+    ".pre-commit-config.yaml",
+    ".style.yapf",
+    ".pylintrc",
+    ".pypirc",
+    "Makefile",
+    "dev/",
+    "tests/",
+    ".DS_Store",
+    ".vscode/",
+    ".trunk/",
+    ".pytest_cache/",
+    ".mypy_cache/",
+    "dist/",
+    "test.json",
+    "renovate.json"
+]

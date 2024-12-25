@@ -12,33 +12,19 @@ jobs:
       run:
         shell: bash
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
       - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.9"
-      - uses: actions/cache@v4
-        id: cache
-        with:
-          path: ${{ env.pythonLocation }}
-          key: ${{ runner.os }}-python-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-publish
-      - name: Install Flit
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: bash dev/setup.sh
+      - name: Install uv
+        run: |
+          pip install -r requirements.setup.txt
       - name: Publish
         env:
-          # SEE https://packaging.python.org/en/latest/specifications/pypirc/?highlight=token#using-a-pypi-token
-          FLIT_USERNAME: __token__
-          FLIT_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: bash dev/publish.sh "pypi"
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+          UV_PUBLISH_TOKEN: "${{ secrets.PYPI_API_TOKEN }}"
+        run: |
+          bash dev/publish.sh "pypi"
 
   test-published-package:
     needs:
@@ -48,18 +34,14 @@ jobs:
       run:
         shell: bash
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
       - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.9"
-      - name: Install packages
+      - name: Install package
         run: |
           python3 -m pip install -U dbt-artifacts-parser
-      - name: Test pacakge
+      - name: Test package
         run: |
           python -c 'import dbt_artifacts_parser; print(dbt_artifacts_parser.__version__)'

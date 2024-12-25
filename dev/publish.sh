@@ -13,25 +13,29 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-set -e
+set -Eo pipefail
 set -x
 
-SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+SCRIPT_FILE="$(readlink -f "$0")"
+SCRIPT_DIR="$(dirname "$SCRIPT_FILE")"
 MODULE_DIR="$(dirname "$SCRIPT_DIR")"
 
-cd "$MODULE_DIR"
+cd "$MODULE_DIR" || exit
 
 # Arguments
 target=${1:?"target is not set"}
 
-# SEE https://flit.readthedocs.io/en/latest/reproducible.html
-SOURCE_DATE_EPOCH=$(date +%s)
-export SOURCE_DATE_EPOCH
+# Ensure uv is installed
+pip install uv
 
-if [[ "$target" == "pypi" ]] ; then
-  flit publish --repository "${target}" --pypirc "${MODULE_DIR}/.pypirc" --setup-py
-elif [[ "$target" == "testpypi" ]] ; then
-  flit publish --repository "${target}" --pypirc "${MODULE_DIR}/.pypirc" --setup-py
+# Build the package first
+uv build
+
+# Publish to the specified target
+if [[ "$target" == "pypi" ]]; then
+  uv publish
+elif [[ "$target" == "testpypi" ]]; then
+  uv publish --publish-url "https://test.pypi.org/legacy/"
 else
   echo "No such target ${target}"
   exit 1
