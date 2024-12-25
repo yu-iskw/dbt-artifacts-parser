@@ -30,6 +30,9 @@ jobs:
     needs:
       - publish
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
     defaults:
       run:
         shell: bash
@@ -38,7 +41,11 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.9"
+          python-version: "${{ matrix.python-version }}"
+      # It takes some time when the package gets available.
+      - name: Sleep
+        run: |
+          sleep 30
       - name: Install package
         run: |
           python3 -m pip install -U dbt-artifacts-parser
