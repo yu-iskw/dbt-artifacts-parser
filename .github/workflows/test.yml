@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install -r requirements.setup.txt
-          bash dev/setup.sh
+          bash dev/setup.sh --deps "development"
       - name: Run tests
         run: bash dev/test_python.sh
       - name: Test installation
