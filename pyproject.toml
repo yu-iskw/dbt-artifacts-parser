@@ -26,7 +26,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Typing :: Typed",
 ]
-dynamic = ["version", "description"]
+description = "A dbt artifacts parser in python"
 dependencies = [
     "pydantic >=2.0,<3.0",
 ]
@@ -37,25 +37,22 @@ Home = "https://github.com/yu-iskw/dbt-artifacts-parser"
 [project.optional-dependencies]
 test = [
     "pytest >=6.2.4,<9.0.0",
+]
+dev = [
+    "datamodel-code-generator >=0.20,<0.30",
+    "build ==1.2.2",
+    "pyyaml >=5.3",
+    "pdoc3 >=0.9.2",
+    "pre-commit >=2.15.0",
     "pylint >=2.12.0",
     "mypy ==1.13.0",
     "flake8 >=3.8.3,<4.0.0",
     "black ==24.8.0",
     "isort >=5.0.6,<6.0.0",
-    "yapf >=0.29.0",
-]
-dev = [
-    "uv>=0.5,<0.6",
-    "build ==1.2.2",
-    "yapf >=0.29.0",
-    "pyyaml >=5.3",
-    "pdoc3 >=0.9.2",
-    "pre-commit >=2.15.0",
-    "datamodel-code-generator >=0.20,<0.30",
 ]
 
-[tool.isort]
-profile = "black"
+[tool.hatch.version]
+path = "dbt_artifacts_parser/__init__.py"
 
 [tool.hatch.build.targets.sdist]
 exclude = [
@@ -77,3 +74,6 @@ exclude = [
     "test.json",
     "renovate.json"
 ]
+
+[tool.isort]
+profile = "black"
