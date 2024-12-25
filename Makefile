@@ -5,7 +5,7 @@ setup: setup-python setup-pre-commit
 # Set up the python environment.
 .PHONY: setup-python
 setup-python:
-	bash ./dev/setup.sh --deps "develop"
+	bash ./dev/setup.sh --deps "development"
 
 # Set up the pre-commit hooks.
 .PHONY: setup-pre-commit
@@ -53,7 +53,7 @@ test:
 # Build the package
 .PHONY: build
 build: clean lint test
-	flit build
+	bash -x ./dev/build.sh
 
 # Clean the environment
 .PHONY: clean

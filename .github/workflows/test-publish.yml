@@ -7,7 +7,6 @@ on:
         description: "dbt-artifacts-parser version"
         required: true
 
-
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -15,49 +14,31 @@ jobs:
       run:
         shell: bash
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
       - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.9"
-      - uses: actions/cache@v4
-        id: cache
-        with:
-          path: ${{ env.pythonLocation }}
-          key: ${{ runner.os }}-python-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-publish
-      - name: Install Flit
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: bash dev/setup.sh
+      - name: Install uv
+        run: |
+          pip install -r requirements.setup.txt
       - name: Test publish
         env:
-          # SEE https://packaging.python.org/en/latest/specifications/pypirc/?highlight=token#using-a-pypi-token
-          FLIT_USERNAME: __token__
-          FLIT_PASSWORD: ${{ secrets.TESTPYPI_API_TOKEN }}
-        run: bash dev/publish.sh "testpypi"
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+          UV_PUBLISH_TOKEN: "${{ secrets.TESTPYPI_API_TOKEN }}"
+        run: |
+          bash dev/publish.sh testpypi
 
   test-published-package:
     needs:
       - publish
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
     defaults:
       run:
         shell: bash
-    strategy:
-      matrix:
-        python-version: [ "3.7", "3.8", "3.9", "3.10", "3.11" ]
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
       - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -68,9 +49,14 @@ jobs:
           python3 -m pip install -U pip==23.1.0
           python3 -m pip install \
             --index-url https://test.pypi.org/simple/ \
+            --extra-index-url https://pypi.org/simple/ \
             --force-reinstall \
             --use-feature=fast-deps \
             -U dbt-artifacts-parser=="${{ github.event.inputs.dbt_artifacts_parser_version }}"
-      - name: Test pacakge
+      # It takes some time when the package gets available.
+      - name: Sleep
+        run: |
+          sleep 30
+      - name: Test package
         run: |
           python -c 'import dbt_artifacts_parser; print(dbt_artifacts_parser.__version__)'
