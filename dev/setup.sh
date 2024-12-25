@@ -45,6 +45,7 @@ cd "${MODULE_DIR}"
 # Install uv and dependencies
 pip install --force-reinstall -r "${MODULE_DIR}/requirements.setup.txt"
 
+UV_PIP_OPTIONS=("--force-reinstall")
 if [[ "${use_venv}" == true ]]; then
   # Create virtual environment
   uv venv
@@ -56,11 +57,13 @@ if [[ "${use_venv}" == true ]]; then
     echo "Error: .venv/bin/activate not found"
     exit 1
   fi
+else
+  UV_PIP_OPTIONS+=("--system")
 fi
 
 # Install package and dependencies
 if [[ "${deps}" == "production" ]]; then
-  uv pip install --force-reinstall -e "."
+  uv pip install "${UV_PIP_OPTIONS[@]}" -e "."
 else
-  uv pip install --force-reinstall -e ".[dev,test]"
+  uv pip install "${UV_PIP_OPTIONS[@]}" -e ".[dev,test]"
 fi
