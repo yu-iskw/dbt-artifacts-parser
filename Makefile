@@ -53,7 +53,7 @@ test:
 # Build the package
 .PHONY: build
 build: clean lint test
-	python -m build
+	bash -x ./dev/build.sh
 
 # Clean the environment
 .PHONY: clean

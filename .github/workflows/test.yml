@@ -36,6 +36,9 @@ jobs:
           bash dev/setup.sh --deps "development"
       - name: Run tests
         run: bash dev/test_python.sh
+      - name: Test build
+        run: |
+          bash dev/build.sh
       - name: Test installation
         run: |
           pip install -e .
