@@ -342,6 +342,13 @@ If you are interested in contributing to this package, please check out the [CON
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/pgoslatara">
+                    <img src="https://avatars.githubusercontent.com/u/14027534?v=4" width="100;" alt="pgoslatara"/>
+                    <br />
+                    <sub><b>Pádraic Slattery</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/meyer-glean">
                     <img src="https://avatars.githubusercontent.com/u/134302890?v=4" width="100;" alt="meyer-glean"/>
                     <br />
