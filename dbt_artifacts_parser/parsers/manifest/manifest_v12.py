@@ -17,7 +17,7 @@ class Metadata(BaseParserModel):
         extra='forbid',
     )
     dbt_schema_version: Optional[str] = None
-    dbt_version: Optional[str] = '1.9.0b4'
+    dbt_version: Optional[str] = '1.10.0a1'
     generated_at: Optional[str] = None
     invocation_id: Optional[str] = None
     env: Optional[Dict[str, str]] = None
@@ -822,6 +822,33 @@ class TimeSpine(BaseParserModel):
     custom_granularities: Optional[List[CustomGranularity]] = None
 
 
+class Period(Enum):
+    minute = 'minute'
+    hour = 'hour'
+    day = 'day'
+
+
+class DependsOn5(Enum):
+    all = 'all'
+    any = 'any'
+
+
+class BuildAfter(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    count: Optional[int] = 0
+    period: Optional[Period] = 'hour'
+    depends_on: Optional[DependsOn5] = 'any'
+
+
+class Freshness(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    build_after: Optional[BuildAfter] = Field(None, title='ModelBuildAfter')
+
+
 class Nodes4(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -872,6 +899,7 @@ class Nodes4(BaseParserModel):
     defer_relation: Optional[DeferRelation1] = None
     primary_key: Optional[List[str]] = None
     time_spine: Optional[TimeSpine] = None
+    freshness: Optional[Freshness] = None
 
 
 class Config7(BaseParserModel):
@@ -936,6 +964,14 @@ class Columns5(BaseParserModel):
     granularity: Optional[Granularity] = None
 
 
+class DependsOn6(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    macros: Optional[List[str]] = None
+    nodes: Optional[List[str]] = None
+
+
 class Contract11(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -979,7 +1015,7 @@ class Nodes5(BaseParserModel):
     refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn1] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn6] = Field(None, title='DependsOn')
     compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
     compiled_code: Optional[str] = None
@@ -1085,7 +1121,7 @@ class Nodes6(BaseParserModel):
     refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn1] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn6] = Field(None, title='DependsOn')
     compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
     compiled_code: Optional[str] = None
@@ -1291,7 +1327,7 @@ class Nodes7(BaseParserModel):
     refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn1] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn6] = Field(None, title='DependsOn')
     compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
     compiled_code: Optional[str] = None
@@ -1312,12 +1348,6 @@ class Quoting(BaseParserModel):
     column: Optional[bool] = None
 
 
-class Period(Enum):
-    minute = 'minute'
-    hour = 'hour'
-    day = 'day'
-
-
 class WarnAfter(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -1334,7 +1364,7 @@ class ErrorAfter(BaseParserModel):
     period: Optional[Period] = None
 
 
-class Freshness(BaseParserModel):
+class Freshness1(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1422,7 +1452,8 @@ class Sources(BaseParserModel):
     identifier: str
     quoting: Optional[Quoting] = Field(None, title='Quoting')
     loaded_at_field: Optional[str] = None
-    freshness: Optional[Freshness] = None
+    loaded_at_query: Optional[str] = None
+    freshness: Optional[Freshness1] = None
     external: Optional[External] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns8]] = None
@@ -1438,7 +1469,7 @@ class Sources(BaseParserModel):
     unrendered_schema: Optional[str] = None
 
 
-class DependsOn8(BaseParserModel):
+class DependsOn9(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1470,7 +1501,7 @@ class Macros(BaseParserModel):
     original_file_path: str
     unique_id: str
     macro_sql: str
-    depends_on: Optional[DependsOn8] = Field(None, title='MacroDependsOn')
+    depends_on: Optional[DependsOn9] = Field(None, title='MacroDependsOn')
     description: Optional[str] = ''
     meta: Optional[Dict[str, Any]] = None
     docs: Optional[Docs] = Field(None, title='Docs')
@@ -1524,7 +1555,7 @@ class Config12(BaseParserModel):
     enabled: Optional[bool] = True
 
 
-class DependsOn9(BaseParserModel):
+class DependsOn10(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -1553,7 +1584,7 @@ class Exposures(BaseParserModel):
     config: Optional[Config12] = Field(None, title='ExposureConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
     url: Optional[str] = None
-    depends_on: Optional[DependsOn9] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn10] = Field(None, title='DependsOn')
     refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
@@ -1623,21 +1654,7 @@ class OffsetWindow(BaseParserModel):
         extra='forbid',
     )
     count: int
-    granularity: Granularity
-
-
-class OffsetToGrain(Enum):
-    nanosecond = 'nanosecond'
-    microsecond = 'microsecond'
-    millisecond = 'millisecond'
-    second = 'second'
-    minute = 'minute'
-    hour = 'hour'
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
+    granularity: str
 
 
 class Numerator(BaseParserModel):
@@ -1648,7 +1665,7 @@ class Numerator(BaseParserModel):
     filter: Optional[Filter2] = None
     alias: Optional[str] = None
     offset_window: Optional[OffsetWindow] = None
-    offset_to_grain: Optional[OffsetToGrain] = None
+    offset_to_grain: Optional[str] = None
 
 
 class Filter3(BaseParserModel):
@@ -1658,14 +1675,6 @@ class Filter3(BaseParserModel):
     where_filters: List[WhereFilter]
 
 
-class OffsetWindow1(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
-
-
 class Denominator(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -1673,8 +1682,8 @@ class Denominator(BaseParserModel):
     name: str
     filter: Optional[Filter3] = None
     alias: Optional[str] = None
-    offset_window: Optional[OffsetWindow1] = None
-    offset_to_grain: Optional[OffsetToGrain] = None
+    offset_window: Optional[OffsetWindow] = None
+    offset_to_grain: Optional[str] = None
 
 
 class Window(BaseParserModel):
@@ -1682,7 +1691,7 @@ class Window(BaseParserModel):
         extra='forbid',
     )
     count: int
-    granularity: Granularity
+    granularity: str
 
 
 class GrainToDate(Enum):
@@ -1706,14 +1715,6 @@ class Filter4(BaseParserModel):
     where_filters: List[WhereFilter]
 
 
-class OffsetWindow2(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
-
-
 class Metric(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -1721,8 +1722,8 @@ class Metric(BaseParserModel):
     name: str
     filter: Optional[Filter4] = None
     alias: Optional[str] = None
-    offset_window: Optional[OffsetWindow2] = None
-    offset_to_grain: Optional[OffsetToGrain] = None
+    offset_window: Optional[OffsetWindow] = None
+    offset_to_grain: Optional[str] = None
 
 
 class Filter5(BaseParserModel):
@@ -1766,14 +1767,6 @@ class Calculation(Enum):
     conversion_rate = 'conversion_rate'
 
 
-class Window1(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
-
-
 class ConstantProperty(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -1790,16 +1783,8 @@ class ConversionTypeParams(BaseParserModel):
     conversion_measure: ConversionMeasure = Field(..., title='MetricInputMeasure')
     entity: str
     calculation: Optional[Calculation] = 'conversion_rate'
-    window: Optional[Window1] = None
+    window: Optional[Window] = None
     constant_properties: Optional[List[ConstantProperty]] = None
-
-
-class Window2(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
 
 
 class PeriodAgg(Enum):
@@ -1812,8 +1797,8 @@ class CumulativeTypeParams(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    window: Optional[Window2] = None
-    grain_to_date: Optional[GrainToDate] = None
+    window: Optional[Window] = None
+    grain_to_date: Optional[str] = None
     period_agg: Optional[PeriodAgg] = 'first'
 
 
@@ -1858,20 +1843,6 @@ class Metadata1(BaseParserModel):
     file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class TimeGranularity(Enum):
-    nanosecond = 'nanosecond'
-    microsecond = 'microsecond'
-    millisecond = 'millisecond'
-    second = 'second'
-    minute = 'minute'
-    hour = 'hour'
-    day = 'day'
-    week = 'week'
-    month = 'month'
-    quarter = 'quarter'
-    year = 'year'
-
-
 class Config13(BaseParserModel):
     model_config = ConfigDict(
         extra='allow',
@@ -1899,13 +1870,13 @@ class Metrics(BaseParserModel):
     type_params: TypeParams = Field(..., title='MetricTypeParams')
     filter: Optional[Filter7] = None
     metadata: Optional[Metadata1] = None
-    time_granularity: Optional[TimeGranularity] = None
+    time_granularity: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None
     tags: Optional[List[str]] = None
     config: Optional[Config13] = Field(None, title='MetricConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
     sources: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn9] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn10] = Field(None, title='DependsOn')
     refs: Optional[List[Ref]] = None
     metrics: Optional[List[List[str]]] = None
     created_at: Optional[float] = None
@@ -2006,7 +1977,7 @@ class Columns9(BaseParserModel):
     granularity: Optional[Granularity] = None
 
 
-class DependsOn11(BaseParserModel):
+class DependsOn12(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2095,7 +2066,7 @@ class Disabled(BaseParserModel):
     relation_name: Optional[str] = None
     raw_code: Optional[str] = ''
     root_path: Optional[str] = None
-    depends_on: Optional[DependsOn11] = Field(None, title='MacroDependsOn')
+    depends_on: Optional[DependsOn12] = Field(None, title='MacroDependsOn')
     defer_relation: Optional[DeferRelation3] = None
 
 
@@ -2161,7 +2132,7 @@ class Columns10(BaseParserModel):
     granularity: Optional[Granularity] = None
 
 
-class DependsOn12(BaseParserModel):
+class DependsOn13(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2212,7 +2183,7 @@ class Disabled1(BaseParserModel):
     refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn13] = Field(None, title='DependsOn')
     compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
     compiled_code: Optional[str] = None
@@ -2309,7 +2280,7 @@ class Disabled2(BaseParserModel):
     refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn13] = Field(None, title='DependsOn')
     compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
     compiled_code: Optional[str] = None
@@ -2432,7 +2403,7 @@ class Disabled3(BaseParserModel):
     refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn13] = Field(None, title='DependsOn')
     compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
     compiled_code: Optional[str] = None
@@ -2604,6 +2575,27 @@ class TimeSpine1(BaseParserModel):
     custom_granularities: Optional[List[CustomGranularity]] = None
 
 
+class DependsOn17(Enum):
+    all = 'all'
+    any = 'any'
+
+
+class BuildAfter1(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    count: Optional[int] = 0
+    period: Optional[Period] = 'hour'
+    depends_on: Optional[DependsOn17] = 'any'
+
+
+class Freshness2(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    build_after: Optional[BuildAfter1] = Field(None, title='ModelBuildAfter')
+
+
 class Disabled4(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -2638,7 +2630,7 @@ class Disabled4(BaseParserModel):
     refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn13] = Field(None, title='DependsOn')
     compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
     compiled_code: Optional[str] = None
@@ -2654,6 +2646,7 @@ class Disabled4(BaseParserModel):
     defer_relation: Optional[DeferRelation4] = None
     primary_key: Optional[List[str]] = None
     time_spine: Optional[TimeSpine1] = None
+    freshness: Optional[Freshness2] = None
 
 
 class Config21(BaseParserModel):
@@ -2718,6 +2711,14 @@ class Columns14(BaseParserModel):
     granularity: Optional[Granularity] = None
 
 
+class DependsOn18(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    macros: Optional[List[str]] = None
+    nodes: Optional[List[str]] = None
+
+
 class Contract27(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -2761,7 +2762,7 @@ class Disabled5(BaseParserModel):
     refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn18] = Field(None, title='DependsOn')
     compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
     compiled_code: Optional[str] = None
@@ -2858,7 +2859,7 @@ class Disabled6(BaseParserModel):
     refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn18] = Field(None, title='DependsOn')
     compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
     compiled_code: Optional[str] = None
@@ -3053,7 +3054,7 @@ class Disabled7(BaseParserModel):
     refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn18] = Field(None, title='DependsOn')
     compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
     compiled_code: Optional[str] = None
@@ -3080,7 +3081,7 @@ class ErrorAfter1(BaseParserModel):
     period: Optional[Period] = None
 
 
-class Freshness1(BaseParserModel):
+class Freshness3(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3157,7 +3158,8 @@ class Disabled8(BaseParserModel):
     identifier: str
     quoting: Optional[Quoting] = Field(None, title='Quoting')
     loaded_at_field: Optional[str] = None
-    freshness: Optional[Freshness1] = None
+    loaded_at_query: Optional[str] = None
+    freshness: Optional[Freshness3] = None
     external: Optional[External1] = None
     description: Optional[str] = ''
     columns: Optional[Dict[str, Columns17]] = None
@@ -3210,7 +3212,7 @@ class Disabled9(BaseParserModel):
     config: Optional[Config26] = Field(None, title='ExposureConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
     url: Optional[str] = None
-    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn18] = Field(None, title='DependsOn')
     refs: Optional[List[Ref]] = None
     sources: Optional[List[List[str]]] = None
     metrics: Optional[List[List[str]]] = None
@@ -3268,14 +3270,6 @@ class Filter10(BaseParserModel):
     where_filters: List[WhereFilter]
 
 
-class OffsetWindow3(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
-
-
 class Numerator1(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -3283,8 +3277,8 @@ class Numerator1(BaseParserModel):
     name: str
     filter: Optional[Filter10] = None
     alias: Optional[str] = None
-    offset_window: Optional[OffsetWindow3] = None
-    offset_to_grain: Optional[OffsetToGrain] = None
+    offset_window: Optional[OffsetWindow] = None
+    offset_to_grain: Optional[str] = None
 
 
 class Filter11(BaseParserModel):
@@ -3294,14 +3288,6 @@ class Filter11(BaseParserModel):
     where_filters: List[WhereFilter]
 
 
-class OffsetWindow4(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
-
-
 class Denominator1(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -3309,16 +3295,8 @@ class Denominator1(BaseParserModel):
     name: str
     filter: Optional[Filter11] = None
     alias: Optional[str] = None
-    offset_window: Optional[OffsetWindow4] = None
-    offset_to_grain: Optional[OffsetToGrain] = None
-
-
-class Window3(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
+    offset_window: Optional[OffsetWindow] = None
+    offset_to_grain: Optional[str] = None
 
 
 class Filter12(BaseParserModel):
@@ -3328,14 +3306,6 @@ class Filter12(BaseParserModel):
     where_filters: List[WhereFilter]
 
 
-class OffsetWindow5(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
-
-
 class Metric1(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -3343,8 +3313,8 @@ class Metric1(BaseParserModel):
     name: str
     filter: Optional[Filter12] = None
     alias: Optional[str] = None
-    offset_window: Optional[OffsetWindow5] = None
-    offset_to_grain: Optional[OffsetToGrain] = None
+    offset_window: Optional[OffsetWindow] = None
+    offset_to_grain: Optional[str] = None
 
 
 class Filter13(BaseParserModel):
@@ -3383,14 +3353,6 @@ class ConversionMeasure1(BaseParserModel):
     fill_nulls_with: Optional[int] = None
 
 
-class Window4(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
-
-
 class ConversionTypeParams1(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -3399,24 +3361,16 @@ class ConversionTypeParams1(BaseParserModel):
     conversion_measure: ConversionMeasure1 = Field(..., title='MetricInputMeasure')
     entity: str
     calculation: Optional[Calculation] = 'conversion_rate'
-    window: Optional[Window4] = None
+    window: Optional[Window] = None
     constant_properties: Optional[List[ConstantProperty]] = None
-
-
-class Window5(BaseParserModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    count: int
-    granularity: Granularity
 
 
 class CumulativeTypeParams1(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    window: Optional[Window5] = None
-    grain_to_date: Optional[GrainToDate] = None
+    window: Optional[Window] = None
+    grain_to_date: Optional[str] = None
     period_agg: Optional[PeriodAgg] = 'first'
 
 
@@ -3429,7 +3383,7 @@ class TypeParams1(BaseParserModel):
     numerator: Optional[Numerator1] = None
     denominator: Optional[Denominator1] = None
     expr: Optional[str] = None
-    window: Optional[Window3] = None
+    window: Optional[Window] = None
     grain_to_date: Optional[GrainToDate] = None
     metrics: Optional[List[Metric1]] = None
     conversion_type_params: Optional[ConversionTypeParams1] = None
@@ -3478,13 +3432,13 @@ class Disabled10(BaseParserModel):
     type_params: TypeParams1 = Field(..., title='MetricTypeParams')
     filter: Optional[Filter15] = None
     metadata: Optional[Metadata2] = None
-    time_granularity: Optional[TimeGranularity] = None
+    time_granularity: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None
     tags: Optional[List[str]] = None
     config: Optional[Config27] = Field(None, title='MetricConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
     sources: Optional[List[List[str]]] = None
-    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn18] = Field(None, title='DependsOn')
     refs: Optional[List[Ref]] = None
     metrics: Optional[List[List[str]]] = None
     created_at: Optional[float] = None
@@ -3580,9 +3534,10 @@ class Disabled11(BaseParserModel):
     config: Optional[Config29] = Field(None, title='SavedQueryConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
-    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn18] = Field(None, title='DependsOn')
     created_at: Optional[float] = None
     refs: Optional[List[Ref]] = None
+    tags: Optional[Union[List[str], str]] = None
 
 
 class NodeRelation(BaseParserModel):
@@ -3609,6 +3564,13 @@ class Type24(Enum):
     unique = 'unique'
 
 
+class Config30(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    meta: Optional[Dict[str, Any]] = None
+
+
 class Entity(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -3619,6 +3581,7 @@ class Entity(BaseParserModel):
     label: Optional[str] = None
     role: Optional[str] = None
     expr: Optional[str] = None
+    config: Optional[Config30] = None
 
 
 class Agg(Enum):
@@ -3676,11 +3639,26 @@ class Measure2(BaseParserModel):
     agg_params: Optional[AggParams] = None
     non_additive_dimension: Optional[NonAdditiveDimension] = None
     agg_time_dimension: Optional[str] = None
+    config: Optional[Config30] = None
 
 
 class Type25(Enum):
     categorical = 'categorical'
     time = 'time'
+
+
+class TimeGranularity(Enum):
+    nanosecond = 'nanosecond'
+    microsecond = 'microsecond'
+    millisecond = 'millisecond'
+    second = 'second'
+    minute = 'minute'
+    hour = 'hour'
+    day = 'day'
+    week = 'week'
+    month = 'month'
+    quarter = 'quarter'
+    year = 'year'
 
 
 class ValidityParams(BaseParserModel):
@@ -3719,6 +3697,7 @@ class Dimension(BaseParserModel):
     type_params: Optional[TypeParams2] = None
     expr: Optional[str] = None
     metadata: Optional[Metadata4] = None
+    config: Optional[Config30] = None
 
 
 class Metadata5(BaseParserModel):
@@ -3729,7 +3708,7 @@ class Metadata5(BaseParserModel):
     file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class Config30(BaseParserModel):
+class Config33(BaseParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -3759,10 +3738,10 @@ class Disabled12(BaseParserModel):
     measures: Optional[List[Measure2]] = None
     dimensions: Optional[List[Dimension]] = None
     metadata: Optional[Metadata5] = None
-    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn18] = Field(None, title='DependsOn')
     refs: Optional[List[Ref]] = None
     created_at: Optional[float] = None
-    config: Optional[Config30] = Field(None, title='SemanticModelConfig')
+    config: Optional[Config33] = Field(None, title='SemanticModelConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
     primary_entity: Optional[str] = None
     group: Optional[str] = None
@@ -3802,7 +3781,7 @@ class Overrides(BaseParserModel):
     env_vars: Optional[Dict[str, Any]] = None
 
 
-class Config31(BaseParserModel):
+class Config34(BaseParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -3836,8 +3815,8 @@ class Disabled13(BaseParserModel):
     fqn: List[str]
     description: Optional[str] = ''
     overrides: Optional[Overrides] = None
-    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
-    config: Optional[Config31] = Field(None, title='UnitTestConfig')
+    depends_on: Optional[DependsOn18] = Field(None, title='DependsOn')
+    config: Optional[Config34] = Field(None, title='UnitTestConfig')
     checksum: Optional[str] = None
     schema_: Optional[str] = Field(None, alias='schema')
     created_at: Optional[float] = None
@@ -3863,7 +3842,7 @@ class QueryParams1(BaseParserModel):
     limit: Optional[int] = None
 
 
-class Config32(BaseParserModel):
+class Config35(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3878,7 +3857,7 @@ class Export1(BaseParserModel):
         extra='forbid',
     )
     name: str
-    config: Config32 = Field(..., title='ExportConfig')
+    config: Config35 = Field(..., title='ExportConfig')
     unrendered_config: Optional[Dict[str, str]] = None
 
 
@@ -3890,7 +3869,7 @@ class Metadata6(BaseParserModel):
     file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class Config33(BaseParserModel):
+class Config36(BaseParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -3919,12 +3898,13 @@ class SavedQueries(BaseParserModel):
     description: Optional[str] = None
     label: Optional[str] = None
     metadata: Optional[Metadata6] = None
-    config: Optional[Config33] = Field(None, title='SavedQueryConfig')
+    config: Optional[Config36] = Field(None, title='SavedQueryConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
-    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn18] = Field(None, title='DependsOn')
     created_at: Optional[float] = None
     refs: Optional[List[Ref]] = None
+    tags: Optional[Union[List[str], str]] = None
 
 
 class Type26(Enum):
@@ -3932,6 +3912,13 @@ class Type26(Enum):
     natural = 'natural'
     primary = 'primary'
     unique = 'unique'
+
+
+class Config37(BaseParserModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    meta: Optional[Dict[str, Any]] = None
 
 
 class Entity1(BaseParserModel):
@@ -3944,6 +3931,7 @@ class Entity1(BaseParserModel):
     label: Optional[str] = None
     role: Optional[str] = None
     expr: Optional[str] = None
+    config: Optional[Config37] = None
 
 
 class NonAdditiveDimension1(BaseParserModel):
@@ -3968,6 +3956,7 @@ class Measure3(BaseParserModel):
     agg_params: Optional[AggParams] = None
     non_additive_dimension: Optional[NonAdditiveDimension1] = None
     agg_time_dimension: Optional[str] = None
+    config: Optional[Config37] = None
 
 
 class Type27(Enum):
@@ -4003,6 +3992,7 @@ class Dimension1(BaseParserModel):
     type_params: Optional[TypeParams3] = None
     expr: Optional[str] = None
     metadata: Optional[Metadata7] = None
+    config: Optional[Config37] = None
 
 
 class Metadata8(BaseParserModel):
@@ -4013,7 +4003,7 @@ class Metadata8(BaseParserModel):
     file_slice: FileSlice = Field(..., title='FileSlice')
 
 
-class Config34(BaseParserModel):
+class Config40(BaseParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -4043,10 +4033,10 @@ class SemanticModels(BaseParserModel):
     measures: Optional[List[Measure3]] = None
     dimensions: Optional[List[Dimension1]] = None
     metadata: Optional[Metadata8] = None
-    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
+    depends_on: Optional[DependsOn18] = Field(None, title='DependsOn')
     refs: Optional[List[Ref]] = None
     created_at: Optional[float] = None
-    config: Optional[Config34] = Field(None, title='SemanticModelConfig')
+    config: Optional[Config40] = Field(None, title='SemanticModelConfig')
     unrendered_config: Optional[Dict[str, Any]] = None
     primary_entity: Optional[str] = None
     group: Optional[str] = None
@@ -4071,7 +4061,7 @@ class Expect1(BaseParserModel):
     fixture: Optional[str] = None
 
 
-class Config35(BaseParserModel):
+class Config41(BaseParserModel):
     model_config = ConfigDict(
         extra='allow',
     )
@@ -4097,8 +4087,8 @@ class UnitTests(BaseParserModel):
     fqn: List[str]
     description: Optional[str] = ''
     overrides: Optional[Overrides] = None
-    depends_on: Optional[DependsOn12] = Field(None, title='DependsOn')
-    config: Optional[Config35] = Field(None, title='UnitTestConfig')
+    depends_on: Optional[DependsOn18] = Field(None, title='DependsOn')
+    config: Optional[Config41] = Field(None, title='UnitTestConfig')
     checksum: Optional[str] = None
     schema_: Optional[str] = Field(None, alias='schema')
     created_at: Optional[float] = None
