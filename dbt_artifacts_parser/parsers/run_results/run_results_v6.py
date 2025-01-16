@@ -16,7 +16,7 @@ class Metadata(BaseParserModel):
         extra='forbid',
     )
     dbt_schema_version: str
-    dbt_version: Optional[str] = '1.9.0b2'
+    dbt_version: Optional[str] = '1.10.0a1'
     generated_at: Optional[str] = None
     invocation_id: Optional[str] = None
     env: Optional[Dict[str, str]] = None
@@ -27,6 +27,7 @@ class Status(Enum):
     error = 'error'
     skipped = 'skipped'
     partial_success = 'partial success'
+    no_op = 'no-op'
 
 
 class Status1(Enum):
