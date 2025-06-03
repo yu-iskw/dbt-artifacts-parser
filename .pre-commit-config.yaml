@@ -24,7 +24,7 @@ repos:
       - id: check-yaml
       - id: detect-private-key
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.4
+    rev: v1.7.7
     hooks:
       - id: actionlint
 #  - repo: https://github.com/asottile/reorder_python_imports
@@ -32,16 +32,16 @@ repos:
 #    hooks:
 #      - id: reorder-python-imports
   - repo: https://github.com/asottile/setup-cfg-fmt
-    rev: v2.7.0
+    rev: v2.8.0
     hooks:
       - id: setup-cfg-fmt
   - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+    rev: 6.0.1
     hooks:
       - id: isort
         name: isort (python)
   - repo: https://github.com/pycqa/pylint
-    rev: v3.3.2
+    rev: v3.3.7
     hooks:
       - id: pylint
 #  - repo: https://github.com/pre-commit/mirrors-mypy
@@ -54,6 +54,6 @@ repos:
     hooks:
       - id: shellcheck
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.4
+    rev: v1.7.7
     hooks:
       - id: actionlint-docker
