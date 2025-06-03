@@ -3,10 +3,11 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import AwareDatetime, ConfigDict
+from pydantic import ConfigDict
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
@@ -17,7 +18,7 @@ class BaseArtifactMetadata(BaseParserModel):
     )
     dbt_schema_version: str
     dbt_version: Optional[str] = '0.20.0rc1'
-    generated_at: Optional[AwareDatetime] = '2021-06-07T14:49:01.097134Z'
+    generated_at: Optional[datetime] = '2021-06-07T14:49:01.097134Z'
     invocation_id: Optional[str] = None
     env: Optional[Dict[str, str]] = {}
 
@@ -47,8 +48,8 @@ class TimingInfo(BaseParserModel):
         extra='forbid',
     )
     name: str
-    started_at: Optional[AwareDatetime] = None
-    completed_at: Optional[AwareDatetime] = None
+    started_at: Optional[datetime] = None
+    completed_at: Optional[datetime] = None
 
 
 class RunResultOutput(BaseParserModel):

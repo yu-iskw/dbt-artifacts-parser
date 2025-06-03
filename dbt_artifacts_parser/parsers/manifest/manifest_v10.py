@@ -3,10 +3,11 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import AwareDatetime, ConfigDict, Field, constr
+from pydantic import ConfigDict, Field, constr
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
@@ -15,11 +16,11 @@ class ManifestMetadata(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    dbt_schema_version: Optional[
-        str
-    ] = 'https://schemas.getdbt.com/dbt/manifest/v10.json'
+    dbt_schema_version: Optional[str] = (
+        'https://schemas.getdbt.com/dbt/manifest/v10.json'
+    )
     dbt_version: Optional[str] = '1.6.0'
-    generated_at: Optional[AwareDatetime] = '2023-08-07T20:10:03.381822Z'
+    generated_at: Optional[datetime] = '2023-08-07T20:10:03.381822Z'
     invocation_id: Optional[str] = '03dee192-ff77-43cc-bc3f-5eeaf6d36344'
     env: Optional[Dict[str, str]] = {}
     project_name: Optional[str] = Field(None, description='Name of the root project')
@@ -149,9 +150,9 @@ class TestConfig(BaseParserModel):
     meta: Optional[Dict[str, Any]] = {}
     group: Optional[str] = None
     materialized: Optional[str] = 'test'
-    severity: Optional[
-        constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
-    ] = 'ERROR'
+    severity: Optional[constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')] = (
+        'ERROR'
+    )
     store_failures: Optional[bool] = None
     where: Optional[str] = None
     limit: Optional[int] = None
@@ -898,7 +899,7 @@ class ModelNode(BaseParserModel):
     constraints: Optional[List[ModelLevelConstraint]] = []
     version: Optional[Union[str, float]] = None
     latest_version: Optional[Union[str, float]] = None
-    deprecation_date: Optional[AwareDatetime] = None
+    deprecation_date: Optional[datetime] = None
     defer_relation: Optional[DeferRelation] = None
 
 
