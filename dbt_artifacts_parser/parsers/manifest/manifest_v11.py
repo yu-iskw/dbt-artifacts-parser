@@ -231,9 +231,9 @@ class TestConfig(BaseParserModel):
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
     materialized: Optional[str] = 'test'
-    severity: Optional[
-        constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
-    ] = 'ERROR'
+    severity: Optional[constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')] = (
+        'ERROR'
+    )
     store_failures: Optional[bool] = None
     store_failures_as: Optional[str] = None
     where: Optional[str] = None
@@ -1447,8 +1447,3 @@ class ManifestV11(BaseParserModel):
     semantic_models: Dict[str, SemanticModel] = Field(
         ..., description='The semantic models defined in the dbt project'
     )
-
-
-# NOTE: We manually change the class, as the generated code is not correct.
-# class ManifestV11(RootModel[WritableManifest]):
-#     root: WritableManifest

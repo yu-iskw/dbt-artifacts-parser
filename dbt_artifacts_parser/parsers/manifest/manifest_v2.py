@@ -3,10 +3,11 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import AwareDatetime, ConfigDict, Field, constr
+from pydantic import ConfigDict, Field, constr
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
@@ -15,11 +16,11 @@ class ManifestMetadata(BaseParserModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    dbt_schema_version: Optional[
-        str
-    ] = 'https://schemas.getdbt.com/dbt/manifest/v2.json'
+    dbt_schema_version: Optional[str] = (
+        'https://schemas.getdbt.com/dbt/manifest/v2.json'
+    )
     dbt_version: Optional[str] = '0.20.0rc1'
-    generated_at: Optional[AwareDatetime] = '2021-06-07T14:49:01.099700Z'
+    generated_at: Optional[datetime] = '2021-06-07T14:49:01.099700Z'
     invocation_id: Optional[str] = None
     env: Optional[Dict[str, str]] = {}
     project_id: Optional[str] = Field(
@@ -113,9 +114,9 @@ class TestConfig(BaseParserModel):
     database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = []
     full_refresh: Optional[bool] = None
-    severity: Optional[
-        constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')
-    ] = 'ERROR'
+    severity: Optional[constr(pattern=r'^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$')] = (
+        'ERROR'
+    )
     store_failures: Optional[bool] = None
     where: Optional[str] = None
     limit: Optional[int] = None
@@ -439,7 +440,7 @@ class FreshnessMetadata(BaseParserModel):
     )
     dbt_schema_version: Optional[str] = 'https://schemas.getdbt.com/dbt/sources/v1.json'
     dbt_version: Optional[str] = '0.20.0rc1'
-    generated_at: Optional[AwareDatetime] = '2021-06-07T14:49:01.095724Z'
+    generated_at: Optional[datetime] = '2021-06-07T14:49:01.095724Z'
     invocation_id: Optional[str] = None
     env: Optional[Dict[str, str]] = {}
 
@@ -1305,8 +1306,8 @@ class SourceFreshnessOutput(BaseParserModel):
         extra='forbid',
     )
     unique_id: str
-    max_loaded_at: AwareDatetime
-    snapshotted_at: AwareDatetime
+    max_loaded_at: datetime
+    snapshotted_at: datetime
     max_loaded_at_time_ago_in_s: float
     status: Status1
     criteria: FreshnessThreshold
