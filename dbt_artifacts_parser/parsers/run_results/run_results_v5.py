@@ -77,8 +77,3 @@ class RunResultsV5(BaseParserModel):
     results: List[RunResultOutput]
     elapsed_time: float
     args: Optional[Dict[str, Any]] = None
-
-
-# NOTE: We manually change the class, as the generated code is not correct.
-# class RunResultsV5(RootModel[RunResultsArtifact]):
-#     root: RunResultsArtifact

@@ -3,10 +3,11 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import AwareDatetime, ConfigDict
+from pydantic import ConfigDict
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
@@ -17,7 +18,7 @@ class FreshnessMetadata(BaseParserModel):
     )
     dbt_schema_version: Optional[str] = 'https://schemas.getdbt.com/dbt/sources/v1.json'
     dbt_version: Optional[str] = '0.19.0'
-    generated_at: Optional[AwareDatetime] = '2021-02-10T04:42:33.675309Z'
+    generated_at: Optional[datetime] = '2021-02-10T04:42:33.675309Z'
     invocation_id: Optional[str] = None
     env: Optional[Dict[str, str]] = {}
 
@@ -70,8 +71,8 @@ class SourceFreshnessOutput(BaseParserModel):
         extra='forbid',
     )
     unique_id: str
-    max_loaded_at: AwareDatetime
-    snapshotted_at: AwareDatetime
+    max_loaded_at: datetime
+    snapshotted_at: datetime
     max_loaded_at_time_ago_in_s: float
     status: Status1
     criteria: FreshnessThreshold
