@@ -1240,6 +1240,8 @@ class Metric(BaseParserModel):
     created_at: Optional[float] = 1681270501.199492
     group: Optional[str] = None
 
+    model_config = ConfigDict(protected_namespaces=())
+
 
 class AnalysisNode(BaseParserModel):
     model_config = ConfigDict(
