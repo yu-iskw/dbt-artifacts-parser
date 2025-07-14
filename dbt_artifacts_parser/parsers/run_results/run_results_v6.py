@@ -16,7 +16,7 @@ class Metadata(BaseParserModel):
         extra='forbid',
     )
     dbt_schema_version: str
-    dbt_version: Optional[str] = '1.10.0b3'
+    dbt_version: Optional[str] = '1.10.0a1'
     generated_at: Optional[str] = None
     invocation_id: Optional[str] = None
     invocation_started_at: Optional[str] = None
