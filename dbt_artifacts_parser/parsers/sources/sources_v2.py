@@ -3,11 +3,10 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import ConfigDict
+from pydantic import AwareDatetime, ConfigDict
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
@@ -62,8 +61,8 @@ class TimingInfo(BaseParserModel):
         extra="forbid",
     )
     name: str
-    started_at: Optional[datetime] = None
-    completed_at: Optional[datetime] = None
+    started_at: Optional[AwareDatetime] = None
+    completed_at: Optional[AwareDatetime] = None
 
 
 class FreshnessThreshold(BaseParserModel):
@@ -80,8 +79,8 @@ class SourceFreshnessOutput(BaseParserModel):
         extra="forbid",
     )
     unique_id: str
-    max_loaded_at: datetime
-    snapshotted_at: datetime
+    max_loaded_at: AwareDatetime
+    snapshotted_at: AwareDatetime
     max_loaded_at_time_ago_in_s: float
     status: Status1
     criteria: FreshnessThreshold
