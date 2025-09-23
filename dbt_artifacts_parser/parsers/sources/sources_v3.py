@@ -19,7 +19,6 @@ class Metadata(BaseParserModel):
     dbt_version: Optional[str] = "1.9.0b2"
     generated_at: Optional[str] = None
     invocation_id: Optional[str] = None
-    invocation_started_at: Optional[str] = None
     env: Optional[Dict[str, str]] = None
 
 

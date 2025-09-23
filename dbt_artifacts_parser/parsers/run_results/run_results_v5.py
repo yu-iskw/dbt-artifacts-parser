@@ -6,7 +6,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import ConfigDict, RootModel
+from pydantic import ConfigDict
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
@@ -69,7 +69,7 @@ class RunResultOutput(BaseParserModel):
     relation_name: Optional[str] = None
 
 
-class RunResultsArtifact(BaseParserModel):
+class RunResultsV5(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -77,7 +77,3 @@ class RunResultsArtifact(BaseParserModel):
     results: List[RunResultOutput]
     elapsed_time: float
     args: Optional[Dict[str, Any]] = None
-
-
-class RunResultsV5(RootModel[RunResultsArtifact]):
-    root: RunResultsArtifact
