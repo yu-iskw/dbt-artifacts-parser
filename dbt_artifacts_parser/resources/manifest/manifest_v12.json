@@ -4071,7 +4071,11 @@
                                 "default": "any"
                               }
                             },
-                            "additionalProperties": true
+                            "additionalProperties": true,
+                            "required": [
+                              "count",
+                              "period"
+                            ]
                           }
                         },
                         "additionalProperties": true,
@@ -15669,7 +15673,11 @@
                                       "default": "any"
                                     }
                                   },
-                                  "additionalProperties": true
+                                  "additionalProperties": true,
+                                  "required": [
+                                    "count",
+                                    "period"
+                                  ]
                                 }
                               },
                               "additionalProperties": true,

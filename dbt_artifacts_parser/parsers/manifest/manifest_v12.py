@@ -741,6 +741,11 @@ class UpdatesOn(Enum):
     any = "any"
 
 
+class UpdatesOn(Enum):
+    all = 'all'
+    any = 'any'
+
+
 class BuildAfter(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -3358,27 +3363,34 @@ class Config42(BaseParserModel):
     field_extra: Optional[Dict[str, Any]] = Field(None, alias="_extra")
     enabled: Optional[bool] = True
     alias: Optional[str] = None
+    schema_: Optional[str] = Field(None, alias='schema')
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
     tags: Optional[Union[List[str], str]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    materialized: Optional[str] = 'snapshot'
     materialized: Optional[str] = "snapshot"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
     lookback: Optional[Any] = 1
     begin: Optional[Any] = None
     persist_docs: Optional[Dict[str, Any]] = None
+    post_hook: Optional[List[PostHookItem]] = Field(None, alias='post-hook')
+    pre_hook: Optional[List[PreHookItem]] = Field(None, alias='pre-hook')
     post_hook: Optional[List[PostHookItem]] = Field(None, alias="post-hook")
     pre_hook: Optional[List[PreHookItem]] = Field(None, alias="pre-hook")
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
     full_refresh: Optional[bool] = None
     unique_key: Optional[Union[str, List[str]]] = None
+    on_schema_change: Optional[str] = 'ignore'
     on_schema_change: Optional[str] = "ignore"
     on_configuration_change: Optional[OnConfigurationChange] = None
     grants: Optional[Dict[str, Any]] = None
     packages: Optional[List[str]] = None
+    docs: Optional[Docs19] = Field(None, title='Docs')
+    contract: Optional[Contract29] = Field(None, title='ContractConfig')
     docs: Optional[Docs21] = Field(None, title="Docs")
     contract: Optional[Contract31] = Field(None, title="ContractConfig")
     event_time: Optional[Any] = None
@@ -3389,6 +3401,7 @@ class Config42(BaseParserModel):
     updated_at: Optional[str] = None
     check_cols: Optional[Union[str, List[str]]] = None
     snapshot_meta_column_names: Optional[SnapshotMetaColumnNames] = Field(
+        None, title='SnapshotMetaColumnNames'
         None, title="SnapshotMetaColumnNames"
     )
     dbt_valid_to_current: Optional[str] = None
