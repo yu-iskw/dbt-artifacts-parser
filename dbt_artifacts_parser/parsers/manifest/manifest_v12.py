@@ -49,6 +49,9 @@ class Metadata(BaseParserModel):
     quoting: Optional[Quoting] = Field(
         None, description='The quoting configuration for the project'
     )
+    run_started_at: Optional[str] = Field(
+        None, description='Timestamp when the dbt run started'
+    )
 
 
 class Checksum(BaseParserModel):
@@ -571,6 +574,7 @@ class Nodes2(BaseParserModel):
     extra_ctes: Optional[List[ExtraCte]] = None
     field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
     contract: Optional[Contract3] = Field(None, title='Contract')
+    functions: Optional[List[str]] = None
 
 
 class Contract5(BaseParserModel):
@@ -707,6 +711,7 @@ class Nodes3(BaseParserModel):
     field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
     contract: Optional[Contract6] = Field(None, title='Contract')
     index: Optional[int] = None
+    functions: Optional[List[str]] = None
 
 
 class Contract7(BaseParserModel):
@@ -991,6 +996,7 @@ class Nodes4(BaseParserModel):
     primary_key: Optional[List[str]] = None
     time_spine: Optional[TimeSpine] = None
     freshness: Optional[Freshness1] = None
+    functions: Optional[List[str]] = None
 
 
 class Config12(BaseParserModel):
@@ -1236,6 +1242,7 @@ class Nodes6(BaseParserModel):
     extra_ctes: Optional[List[ExtraCte]] = None
     field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
     contract: Optional[Contract11] = Field(None, title='Contract')
+    functions: Optional[List[str]] = None
     column_name: Optional[str] = None
     file_key_name: Optional[str] = None
     attached_node: Optional[str] = None
@@ -1455,6 +1462,7 @@ class Nodes7(BaseParserModel):
     field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
     contract: Optional[Contract14] = Field(None, title='Contract')
     defer_relation: Optional[DeferRelation2] = None
+    functions: Optional[List[str]] = None
 
 
 class WarnAfter(BaseParserModel):
@@ -2869,6 +2877,7 @@ class Disabled4(BaseParserModel):
     extra_ctes: Optional[List[ExtraCte]] = None
     field_pre_injected_sql: Optional[str] = Field(None, alias='_pre_injected_sql')
     contract: Optional[Contract24] = Field(None, title='Contract')
+    functions: Optional[List[str]] = None
     access: Optional[Access] = 'protected'
     constraints: Optional[List[Constraint15]] = None
     version: Optional[Union[str, float]] = None
@@ -4468,4 +4477,7 @@ class ManifestV12(BaseParserModel):
     )
     unit_tests: Dict[str, UnitTests] = Field(
         ..., description='The unit tests defined in the project'
+    )
+    functions: Optional[Dict[str, Any]] = Field(
+        None, description='User-defined functions in the dbt project'
     )
