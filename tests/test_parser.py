@@ -75,6 +75,7 @@ class TestCatalogParser:
     ("v11", os.path.join(get_project_root(), "tests", "resources", "v11", "jaffle_shop", "manifest.json")),
     ("v12", os.path.join(get_project_root(), "tests", "resources", "v12", "jaffle_shop", "manifest_1.8.json")),
     ("v12", os.path.join(get_project_root(), "tests", "resources", "v12", "jaffle_shop", "manifest_1.9.json")),
+    ("v12", os.path.join(get_project_root(), "tests", "resources", "v12", "jaffle_shop", "manifest_1.10.json")),
 ])
 class TestManifestParser:
     def test_parse_manifest(self, version, path):
