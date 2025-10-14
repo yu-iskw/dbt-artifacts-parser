@@ -12,10 +12,10 @@ from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 class Metadata(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     dbt_schema_version: Optional[str] = None
-    dbt_version: Optional[str] = '1.9.0b2'
+    dbt_version: Optional[str] = "1.9.0b2"
     generated_at: Optional[str] = None
     invocation_id: Optional[str] = None
     env: Optional[Dict[str, str]] = None
@@ -23,10 +23,10 @@ class Metadata(BaseParserModel):
 
 class Metadata1(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     type: str
-    schema_: str = Field(..., alias='schema')
+    schema_: str = Field(..., alias="schema")
     name: str
     database: Optional[str] = None
     comment: Optional[str] = None
@@ -35,7 +35,7 @@ class Metadata1(BaseParserModel):
 
 class Columns(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     type: str
     index: int
@@ -45,7 +45,7 @@ class Columns(BaseParserModel):
 
 class Stats(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     id: str
     label: str
@@ -56,9 +56,9 @@ class Stats(BaseParserModel):
 
 class Nodes(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
-    metadata: Metadata1 = Field(..., title='TableMetadata')
+    metadata: Metadata1 = Field(..., title="TableMetadata")
     columns: Dict[str, Columns]
     stats: Dict[str, Stats]
     unique_id: Optional[str] = None
@@ -66,9 +66,9 @@ class Nodes(BaseParserModel):
 
 class Sources(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
-    metadata: Metadata1 = Field(..., title='TableMetadata')
+    metadata: Metadata1 = Field(..., title="TableMetadata")
     columns: Dict[str, Columns]
     stats: Dict[str, Stats]
     unique_id: Optional[str] = None
@@ -76,10 +76,10 @@ class Sources(BaseParserModel):
 
 class CatalogV1(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
-    metadata: Metadata = Field(..., title='CatalogMetadata')
+    metadata: Metadata = Field(..., title="CatalogMetadata")
     nodes: Dict[str, Nodes]
     sources: Dict[str, Sources]
     errors: Optional[List[str]] = None
-    field_compile_results: Any = Field(None, alias='_compile_results')
+    field_compile_results: Any = Field(None, alias="_compile_results")

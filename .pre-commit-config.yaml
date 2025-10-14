@@ -61,7 +61,5 @@ repos:
       # Run the linter.
       - id: ruff-check
         args: [ --fix ]
-        exclude: (dbt_artifacts_parser/parsers/)
       # Run the formatter.
       - id: ruff-format
-        exclude: (dbt_artifacts_parser/parsers/)
