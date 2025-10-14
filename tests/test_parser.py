@@ -60,23 +60,176 @@ class TestCatalogParser:
         )
 
 
-@pytest.mark.parametrize("version,path", [
-    ("v1", os.path.join(get_project_root(), "tests", "resources", "v1", "jaffle_shop", "manifest.json")),
-    ("v2", os.path.join(get_project_root(), "tests", "resources", "v2", "jaffle_shop", "manifest.json")),
-    ("v3", os.path.join(get_project_root(), "tests", "resources", "v3", "jaffle_shop", "manifest.json")),
-    ("v4", os.path.join(get_project_root(), "tests", "resources", "v4", "jaffle_shop", "manifest.json")),
-    ("v5", os.path.join(get_project_root(), "tests", "resources", "v5", "jaffle_shop", "manifest.json")),
-    ("v6", os.path.join(get_project_root(), "tests", "resources", "v6", "jaffle_shop", "manifest.json")),
-    ("v7", os.path.join(get_project_root(), "tests", "resources", "v7", "jaffle_shop", "manifest.json")),
-    ("v8", os.path.join(get_project_root(), "tests", "resources", "v8", "jaffle_shop", "manifest.json")),
-    ("v8", os.path.join(get_project_root(), "tests", "resources", "v8", "jaffle_shop_at_1_4_3", "manifest.json")),
-    ("v9", os.path.join(get_project_root(), "tests", "resources", "v9", "jaffle_shop_at_1.5rc1", "manifest.json")),
-    ("v10", os.path.join(get_project_root(), "tests", "resources", "v10", "jaffle_shop", "manifest.json")),
-    ("v11", os.path.join(get_project_root(), "tests", "resources", "v11", "jaffle_shop", "manifest.json")),
-    ("v12", os.path.join(get_project_root(), "tests", "resources", "v12", "jaffle_shop", "manifest_1.8.json")),
-    ("v12", os.path.join(get_project_root(), "tests", "resources", "v12", "jaffle_shop", "manifest_1.9.json")),
-    ("v12", os.path.join(get_project_root(), "tests", "resources", "v12", "jaffle_shop", "manifest_1.10.json")),
-])
+@pytest.mark.parametrize(
+    "version,path",
+    [
+        (
+            "v1",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "v1",
+                "jaffle_shop",
+                "manifest.json",
+            ),
+        ),
+        (
+            "v2",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "v2",
+                "jaffle_shop",
+                "manifest.json",
+            ),
+        ),
+        (
+            "v3",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "v3",
+                "jaffle_shop",
+                "manifest.json",
+            ),
+        ),
+        (
+            "v4",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "v4",
+                "jaffle_shop",
+                "manifest.json",
+            ),
+        ),
+        (
+            "v5",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "v5",
+                "jaffle_shop",
+                "manifest.json",
+            ),
+        ),
+        (
+            "v6",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "v6",
+                "jaffle_shop",
+                "manifest.json",
+            ),
+        ),
+        (
+            "v7",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "v7",
+                "jaffle_shop",
+                "manifest.json",
+            ),
+        ),
+        (
+            "v8",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "v8",
+                "jaffle_shop",
+                "manifest.json",
+            ),
+        ),
+        (
+            "v8",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "v8",
+                "jaffle_shop_at_1_4_3",
+                "manifest.json",
+            ),
+        ),
+        (
+            "v9",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "v9",
+                "jaffle_shop_at_1.5rc1",
+                "manifest.json",
+            ),
+        ),
+        (
+            "v10",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "v10",
+                "jaffle_shop",
+                "manifest.json",
+            ),
+        ),
+        (
+            "v11",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "v11",
+                "jaffle_shop",
+                "manifest.json",
+            ),
+        ),
+        (
+            "v12",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "v12",
+                "jaffle_shop",
+                "manifest_1.8.json",
+            ),
+        ),
+        (
+            "v12",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "v12",
+                "jaffle_shop",
+                "manifest_1.9.json",
+            ),
+        ),
+        (
+            "v12",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "v12",
+                "jaffle_shop",
+                "manifest_1.10.json",
+            ),
+        ),
+    ],
+)
 class TestManifestParser:
     def test_parse_manifest(self, version, path):
         with open(path, "r", encoding="utf-8") as fp:
