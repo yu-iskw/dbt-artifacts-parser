@@ -22,5 +22,5 @@ class TestUtils(unittest.TestCase):
     def test_get_project_root(self):
         self.assertEqual(
             get_project_root(),
-            os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+            os.path.abspath(os.path.dirname(os.path.dirname(__file__))),
         )

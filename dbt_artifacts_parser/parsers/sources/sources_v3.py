@@ -13,22 +13,22 @@ from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 class Metadata(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     dbt_schema_version: Optional[str] = None
-    dbt_version: Optional[str] = '1.9.0b2'
+    dbt_version: Optional[str] = "1.9.0b2"
     generated_at: Optional[str] = None
     invocation_id: Optional[str] = None
     env: Optional[Dict[str, str]] = None
 
 
 class Status(Enum):
-    runtime_error = 'runtime error'
+    runtime_error = "runtime error"
 
 
 class Results(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     unique_id: str
     error: Optional[Union[str, int]] = None
@@ -36,21 +36,21 @@ class Results(BaseParserModel):
 
 
 class Status1(Enum):
-    pass_ = 'pass'
-    warn = 'warn'
-    error = 'error'
-    runtime_error = 'runtime error'
+    pass_ = "pass"
+    warn = "warn"
+    error = "error"
+    runtime_error = "runtime error"
 
 
 class Period(Enum):
-    minute = 'minute'
-    hour = 'hour'
-    day = 'day'
+    minute = "minute"
+    hour = "hour"
+    day = "day"
 
 
 class WarnAfter(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     count: Optional[int] = None
     period: Optional[Period] = None
@@ -58,7 +58,7 @@ class WarnAfter(BaseParserModel):
 
 class ErrorAfter(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     count: Optional[int] = None
     period: Optional[Period] = None
@@ -66,7 +66,7 @@ class ErrorAfter(BaseParserModel):
 
 class Criteria(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     warn_after: Optional[WarnAfter] = None
     error_after: Optional[ErrorAfter] = None
@@ -75,7 +75,7 @@ class Criteria(BaseParserModel):
 
 class TimingItem(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     name: str
     started_at: Optional[str] = None
@@ -84,14 +84,14 @@ class TimingItem(BaseParserModel):
 
 class Results1(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     unique_id: str
     max_loaded_at: str
     snapshotted_at: str
     max_loaded_at_time_ago_in_s: float
     status: Status1
-    criteria: Criteria = Field(..., title='FreshnessThreshold')
+    criteria: Criteria = Field(..., title="FreshnessThreshold")
     adapter_response: Dict[str, Any]
     timing: List[TimingItem]
     thread_id: str
@@ -100,8 +100,8 @@ class Results1(BaseParserModel):
 
 class SourcesV3(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
-    metadata: Metadata = Field(..., title='FreshnessMetadata')
+    metadata: Metadata = Field(..., title="FreshnessMetadata")
     results: List[Union[Results, Results1]]
     elapsed_time: float

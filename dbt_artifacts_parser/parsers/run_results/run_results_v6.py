@@ -13,40 +13,40 @@ from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 class Metadata(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     dbt_schema_version: str
-    dbt_version: Optional[str] = '1.9.0b2'
+    dbt_version: Optional[str] = "1.9.0b2"
     generated_at: Optional[str] = None
     invocation_id: Optional[str] = None
     env: Optional[Dict[str, str]] = None
 
 
 class Status(Enum):
-    success = 'success'
-    error = 'error'
-    skipped = 'skipped'
-    partial_success = 'partial success'
+    success = "success"
+    error = "error"
+    skipped = "skipped"
+    partial_success = "partial success"
 
 
 class Status1(Enum):
-    pass_ = 'pass'
-    error = 'error'
-    fail = 'fail'
-    warn = 'warn'
-    skipped = 'skipped'
+    pass_ = "pass"
+    error = "error"
+    fail = "fail"
+    warn = "warn"
+    skipped = "skipped"
 
 
 class Status2(Enum):
-    pass_ = 'pass'
-    warn = 'warn'
-    error = 'error'
-    runtime_error = 'runtime error'
+    pass_ = "pass"
+    warn = "warn"
+    error = "error"
+    runtime_error = "runtime error"
 
 
 class TimingItem(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     name: str
     started_at: Optional[str] = None
@@ -55,7 +55,7 @@ class TimingItem(BaseParserModel):
 
 class BatchResults(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     successful: Optional[List[List]] = None
     failed: Optional[List[List]] = None
@@ -63,7 +63,7 @@ class BatchResults(BaseParserModel):
 
 class Result(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     status: Union[Status, Status1, Status2]
     timing: List[TimingItem]
@@ -81,9 +81,9 @@ class Result(BaseParserModel):
 
 class RunResultsV6(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
-    metadata: Metadata = Field(..., title='BaseArtifactMetadata')
+    metadata: Metadata = Field(..., title="BaseArtifactMetadata")
     results: List[Result]
     elapsed_time: float
     args: Optional[Dict[str, Any]] = None

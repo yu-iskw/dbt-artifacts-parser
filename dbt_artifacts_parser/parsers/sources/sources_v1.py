@@ -14,22 +14,22 @@ from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 class FreshnessMetadata(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
-    dbt_schema_version: Optional[str] = 'https://schemas.getdbt.com/dbt/sources/v1.json'
-    dbt_version: Optional[str] = '0.19.0'
-    generated_at: Optional[datetime] = '2021-02-10T04:42:33.675309Z'
+    dbt_schema_version: Optional[str] = "https://schemas.getdbt.com/dbt/sources/v1.json"
+    dbt_version: Optional[str] = "0.19.0"
+    generated_at: Optional[datetime] = "2021-02-10T04:42:33.675309Z"
     invocation_id: Optional[str] = None
     env: Optional[Dict[str, str]] = {}
 
 
 class Status(Enum):
-    runtime_error = 'runtime error'
+    runtime_error = "runtime error"
 
 
 class SourceFreshnessRuntimeError(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     unique_id: str
     error: Optional[Union[str, int]] = None
@@ -37,21 +37,21 @@ class SourceFreshnessRuntimeError(BaseParserModel):
 
 
 class Status1(Enum):
-    pass_ = 'pass'
-    warn = 'warn'
-    error = 'error'
-    runtime_error = 'runtime error'
+    pass_ = "pass"
+    warn = "warn"
+    error = "error"
+    runtime_error = "runtime error"
 
 
 class Period(Enum):
-    minute = 'minute'
-    hour = 'hour'
-    day = 'day'
+    minute = "minute"
+    hour = "hour"
+    day = "day"
 
 
 class Time(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     count: int
     period: Period
@@ -59,7 +59,7 @@ class Time(BaseParserModel):
 
 class FreshnessThreshold(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     warn_after: Optional[Time] = None
     error_after: Optional[Time] = None
@@ -68,7 +68,7 @@ class FreshnessThreshold(BaseParserModel):
 
 class SourceFreshnessOutput(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     unique_id: str
     max_loaded_at: datetime
@@ -81,7 +81,7 @@ class SourceFreshnessOutput(BaseParserModel):
 
 class SourcesV1(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     metadata: FreshnessMetadata
     results: List[Union[SourceFreshnessRuntimeError, SourceFreshnessOutput]]

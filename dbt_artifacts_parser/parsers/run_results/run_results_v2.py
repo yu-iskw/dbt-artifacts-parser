@@ -14,38 +14,38 @@ from dbt_artifacts_parser.parsers.base import BaseParserModel
 
 class BaseArtifactMetadata(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     dbt_schema_version: str
-    dbt_version: Optional[str] = '0.20.0rc1'
-    generated_at: Optional[datetime] = '2021-06-07T14:49:01.097134Z'
+    dbt_version: Optional[str] = "0.20.0rc1"
+    generated_at: Optional[datetime] = "2021-06-07T14:49:01.097134Z"
     invocation_id: Optional[str] = None
     env: Optional[Dict[str, str]] = {}
 
 
 class Status(Enum):
-    success = 'success'
-    error = 'error'
-    skipped = 'skipped'
+    success = "success"
+    error = "error"
+    skipped = "skipped"
 
 
 class Status1(Enum):
-    pass_ = 'pass'
-    error = 'error'
-    fail = 'fail'
-    warn = 'warn'
+    pass_ = "pass"
+    error = "error"
+    fail = "fail"
+    warn = "warn"
 
 
 class Status2(Enum):
-    pass_ = 'pass'
-    warn = 'warn'
-    error = 'error'
-    runtime_error = 'runtime error'
+    pass_ = "pass"
+    warn = "warn"
+    error = "error"
+    runtime_error = "runtime error"
 
 
 class TimingInfo(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     name: str
     started_at: Optional[datetime] = None
@@ -54,7 +54,7 @@ class TimingInfo(BaseParserModel):
 
 class RunResultOutput(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     status: Union[Status, Status1, Status2]
     timing: List[TimingInfo]
@@ -68,7 +68,7 @@ class RunResultOutput(BaseParserModel):
 
 class RunResultsV2(BaseParserModel):
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
     metadata: BaseArtifactMetadata
     results: List[RunResultOutput]

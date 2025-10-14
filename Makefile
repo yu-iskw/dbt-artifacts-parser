@@ -14,7 +14,7 @@ setup-pre-commit:
 
 # Check all the coding style.
 .PHONY: lint
-lint: run-pre-commit lint-shell lint-python
+lint: run-pre-commit
 
 # Run the pre-commit hooks.
 .PHONY: run-pre-commit
@@ -25,25 +25,6 @@ run-pre-commit:
 .PHONY: update-pre-commit
 update-pre-commit:
 	pre-commit autoupdate
-
-# Check the coding style for the shell scripts.
-.PHONY: lint-shell
-lint-shell:
-	shellcheck ./dev/*.sh
-
-# Check the coding style for the python files.
-.PHONY: lint-python
-lint-python:
-	bash ./dev/lint_python.sh
-
-# Format source codes
-.PHONY: format
-format: format-python
-
-# Format python codes
-.PHONY: format-python
-format-python:
-	bash ./dev/format_python.sh
 
 # Run the unit tests.
 .PHONY: test
