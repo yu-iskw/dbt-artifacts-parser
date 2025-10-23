@@ -313,6 +313,13 @@ If you are interested in contributing to this package, please check out the [CON
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/dlouseiro">
+                    <img src="https://avatars.githubusercontent.com/u/23104901?v=4" width="100;" alt="dlouseiro"/>
+                    <br />
+                    <sub><b>Dinis Louseiro</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/judahrand">
                     <img src="https://avatars.githubusercontent.com/u/17158624?v=4" width="100;" alt="judahrand"/>
                     <br />
@@ -326,6 +333,8 @@ If you are interested in contributing to this package, please check out the [CON
                     <sub><b>Mayur Singal</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/nabilm">
                     <img src="https://avatars.githubusercontent.com/u/987369?v=4" width="100;" alt="nabilm"/>
@@ -333,8 +342,6 @@ If you are interested in contributing to this package, please check out the [CON
                     <sub><b>Mohamed Nabil Mahmoud Hafez</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/OnkarVO7">
                     <img src="https://avatars.githubusercontent.com/u/28966081?v=4" width="100;" alt="OnkarVO7"/>
