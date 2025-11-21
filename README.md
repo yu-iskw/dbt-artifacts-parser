@@ -357,6 +357,13 @@ If you are interested in contributing to this package, please check out the [CON
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/asafalina">
+                    <img src="https://avatars.githubusercontent.com/u/32689896?v=4" width="100;" alt="asafalina"/>
+                    <br />
+                    <sub><b>asafalina</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/meyer-glean">
                     <img src="https://avatars.githubusercontent.com/u/134302890?v=4" width="100;" alt="meyer-glean"/>
                     <br />
