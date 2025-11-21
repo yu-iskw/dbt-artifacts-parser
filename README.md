@@ -200,7 +200,7 @@ import json
 # parse any version of run-results.json
 from dbt_artifacts_parser.parser import parse_run_results
 
-with open("path/to/run-resultsjson", "r") as fp:
+with open("path/to/run-results.json", "r") as fp:
     run_results_dict = json.load(fp)
     run_results_obj = parse_run_results(run_results=run_results_dict)
 
