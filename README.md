@@ -327,14 +327,21 @@ If you are interested in contributing to this package, please check out the [CON
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/kiliantscherny">
+                    <img src="https://avatars.githubusercontent.com/u/90620239?v=4" width="100;" alt="kiliantscherny"/>
+                    <br />
+                    <sub><b>Kilian Tscherny</b></sub>
+                </a>
+            </td>
+		</tr>
+		<tr>
+            <td align="center">
                 <a href="https://github.com/ulixius9">
                     <img src="https://avatars.githubusercontent.com/u/39544459?v=4" width="100;" alt="ulixius9"/>
                     <br />
                     <sub><b>Mayur Singal</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/nabilm">
                     <img src="https://avatars.githubusercontent.com/u/987369?v=4" width="100;" alt="nabilm"/>
