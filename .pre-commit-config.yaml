@@ -35,11 +35,6 @@ repos:
     rev: v3.1.0
     hooks:
       - id: setup-cfg-fmt
-  - repo: https://github.com/pycqa/isort
-    rev: 7.0.0
-    hooks:
-      - id: isort
-        name: isort (python)
   - repo: https://github.com/pycqa/pylint
     rev: v4.0.3
     hooks:

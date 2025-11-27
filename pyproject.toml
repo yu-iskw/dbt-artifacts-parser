@@ -74,5 +74,5 @@ exclude = [
     "renovate.json"
 ]
 
-[tool.isort]
-profile = "black"
+[tool.ruff.lint]
+select = ["E", "F", "I"]
