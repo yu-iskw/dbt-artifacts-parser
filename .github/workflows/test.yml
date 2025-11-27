@@ -4,10 +4,11 @@ on:
   pull_request:
     paths:
       - .github/workflows/test.yml
-      - 'pyproject.toml'
-      - 'dbt_artifacts_parser/**/*.py'
-      - 'tests/**/*.py'
-      - 'pylintrc'
+      - pyproject.toml
+      - uv.lock
+      - dbt_artifacts_parser/**/*.py
+      - tests/**/*.py
+      - pylintrc
   push:
     branches:
       - main
