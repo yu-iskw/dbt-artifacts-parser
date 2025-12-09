@@ -27,10 +27,6 @@ repos:
     rev: v1.7.9
     hooks:
       - id: actionlint
-#  - repo: https://github.com/asottile/reorder_python_imports
-#    rev: v3.10.0
-#    hooks:
-#      - id: reorder-python-imports
   - repo: https://github.com/asottile/setup-cfg-fmt
     rev: v3.1.0
     hooks:
@@ -40,21 +36,13 @@ repos:
     hooks:
       - id: pylint
         exclude: (dbt_artifacts_parser/parsers/)
-#  - repo: https://github.com/pre-commit/mirrors-mypy
-#    rev: 'v1.4.1'
-#    hooks:
-#      - id: mypy
-#        additional_dependencies: [types-all]
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.11.0.1
     hooks:
       - id: shellcheck
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    # Ruff version.
     rev: v0.14.6
     hooks:
-      # Run the linter.
       - id: ruff-check
         args: [ --fix ]
-      # Run the formatter.
       - id: ruff-format
