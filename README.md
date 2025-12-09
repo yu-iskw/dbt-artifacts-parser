@@ -336,6 +336,13 @@ If you are interested in contributing to this package, please check out the [CON
 		</tr>
 		<tr>
             <td align="center">
+                <a href="https://github.com/mattcristal">
+                    <img src="https://avatars.githubusercontent.com/u/33809495?v=4" width="100;" alt="mattcristal"/>
+                    <br />
+                    <sub><b>Matteo Renoldi</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/ulixius9">
                     <img src="https://avatars.githubusercontent.com/u/39544459?v=4" width="100;" alt="ulixius9"/>
                     <br />
@@ -370,6 +377,8 @@ If you are interested in contributing to this package, please check out the [CON
                     <sub><b>asafalina</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/meyer-glean">
                     <img src="https://avatars.githubusercontent.com/u/134302890?v=4" width="100;" alt="meyer-glean"/>
