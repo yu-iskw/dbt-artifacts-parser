@@ -8,7 +8,7 @@
 
 # dbt-artifacts-parser
 
-This is a dbt artifacts parse in python.
+This is a dbt artifacts parser in python.
 It enables us to deal with `catalog.json`, `manifest.json`, `run-results.json` and `sources.json` as python objects.
 
 This package is primarily designed for dbt-core, enabling seamless interaction with dbt artifacts as Python objects. While dbt Cloud provides additional artifact types beyond those of dbt-core, this package does not offer comprehensive support for them.
@@ -23,6 +23,7 @@ This package is primarily designed for dbt-core, enabling seamless interaction w
 
 | Version | Supported dbt Version | Supported pydantic Version |
 |---------|-----------------------|----------------------------|
+|  0.12   | dbt 0.19 to 1.11      | pydantic v2                |
 |  0.9    | dbt 1.7 to 1.10       | pydantic v2                |
 |  0.8    | dbt 1.5 to 1.9        | pydantic v2                |
 |  0.7    | dbt 1.5 to 1.8        | pydantic v2                |
@@ -60,12 +61,12 @@ Those are the classes to parse dbt artifacts.
 
 ### Run Results
 
-- [RunResultsV1](dbt_artifacts_parser/parsers/manifest/manifest_v1.py) for run_results.json v1
-- [RunResultsV2](dbt_artifacts_parser/parsers/manifest/manifest_v2.py) for run_results.json v2
-- [RunResultsV3](dbt_artifacts_parser/parsers/manifest/manifest_v3.py) for run_results.json v3
-- [RunResultsV4](dbt_artifacts_parser/parsers/manifest/manifest_v4.py) for run_results.json v4
-- [RunResultsV5](dbt_artifacts_parser/parsers/manifest/manifest_v5.py) for run_results.json v5
-- [RunResultsV6](dbt_artifacts_parser/parsers/manifest/manifest_v6.py) for run_results.json v6
+- [RunResultsV1](dbt_artifacts_parser/parsers/run_results/run_results_v1.py) for run_results.json v1
+- [RunResultsV2](dbt_artifacts_parser/parsers/run_results/run_results_v2.py) for run_results.json v2
+- [RunResultsV3](dbt_artifacts_parser/parsers/run_results/run_results_v3.py) for run_results.json v3
+- [RunResultsV4](dbt_artifacts_parser/parsers/run_results/run_results_v4.py) for run_results.json v4
+- [RunResultsV5](dbt_artifacts_parser/parsers/run_results/run_results_v5.py) for run_results.json v5
+- [RunResultsV6](dbt_artifacts_parser/parsers/run_results/run_results_v6.py) for run_results.json v6
 
 ### Sources
 
