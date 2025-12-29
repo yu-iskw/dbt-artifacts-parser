@@ -104,8 +104,24 @@ class TestDbtUtils:
     )
     def test_get_dbt_schema_version(self, version, artifacts):
         for file, expected_dbt_schema_version in artifacts.items():
+            # Determine the subdirectory based on file type
+            if file == "catalog.json":
+                subdirectory = "catalog"
+            elif file == "manifest.json":
+                subdirectory = "manifest"
+            elif file == "run_results.json":
+                subdirectory = "run_results"
+            else:
+                subdirectory = version  # fallback, though shouldn't happen
+
             path = os.path.join(
-                get_project_root(), "tests", "resources", version, "jaffle_shop", file
+                get_project_root(),
+                "tests",
+                "resources",
+                subdirectory,
+                version,
+                "jaffle_shop",
+                file,
             )
             with open(path, "r", encoding="utf-8") as fp:
                 artifact_json = json.load(fp)
