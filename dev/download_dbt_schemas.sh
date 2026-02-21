@@ -20,16 +20,12 @@ set -e
 # Constants
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 MODULE_ROOT="$(dirname "${SCRIPT_DIR}")"
+BASE_URL="https://raw.githubusercontent.com/dbt-labs/dbt-core"
+REF="main"
+RESOURCES_DIR="${MODULE_ROOT}/dbt_artifacts_parser/resources"
 
-# Base class
-base_class="dbt_artifacts_parser.parsers.base.BaseParserModel"
-target_python_version="3.9"
-output_model_type="pydantic_v2.BaseModel"
-
-# All artifact types for "generate all"
+# Artifact types and version lists. Must stay in sync with dev/generate_parser_classes.sh.
 ARTIFACT_TYPES=(catalog manifest run-results sources)
-
-# Version list per artifact type (bash arrays). Used indirectly via nameref in main (default_versions_array_name).
 # shellcheck disable=SC2034
 CATALOG_VERSIONS=(v1)
 # shellcheck disable=SC2034
@@ -40,50 +36,39 @@ RUN_RESULTS_VERSIONS=(v1 v2 v3 v4 v5 v6)
 SOURCES_VERSIONS=(v1 v2 v3)
 
 usage() {
-	echo "Usage: $0 [artifact_type] [version ...]"
-	echo "  Generate Pydantic parser classes from dbt artifact JSON schemas."
-	echo "  With no arguments, generates all artifact types and versions."
+	echo "Usage: $0 [--ref REF] [artifact_type] [version ...]"
+	echo "  Download dbt artifact JSON schemas from dbt-labs/dbt-core into this project's resources."
+	echo "  With no arguments (after --ref), downloads all artifact types and versions."
 	echo ""
-	echo "  artifact_type  one of: catalog, manifest, run-results, sources"
-	echo "  version        optional list of versions (e.g. v1 v7). If omitted, all versions for the type are generated."
+	echo "  --ref REF       Git ref: branch, tag, or commit (default: main)"
+	echo "  artifact_type   one of: catalog, manifest, run-results, sources"
+	echo "  version         optional list of versions (e.g. v1 v7). If omitted, all versions for the type are downloaded."
 	exit "$1"
 }
 
-# Sets resource_dir, parser_dir, file_stem, output_file_stem, class_prefix, default_versions_array_name for the given artifact type.
+# Sets resource_dir, file_stem, default_versions_array_name for the given artifact type.
 # Exits with usage if type is invalid.
 get_artifact_metadata() {
 	local type="$1"
 	case "${type}" in
 	catalog)
 		resource_dir="catalog"
-		parser_dir="catalog"
 		file_stem="catalog"
-		output_file_stem="catalog"
-		class_prefix="Catalog"
 		default_versions_array_name="CATALOG_VERSIONS"
 		;;
 	manifest)
 		resource_dir="manifest"
-		parser_dir="manifest"
 		file_stem="manifest"
-		output_file_stem="manifest"
-		class_prefix="Manifest"
 		default_versions_array_name="MANIFEST_VERSIONS"
 		;;
 	run-results)
 		resource_dir="run-results"
-		parser_dir="run_results"
 		file_stem="run-results"
-		output_file_stem="run_results"
-		class_prefix="RunResults"
 		default_versions_array_name="RUN_RESULTS_VERSIONS"
 		;;
 	sources)
 		resource_dir="sources"
-		parser_dir="sources"
 		file_stem="sources"
-		output_file_stem="sources"
-		class_prefix="Sources"
 		default_versions_array_name="SOURCES_VERSIONS"
 		;;
 	*)
@@ -93,37 +78,44 @@ get_artifact_metadata() {
 	esac
 }
 
-# Generate parser for one (artifact_type, version) pair.
-run_codegen() {
+download_one() {
 	local artifact_type="$1"
 	local ver="$2"
 	get_artifact_metadata "${artifact_type}"
-	upper_ver=${ver^v}
-	input="${MODULE_ROOT}/dbt_artifacts_parser/resources/${resource_dir}/${file_stem}_${ver}.json"
-	destination="${MODULE_ROOT}/dbt_artifacts_parser/parsers/${parser_dir}/${output_file_stem}_${ver}.py"
-	echo "Generate ${destination}"
-	datamodel-codegen --input-file-type jsonschema \
-		--target-python-version "${target_python_version}" \
-		--output-model-type "${output_model_type}" \
-		--disable-timestamp \
-		--base-class "${base_class}" \
-		--class-name "${class_prefix}${upper_ver}" \
-		--input "${input}" \
-		--output "${destination}"
+	url="${BASE_URL}/${REF}/schemas/dbt/${resource_dir}/${ver}.json"
+	dest="${RESOURCES_DIR}/${resource_dir}/${file_stem}_${ver}.json"
+	mkdir -p "${RESOURCES_DIR}/${resource_dir}"
+	curl -f -S -L -o "${dest}" "${url}"
+	echo "Downloaded ${dest}"
 }
 
-# --- Main ---
-if [[ $1 == "-h" || $1 == "--help" ]]; then
-	usage 0
-fi
+# --- Argument parsing ---
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+	--ref)
+		if [[ -z "${2:-}" ]]; then
+			echo "Missing value for --ref" >&2
+			usage 1
+		fi
+		REF="$2"
+		shift 2
+		;;
+	-h|--help)
+		usage 0
+		;;
+	*)
+		break
+		;;
+	esac
+done
 
+# --- Main ---
 if [[ $# -eq 0 ]]; then
-	# Generate all artifact types and versions (backward-compatible behavior)
 	for artifact_type in "${ARTIFACT_TYPES[@]}"; do
 		get_artifact_metadata "${artifact_type}"
 		declare -n vers="${default_versions_array_name}"
 		for ver in "${vers[@]}"; do
-			run_codegen "${artifact_type}" "${ver}"
+			download_one "${artifact_type}" "${ver}"
 		done
 	done
 else
@@ -133,12 +125,12 @@ else
 	if [[ $# -eq 0 ]]; then
 		declare -n vers="${default_versions_array_name}"
 		for ver in "${vers[@]}"; do
-			run_codegen "${artifact_type}" "${ver}"
+			download_one "${artifact_type}" "${ver}"
 		done
 	else
 		versions=("$@")
 		for ver in "${versions[@]}"; do
-			run_codegen "${artifact_type}" "${ver}"
+			download_one "${artifact_type}" "${ver}"
 		done
 	fi
 fi

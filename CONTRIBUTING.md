@@ -56,6 +56,8 @@ It installs the dependencies and set up the pre-commit hooks.
 make setup
 ```
 
+When using [Claude Code](https://code.claude.com/), this repo runs pre-commit as a quality gate when Claude is about to stop. Config lives in [.claude/settings.json](.claude/settings.json) and [.claude/hooks/](.claude/hooks/).
+
 ## How to generate Pydantic models
 
 These are the steps to generate the Pydantic models from dbt artifacts in this package.
@@ -68,3 +70,9 @@ We manage the downloaded JSON schemas in the directory of [dbt_artifacts_parser/
 
 [dev/generate_parser_classes.sh](./dev/generate_parser_classes.sh) is a script to generate Pydantic models from the JSON schemas of dbt artifacts.
 If we want to add new dbt artifact(s), we need to modify the script to generate the new pydantic models.
+
+## AI agents and tools
+
+Project instructions for AI agents (Codex, Cursor, Claude Code) are in [AGENTS.md](./AGENTS.md). Claude Code also uses [CLAUDE.md](./CLAUDE.md), which references AGENTS.md.
+
+Skills live in [.claude/skills/](./.claude/skills/). Cursor and Claude Code load them from there. Codex reads skills from `.agents/skills`; in this repo that path is a symlink to `.claude/skills`, so the same skills are available. The `.cursor/` directory is reserved for future Cursor-specific rules if needed.
