@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 from pydantic import ConfigDict, Field
 
@@ -15,11 +15,12 @@ class Metadata(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    dbt_schema_version: Optional[str] = None
-    dbt_version: Optional[str] = "1.9.0b2"
-    generated_at: Optional[str] = None
-    invocation_id: Optional[str] = None
-    env: Optional[Dict[str, str]] = None
+    dbt_schema_version: str | None = None
+    dbt_version: str | None = "1.12.0a1"
+    generated_at: str | None = None
+    invocation_id: str | None = None
+    invocation_started_at: str | None = None
+    env: dict[str, str] | None = None
 
 
 class Status(Enum):
@@ -31,7 +32,7 @@ class Results(BaseParserModel):
         extra="forbid",
     )
     unique_id: str
-    error: Optional[Union[str, int]] = None
+    error: str | int | None
     status: Status
 
 
@@ -52,25 +53,25 @@ class WarnAfter(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    count: Optional[int] = None
-    period: Optional[Period] = None
+    count: int | None = None
+    period: Period | None = None
 
 
 class ErrorAfter(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    count: Optional[int] = None
-    period: Optional[Period] = None
+    count: int | None = None
+    period: Period | None = None
 
 
 class Criteria(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    warn_after: Optional[WarnAfter] = None
-    error_after: Optional[ErrorAfter] = None
-    filter: Optional[str] = None
+    warn_after: WarnAfter | None = None
+    error_after: ErrorAfter | None = None
+    filter: str | None = None
 
 
 class TimingItem(BaseParserModel):
@@ -78,8 +79,8 @@ class TimingItem(BaseParserModel):
         extra="forbid",
     )
     name: str
-    started_at: Optional[str] = None
-    completed_at: Optional[str] = None
+    started_at: str | None = None
+    completed_at: str | None = None
 
 
 class Results1(BaseParserModel):
@@ -92,8 +93,8 @@ class Results1(BaseParserModel):
     max_loaded_at_time_ago_in_s: float
     status: Status1
     criteria: Criteria = Field(..., title="FreshnessThreshold")
-    adapter_response: Dict[str, Any]
-    timing: List[TimingItem]
+    adapter_response: dict[str, Any]
+    timing: list[TimingItem]
     thread_id: str
     execution_time: float
 
@@ -103,5 +104,5 @@ class SourcesV3(BaseParserModel):
         extra="forbid",
     )
     metadata: Metadata = Field(..., title="FreshnessMetadata")
-    results: List[Union[Results, Results1]]
+    results: list[Results | Results1]
     elapsed_time: float

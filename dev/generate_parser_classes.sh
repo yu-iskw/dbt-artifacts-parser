@@ -23,7 +23,7 @@ MODULE_ROOT="$(dirname "${SCRIPT_DIR}")"
 
 # Base class
 base_class="dbt_artifacts_parser.parsers.base.BaseParserModel"
-target_python_version="3.9"
+target_python_version="3.10"
 output_model_type="pydantic_v2.BaseModel"
 
 # All artifact types for "generate all"
