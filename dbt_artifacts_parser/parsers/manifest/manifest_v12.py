@@ -27,7 +27,7 @@ class Metadata(BaseParserModel):
         extra="forbid",
     )
     dbt_schema_version: str | None = None
-    dbt_version: str | None = "1.11.0a1"
+    dbt_version: str | None = "1.12.0a1"
     generated_at: str | None = None
     invocation_id: str | None = None
     invocation_started_at: str | None = None
@@ -179,6 +179,62 @@ class Granularity(Enum):
     year = "year"
 
 
+class Type1(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class ValidityParams(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    is_start: bool | None = False
+    is_end: bool | None = False
+
+
+class Dimension(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type1
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension1(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type2(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type2
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity1(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
 class Columns(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -193,6 +249,8 @@ class Columns(BaseParserModel):
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension | Dimension1 | None = None
+    entity: Entity | Entity1 | None = None
     doc_blocks: list[str] | None = None
 
 
@@ -346,11 +404,20 @@ class Config3(BaseParserModel):
     concurrent_batches: Any | None = None
 
 
+class Type3(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
+
+
 class Constraint1(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type
+    type: Type3
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -368,6 +435,54 @@ class Config4(BaseParserModel):
     tags: list[str] | None = None
 
 
+class Type4(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension2(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type4
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension3(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type5(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity2(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type5
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity3(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
 class Columns1(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -382,6 +497,8 @@ class Columns1(BaseParserModel):
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension2 | Dimension3 | None = None
+    entity: Entity2 | Entity3 | None = None
     doc_blocks: list[str] | None = None
 
 
@@ -483,6 +600,7 @@ class Config5(BaseParserModel):
     )
     store_failures: bool | None = None
     store_failures_as: str | None = None
+    sql_header: Any | None = None
     where: str | None = None
     limit: int | None = None
     fail_calc: str | None = "count(*)"
@@ -490,11 +608,20 @@ class Config5(BaseParserModel):
     error_if: str | None = "!= 0"
 
 
+class Type6(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
+
+
 class Constraint2(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type
+    type: Type6
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -512,6 +639,54 @@ class Config6(BaseParserModel):
     tags: list[str] | None = None
 
 
+class Type7(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension4(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type7
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension5(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type8(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity4(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type8
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity5(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
 class Columns2(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -526,6 +701,8 @@ class Columns2(BaseParserModel):
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension4 | Dimension5 | None = None
+    entity: Entity4 | Entity5 | None = None
     doc_blocks: list[str] | None = None
 
 
@@ -617,11 +794,20 @@ class Config7(BaseParserModel):
     concurrent_batches: Any | None = None
 
 
+class Type9(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
+
+
 class Constraint3(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type
+    type: Type9
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -639,6 +825,54 @@ class Config8(BaseParserModel):
     tags: list[str] | None = None
 
 
+class Type10(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension6(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type10
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension7(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type11(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity6(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type11
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity7(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
 class Columns3(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -653,6 +887,8 @@ class Columns3(BaseParserModel):
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension6 | Dimension7 | None = None
+    entity: Entity6 | Entity7 | None = None
     doc_blocks: list[str] | None = None
 
 
@@ -789,11 +1025,20 @@ class Config9(BaseParserModel):
     freshness: Freshness | None = None
 
 
+class Type12(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
+
+
 class Constraint4(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type
+    type: Type12
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -811,6 +1056,54 @@ class Config10(BaseParserModel):
     tags: list[str] | None = None
 
 
+class Type13(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension8(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type13
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension9(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type14(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity8(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type14
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity9(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
 class Columns4(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -825,6 +1118,8 @@ class Columns4(BaseParserModel):
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension8 | Dimension9 | None = None
+    entity: Entity8 | Entity9 | None = None
     doc_blocks: list[str] | None = None
 
 
@@ -837,11 +1132,20 @@ class Contract8(BaseParserModel):
     checksum: str | None = None
 
 
+class Type15(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
+
+
 class Constraint5(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type
+    type: Type15
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -1018,7 +1322,7 @@ class Constraint6(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type
+    type: Type15
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -1036,6 +1340,54 @@ class Config13(BaseParserModel):
     tags: list[str] | None = None
 
 
+class Type17(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension10(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type17
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension11(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type18(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity10(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type18
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity11(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
 class Columns5(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -1050,6 +1402,8 @@ class Columns5(BaseParserModel):
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension10 | Dimension11 | None = None
+    entity: Entity10 | Entity11 | None = None
     doc_blocks: list[str] | None = None
 
 
@@ -1126,6 +1480,7 @@ class Config14(BaseParserModel):
     )
     store_failures: bool | None = None
     store_failures_as: str | None = None
+    sql_header: Any | None = None
     where: str | None = None
     limit: int | None = None
     fail_calc: str | None = "count(*)"
@@ -1133,11 +1488,20 @@ class Config14(BaseParserModel):
     error_if: str | None = "!= 0"
 
 
+class Type19(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
+
+
 class Constraint7(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type
+    type: Type19
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -1155,6 +1519,54 @@ class Config15(BaseParserModel):
     tags: list[str] | None = None
 
 
+class Type20(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension12(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type20
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension13(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type21(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity12(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type21
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity13(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
 class Columns6(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -1169,6 +1581,8 @@ class Columns6(BaseParserModel):
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension12 | Dimension13 | None = None
+    entity: Entity12 | Entity13 | None = None
     doc_blocks: list[str] | None = None
 
 
@@ -1293,11 +1707,20 @@ class Config16(BaseParserModel):
     dbt_valid_to_current: str | None = None
 
 
+class Type22(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
+
+
 class Constraint8(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type
+    type: Type22
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -1315,6 +1738,54 @@ class Config17(BaseParserModel):
     tags: list[str] | None = None
 
 
+class Type23(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension14(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type23
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension15(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type24(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity14(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type24
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity15(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
 class Columns7(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -1329,6 +1800,8 @@ class Columns7(BaseParserModel):
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension14 | Dimension15 | None = None
+    entity: Entity14 | Entity15 | None = None
     doc_blocks: list[str] | None = None
 
 
@@ -1455,6 +1928,18 @@ class Returns(BaseParserModel):
     description: str | None = None
 
 
+class Type25(Enum):
+    scalar = "scalar"
+    aggregate = "aggregate"
+    table = "table"
+
+
+class Volatility(Enum):
+    deterministic = "deterministic"
+    stable = "stable"
+    non_deterministic = "non-deterministic"
+
+
 class Config19(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -1487,13 +1972,26 @@ class Config19(BaseParserModel):
     contract: Contract15 | None = Field(None, title="ContractConfig")
     event_time: Any | None = None
     concurrent_batches: Any | None = None
+    type: Type25 | None = "scalar"
+    volatility: Volatility | None = None
+    runtime_version: str | None = None
+    entry_point: str | None = None
+
+
+class Type26(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
 
 
 class Constraint9(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type
+    type: Type26
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -1511,6 +2009,54 @@ class Config20(BaseParserModel):
     tags: list[str] | None = None
 
 
+class Type27(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension16(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type27
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension17(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type28(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity16(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type28
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity17(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
 class Columns8(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -1525,6 +2071,8 @@ class Columns8(BaseParserModel):
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension16 | Dimension17 | None = None
+    entity: Entity16 | Entity17 | None = None
     doc_blocks: list[str] | None = None
 
 
@@ -1544,12 +2092,77 @@ class Argument(BaseParserModel):
     name: str
     data_type: str
     description: str | None = None
+    default_value: Any = None
 
 
-class Type10(Enum):
+class Contract18(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    enforced: bool | None = False
+    alias_types: bool | None = True
+
+
+class Type29(Enum):
     scalar = "scalar"
     aggregate = "aggregate"
     table = "table"
+
+
+class Config21(BaseParserModel):
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    field_extra: dict[str, Any] | None = Field(None, alias="_extra")
+    enabled: bool | None = True
+    alias: str | None = None
+    schema_: str | None = Field(None, alias="schema")
+    database: str | None = None
+    tags: list[str] | str | None = None
+    meta: dict[str, Any] | None = None
+    group: str | None = None
+    materialized: str | None = "function"
+    incremental_strategy: str | None = None
+    batch_size: Any | None = None
+    lookback: Any | None = 1
+    begin: Any | None = None
+    persist_docs: dict[str, Any] | None = None
+    post_hook: list[PostHookItem] | None = Field(None, alias="post-hook")
+    pre_hook: list[PreHookItem] | None = Field(None, alias="pre-hook")
+    quoting: dict[str, Any] | None = None
+    column_types: dict[str, Any] | None = None
+    full_refresh: bool | None = None
+    unique_key: str | list[str] | None = None
+    on_schema_change: str | None = "ignore"
+    on_configuration_change: OnConfigurationChange | None = None
+    grants: dict[str, Any] | None = None
+    packages: list[str] | None = None
+    docs: Docs | None = Field(None, title="Docs")
+    contract: Contract18 | None = Field(None, title="ContractConfig")
+    event_time: Any | None = None
+    concurrent_batches: Any | None = None
+    type: Type29 | None = "scalar"
+    volatility: Volatility | None = None
+    runtime_version: str | None = None
+    entry_point: str | None = None
+
+
+class DeferFunction(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    database: str | None
+    schema_: str = Field(..., alias="schema")
+    alias: str
+    resource_type: ResourceType
+    name: str
+    description: str
+    compiled_code: str | None
+    meta: dict[str, Any]
+    tags: list[str]
+    config: Config21 | None
+    arguments: list[Argument]
+    returns: Returns = Field(..., title="FunctionReturns")
 
 
 class Nodes8(BaseParserModel):
@@ -1598,7 +2211,7 @@ class Nodes8(BaseParserModel):
     field_pre_injected_sql: str | None = Field(None, alias="_pre_injected_sql")
     contract: Contract17 | None = Field(None, title="Contract")
     arguments: list[Argument] | None = None
-    type: Type10 | None = "scalar"
+    defer_function: DeferFunction | None = None
 
 
 class WarnAfter(BaseParserModel):
@@ -1649,7 +2262,7 @@ class External(BaseParserModel):
     partitions: list[str] | list[Partition] | None = None
 
 
-class Type11(Enum):
+class Type30(Enum):
     check = "check"
     not_null = "not_null"
     unique = "unique"
@@ -1662,13 +2275,70 @@ class Constraint10(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type11
+    type: Type30
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
     warn_unsupported: bool | None = True
     to: str | None = None
     to_columns: list[str] | None = None
+
+
+class Config22(BaseParserModel):
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    field_extra: dict[str, Any] | None = Field(None, alias="_extra")
+    meta: dict[str, Any] | None = None
+    tags: list[str] | None = None
+
+
+class Type31(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension18(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type31
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension19(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type32(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity18(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type32
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity19(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
 
 
 class Columns9(BaseParserModel):
@@ -1681,10 +2351,12 @@ class Columns9(BaseParserModel):
     data_type: str | None = None
     constraints: list[Constraint10] | None = None
     quote: bool | None = None
-    config: Config20 | None = Field(None, title="ColumnConfig")
+    config: Config22 | None = Field(None, title="ColumnConfig")
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension18 | Dimension19 | None = None
+    entity: Entity18 | Entity19 | None = None
     doc_blocks: list[str] | None = None
 
 
@@ -1713,7 +2385,7 @@ class Freshness2(BaseParserModel):
     filter: str | None = None
 
 
-class Config22(BaseParserModel):
+class Config23(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -1754,7 +2426,7 @@ class Sources(BaseParserModel):
     meta: dict[str, Any] | None = None
     source_meta: dict[str, Any] | None = None
     tags: list[str] | None = None
-    config: Config22 | None = Field(None, title="SourceConfig")
+    config: Config23 | None = Field(None, title="SourceConfig")
     patch_path: str | None = None
     unrendered_config: dict[str, Any] | None = None
     relation_name: str | None = None
@@ -1771,7 +2443,16 @@ class DependsOn9(BaseParserModel):
     macros: list[str] | None = None
 
 
-class Argument1(BaseParserModel):
+class Config24(BaseParserModel):
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    field_extra: dict[str, Any] | None = Field(None, alias="_extra")
+    meta: dict[str, Any] | None = None
+    docs: Docs | None = Field(None, title="Docs")
+
+
+class Argument2(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -1800,13 +2481,14 @@ class Macros(BaseParserModel):
     description: str | None = ""
     meta: dict[str, Any] | None = None
     docs: Docs | None = Field(None, title="Docs")
+    config: Config24 | None = Field(None, title="MacroConfig")
     patch_path: str | None = None
-    arguments: list[Argument1] | None = None
+    arguments: list[Argument2] | None = None
     created_at: float | None = None
     supported_languages: list[SupportedLanguage] | None = None
 
 
-class Docs20(BaseParserModel):
+class Docs22(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -1819,7 +2501,7 @@ class Docs20(BaseParserModel):
     block_contents: str
 
 
-class Type12(Enum):
+class Type33(Enum):
     dashboard = "dashboard"
     notebook = "notebook"
     analysis = "analysis"
@@ -1842,7 +2524,7 @@ class Maturity(Enum):
     high = "high"
 
 
-class Config23(BaseParserModel):
+class Config25(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -1871,14 +2553,14 @@ class Exposures(BaseParserModel):
     original_file_path: str
     unique_id: str
     fqn: list[str]
-    type: Type12
+    type: Type33
     owner: Owner = Field(..., title="Owner")
     description: str | None = ""
     label: str | None = None
     maturity: Maturity | None = None
     meta: dict[str, Any] | None = None
     tags: list[str] | None = None
-    config: Config23 | None = Field(None, title="ExposureConfig")
+    config: Config25 | None = Field(None, title="ExposureConfig")
     unrendered_config: dict[str, Any] | None = None
     url: str | None = None
     depends_on: DependsOn10 | None = Field(None, title="DependsOn")
@@ -1888,7 +2570,7 @@ class Exposures(BaseParserModel):
     created_at: float | None = None
 
 
-class Type13(Enum):
+class Type34(Enum):
     simple = "simple"
     ratio = "ratio"
     cumulative = "cumulative"
@@ -2059,6 +2741,42 @@ class ConversionMeasure(BaseParserModel):
     fill_nulls_with: int | None = None
 
 
+class Filter7(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    where_filters: list[WhereFilter]
+
+
+class BaseMetric(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    filter: Filter7 | None = None
+    alias: str | None = None
+    offset_window: OffsetWindow | None = None
+    offset_to_grain: str | None = None
+
+
+class Filter8(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    where_filters: list[WhereFilter]
+
+
+class ConversionMetric(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    filter: Filter8 | None = None
+    alias: str | None = None
+    offset_window: OffsetWindow | None = None
+    offset_to_grain: str | None = None
+
+
 class Calculation(Enum):
     conversions = "conversions"
     conversion_rate = "conversion_rate"
@@ -2076,9 +2794,11 @@ class ConversionTypeParams(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    base_measure: BaseMeasure = Field(..., title="MetricInputMeasure")
-    conversion_measure: ConversionMeasure = Field(..., title="MetricInputMeasure")
     entity: str
+    base_measure: BaseMeasure | None = None
+    conversion_measure: ConversionMeasure | None = None
+    base_metric: BaseMetric | None = None
+    conversion_metric: ConversionMetric | None = None
     calculation: Calculation | None = "conversion_rate"
     window: Window | None = None
     constant_properties: list[ConstantProperty] | None = None
@@ -2090,7 +2810,7 @@ class PeriodAgg(Enum):
     average = "average"
 
 
-class Filter7(BaseParserModel):
+class Filter9(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -2102,7 +2822,7 @@ class Metric1(BaseParserModel):
         extra="forbid",
     )
     name: str
-    filter: Filter7 | None = None
+    filter: Filter9 | None = None
     alias: str | None = None
     offset_window: OffsetWindow | None = None
     offset_to_grain: str | None = None
@@ -2169,7 +2889,6 @@ class MetricAggregationParams(BaseParserModel):
     agg_params: AggParams | None = None
     agg_time_dimension: str | None = None
     non_additive_dimension: NonAdditiveDimension | None = None
-    expr: str | None = None
 
 
 class TypeParams(BaseParserModel):
@@ -2187,9 +2906,12 @@ class TypeParams(BaseParserModel):
     conversion_type_params: ConversionTypeParams | None = None
     cumulative_type_params: CumulativeTypeParams | None = None
     metric_aggregation_params: MetricAggregationParams | None = None
+    fill_nulls_with: int | None = None
+    join_to_timespine: bool | None = False
+    is_private: bool | None = None
 
 
-class Filter8(BaseParserModel):
+class Filter10(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -2214,7 +2936,7 @@ class Metadata1(BaseParserModel):
     file_slice: FileSlice = Field(..., title="FileSlice")
 
 
-class Config24(BaseParserModel):
+class Config26(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -2237,14 +2959,12 @@ class Metrics(BaseParserModel):
     fqn: list[str]
     description: str
     label: str
-    type: Type13
+    type: Type34
     type_params: TypeParams = Field(..., title="MetricTypeParams")
-    filter: Filter8 | None = None
+    filter: Filter10 | None = None
     metadata: Metadata1 | None = None
     time_granularity: str | None = None
-    meta: dict[str, Any] | None = None
-    tags: list[str] | None = None
-    config: Config24 | None = Field(None, title="MetricConfig")
+    config: Config26 | None = Field(None, title="MetricConfig")
     unrendered_config: dict[str, Any] | None = None
     sources: list[list[str]] | None = None
     depends_on: DependsOn10 | None = Field(None, title="DependsOn")
@@ -2252,9 +2972,11 @@ class Metrics(BaseParserModel):
     metrics: list[list[str]] | None = None
     created_at: float | None = None
     group: str | None = None
+    meta: dict[str, Any] | None = None
+    tags: list[str] | None = None
 
 
-class Config25(BaseParserModel):
+class Config27(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -2274,10 +2996,10 @@ class Groups(BaseParserModel):
     unique_id: str
     owner: Owner = Field(..., title="Owner")
     description: str | None = None
-    config: Config25 | None = Field(None, title="GroupConfig")
+    config: Config27 | None = Field(None, title="GroupConfig")
 
 
-class Docs21(BaseParserModel):
+class Docs23(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -2285,15 +3007,7 @@ class Docs21(BaseParserModel):
     node_color: str | None = None
 
 
-class Contract18(BaseParserModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    enforced: bool | None = False
-    alias_types: bool | None = True
-
-
-class Config26(BaseParserModel):
+class Config28(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -2321,7 +3035,7 @@ class Config26(BaseParserModel):
     on_configuration_change: OnConfigurationChange | None = None
     grants: dict[str, Any] | None = None
     packages: list[str] | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
+    docs: Docs23 | None = Field(None, title="Docs")
     contract: Contract18 | None = Field(None, title="ContractConfig")
     event_time: Any | None = None
     concurrent_batches: Any | None = None
@@ -2329,7 +3043,7 @@ class Config26(BaseParserModel):
     quote_columns: bool | None = None
 
 
-class Type14(Enum):
+class Type35(Enum):
     check = "check"
     not_null = "not_null"
     unique = "unique"
@@ -2342,7 +3056,7 @@ class Constraint11(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type14
+    type: Type35
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -2351,13 +3065,61 @@ class Constraint11(BaseParserModel):
     to_columns: list[str] | None = None
 
 
-class Config27(BaseParserModel):
+class Config29(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     meta: dict[str, Any] | None = None
     tags: list[str] | None = None
+
+
+class Type36(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension20(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type36
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension21(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type37(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity20(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type37
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity21(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
 
 
 class Columns10(BaseParserModel):
@@ -2370,10 +3132,12 @@ class Columns10(BaseParserModel):
     data_type: str | None = None
     constraints: list[Constraint11] | None = None
     quote: bool | None = None
-    config: Config27 | None = Field(None, title="ColumnConfig")
+    config: Config29 | None = Field(None, title="ColumnConfig")
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension20 | Dimension21 | None = None
+    entity: Entity20 | Entity21 | None = None
     doc_blocks: list[str] | None = None
 
 
@@ -2384,7 +3148,7 @@ class DependsOn12(BaseParserModel):
     macros: list[str] | None = None
 
 
-class Config28(BaseParserModel):
+class Config30(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -2412,7 +3176,7 @@ class Config28(BaseParserModel):
     on_configuration_change: OnConfigurationChange | None = None
     grants: dict[str, Any] | None = None
     packages: list[str] | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
+    docs: Docs23 | None = Field(None, title="Docs")
     contract: Contract18 | None = Field(None, title="ContractConfig")
     event_time: Any | None = None
     concurrent_batches: Any | None = None
@@ -2432,7 +3196,7 @@ class DeferRelation3(BaseParserModel):
     compiled_code: str | None
     meta: dict[str, Any]
     tags: list[str]
-    config: Config28 | None
+    config: Config30 | None
 
 
 class Disabled(BaseParserModel):
@@ -2450,13 +3214,13 @@ class Disabled(BaseParserModel):
     fqn: list[str]
     alias: str
     checksum: Checksum = Field(..., title="FileHash")
-    config: Config26 | None = Field(None, title="SeedConfig")
+    config: Config28 | None = Field(None, title="SeedConfig")
     tags: list[str] | None = None
     description: str | None = ""
     columns: dict[str, Columns10] | None = None
     meta: dict[str, Any] | None = None
     group: str | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
+    docs: Docs23 | None = Field(None, title="Docs")
     patch_path: str | None = None
     build_path: str | None = None
     unrendered_config: dict[str, Any] | None = None
@@ -2471,7 +3235,7 @@ class Disabled(BaseParserModel):
     defer_relation: DeferRelation3 | None = None
 
 
-class Config29(BaseParserModel):
+class Config31(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -2499,17 +3263,26 @@ class Config29(BaseParserModel):
     on_configuration_change: OnConfigurationChange | None = None
     grants: dict[str, Any] | None = None
     packages: list[str] | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
+    docs: Docs23 | None = Field(None, title="Docs")
     contract: Contract18 | None = Field(None, title="ContractConfig")
     event_time: Any | None = None
     concurrent_batches: Any | None = None
+
+
+class Type38(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
 
 
 class Constraint12(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type14
+    type: Type38
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -2518,13 +3291,61 @@ class Constraint12(BaseParserModel):
     to_columns: list[str] | None = None
 
 
-class Config30(BaseParserModel):
+class Config32(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     meta: dict[str, Any] | None = None
     tags: list[str] | None = None
+
+
+class Type39(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension22(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type39
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension23(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type40(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity22(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type40
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity23(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
 
 
 class Columns11(BaseParserModel):
@@ -2537,10 +3358,12 @@ class Columns11(BaseParserModel):
     data_type: str | None = None
     constraints: list[Constraint12] | None = None
     quote: bool | None = None
-    config: Config30 | None = Field(None, title="ColumnConfig")
+    config: Config32 | None = Field(None, title="ColumnConfig")
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension22 | Dimension23 | None = None
+    entity: Entity22 | Entity23 | None = None
     doc_blocks: list[str] | None = None
 
 
@@ -2552,7 +3375,7 @@ class DependsOn13(BaseParserModel):
     nodes: list[str] | None = None
 
 
-class Contract21(BaseParserModel):
+class Contract22(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -2576,13 +3399,13 @@ class Disabled1(BaseParserModel):
     fqn: list[str]
     alias: str
     checksum: Checksum = Field(..., title="FileHash")
-    config: Config29 | None = Field(None, title="NodeConfig")
+    config: Config31 | None = Field(None, title="NodeConfig")
     tags: list[str] | None = None
     description: str | None = ""
     columns: dict[str, Columns11] | None = None
     meta: dict[str, Any] | None = None
     group: str | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
+    docs: Docs23 | None = Field(None, title="Docs")
     patch_path: str | None = None
     build_path: str | None = None
     unrendered_config: dict[str, Any] | None = None
@@ -2604,10 +3427,10 @@ class Disabled1(BaseParserModel):
     extra_ctes_injected: bool | None = False
     extra_ctes: list[ExtraCte] | None = None
     field_pre_injected_sql: str | None = Field(None, alias="_pre_injected_sql")
-    contract: Contract21 | None = Field(None, title="Contract")
+    contract: Contract22 | None = Field(None, title="Contract")
 
 
-class Config31(BaseParserModel):
+class Config33(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -2625,6 +3448,7 @@ class Config31(BaseParserModel):
     )
     store_failures: bool | None = None
     store_failures_as: str | None = None
+    sql_header: Any | None = None
     where: str | None = None
     limit: int | None = None
     fail_calc: str | None = "count(*)"
@@ -2632,11 +3456,20 @@ class Config31(BaseParserModel):
     error_if: str | None = "!= 0"
 
 
+class Type41(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
+
+
 class Constraint13(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type14
+    type: Type41
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -2645,13 +3478,61 @@ class Constraint13(BaseParserModel):
     to_columns: list[str] | None = None
 
 
-class Config32(BaseParserModel):
+class Config34(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     meta: dict[str, Any] | None = None
     tags: list[str] | None = None
+
+
+class Type42(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension24(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type42
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension25(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type43(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity24(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type43
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity25(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
 
 
 class Columns12(BaseParserModel):
@@ -2664,10 +3545,12 @@ class Columns12(BaseParserModel):
     data_type: str | None = None
     constraints: list[Constraint13] | None = None
     quote: bool | None = None
-    config: Config32 | None = Field(None, title="ColumnConfig")
+    config: Config34 | None = Field(None, title="ColumnConfig")
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension24 | Dimension25 | None = None
+    entity: Entity24 | Entity25 | None = None
     doc_blocks: list[str] | None = None
 
 
@@ -2686,13 +3569,13 @@ class Disabled2(BaseParserModel):
     fqn: list[str]
     alias: str
     checksum: Checksum = Field(..., title="FileHash")
-    config: Config31 | None = Field(None, title="TestConfig")
+    config: Config33 | None = Field(None, title="TestConfig")
     tags: list[str] | None = None
     description: str | None = ""
     columns: dict[str, Columns12] | None = None
     meta: dict[str, Any] | None = None
     group: str | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
+    docs: Docs23 | None = Field(None, title="Docs")
     patch_path: str | None = None
     build_path: str | None = None
     unrendered_config: dict[str, Any] | None = None
@@ -2714,88 +3597,7 @@ class Disabled2(BaseParserModel):
     extra_ctes_injected: bool | None = False
     extra_ctes: list[ExtraCte] | None = None
     field_pre_injected_sql: str | None = Field(None, alias="_pre_injected_sql")
-    contract: Contract21 | None = Field(None, title="Contract")
-
-
-class Contract23(BaseParserModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    enforced: bool | None = False
-    alias_types: bool | None = True
-
-
-class Config33(BaseParserModel):
-    model_config = ConfigDict(
-        extra="allow",
-    )
-    field_extra: dict[str, Any] | None = Field(None, alias="_extra")
-    enabled: bool | None = True
-    alias: str | None = None
-    schema_: str | None = Field(None, alias="schema")
-    database: str | None = None
-    tags: list[str] | str | None = None
-    meta: dict[str, Any] | None = None
-    group: str | None = None
-    materialized: str | None = "view"
-    incremental_strategy: str | None = None
-    batch_size: Any | None = None
-    lookback: Any | None = 1
-    begin: Any | None = None
-    persist_docs: dict[str, Any] | None = None
-    post_hook: list[PostHookItem] | None = Field(None, alias="post-hook")
-    pre_hook: list[PreHookItem] | None = Field(None, alias="pre-hook")
-    quoting: dict[str, Any] | None = None
-    column_types: dict[str, Any] | None = None
-    full_refresh: bool | None = None
-    unique_key: str | list[str] | None = None
-    on_schema_change: str | None = "ignore"
-    on_configuration_change: OnConfigurationChange | None = None
-    grants: dict[str, Any] | None = None
-    packages: list[str] | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
-    contract: Contract23 | None = Field(None, title="ContractConfig")
-    event_time: Any | None = None
-    concurrent_batches: Any | None = None
-
-
-class Constraint14(BaseParserModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    type: Type14
-    name: str | None = None
-    expression: str | None = None
-    warn_unenforced: bool | None = True
-    warn_unsupported: bool | None = True
-    to: str | None = None
-    to_columns: list[str] | None = None
-
-
-class Config34(BaseParserModel):
-    model_config = ConfigDict(
-        extra="allow",
-    )
-    field_extra: dict[str, Any] | None = Field(None, alias="_extra")
-    meta: dict[str, Any] | None = None
-    tags: list[str] | None = None
-
-
-class Columns13(BaseParserModel):
-    model_config = ConfigDict(
-        extra="allow",
-    )
-    name: str
-    description: str | None = ""
-    meta: dict[str, Any] | None = None
-    data_type: str | None = None
-    constraints: list[Constraint14] | None = None
-    quote: bool | None = None
-    config: Config34 | None = Field(None, title="ColumnConfig")
-    tags: list[str] | None = None
-    field_extra: dict[str, Any] | None = Field(None, alias="_extra")
-    granularity: Granularity | None = None
-    doc_blocks: list[str] | None = None
+    contract: Contract22 | None = Field(None, title="Contract")
 
 
 class Contract24(BaseParserModel):
@@ -2804,78 +3606,6 @@ class Contract24(BaseParserModel):
     )
     enforced: bool | None = False
     alias_types: bool | None = True
-    checksum: str | None = None
-
-
-class Disabled3(BaseParserModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    database: str | None
-    schema_: str = Field(..., alias="schema")
-    name: str
-    resource_type: Literal["operation"]
-    package_name: str
-    path: str
-    original_file_path: str
-    unique_id: str
-    fqn: list[str]
-    alias: str
-    checksum: Checksum = Field(..., title="FileHash")
-    config: Config33 | None = Field(None, title="NodeConfig")
-    tags: list[str] | None = None
-    description: str | None = ""
-    columns: dict[str, Columns13] | None = None
-    meta: dict[str, Any] | None = None
-    group: str | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
-    patch_path: str | None = None
-    build_path: str | None = None
-    unrendered_config: dict[str, Any] | None = None
-    created_at: float | None = None
-    config_call_dict: dict[str, Any] | None = None
-    unrendered_config_call_dict: dict[str, Any] | None = None
-    relation_name: str | None = None
-    raw_code: str | None = ""
-    doc_blocks: list[str] | None = None
-    language: str | None = "sql"
-    refs: list[Ref] | None = None
-    sources: list[list[str]] | None = None
-    metrics: list[list[str]] | None = None
-    functions: list[list[str]] | None = None
-    depends_on: DependsOn13 | None = Field(None, title="DependsOn")
-    compiled_path: str | None = None
-    compiled: bool | None = False
-    compiled_code: str | None = None
-    extra_ctes_injected: bool | None = False
-    extra_ctes: list[ExtraCte] | None = None
-    field_pre_injected_sql: str | None = Field(None, alias="_pre_injected_sql")
-    contract: Contract24 | None = Field(None, title="Contract")
-    index: int | None = None
-
-
-class Contract25(BaseParserModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    enforced: bool | None = False
-    alias_types: bool | None = True
-
-
-class BuildAfter1(BaseParserModel):
-    model_config = ConfigDict(
-        extra="allow",
-    )
-    count: int | None = None
-    period: Period | None = None
-    updates_on: UpdatesOn | None = "any"
-
-
-class Freshness3(BaseParserModel):
-    model_config = ConfigDict(
-        extra="allow",
-    )
-    build_after: BuildAfter1 = Field(..., title="ModelBuildAfter")
 
 
 class Config35(BaseParserModel):
@@ -2906,19 +3636,26 @@ class Config35(BaseParserModel):
     on_configuration_change: OnConfigurationChange | None = None
     grants: dict[str, Any] | None = None
     packages: list[str] | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
-    contract: Contract25 | None = Field(None, title="ContractConfig")
+    docs: Docs23 | None = Field(None, title="Docs")
+    contract: Contract24 | None = Field(None, title="ContractConfig")
     event_time: Any | None = None
     concurrent_batches: Any | None = None
-    access: Access | None = "protected"
-    freshness: Freshness3 | None = None
 
 
-class Constraint15(BaseParserModel):
+class Type44(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
+
+
+class Constraint14(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type14
+    type: Type44
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -2936,7 +3673,55 @@ class Config36(BaseParserModel):
     tags: list[str] | None = None
 
 
-class Columns14(BaseParserModel):
+class Type45(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension26(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type45
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension27(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type46(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity26(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type46
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity27(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Columns13(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -2944,16 +3729,18 @@ class Columns14(BaseParserModel):
     description: str | None = ""
     meta: dict[str, Any] | None = None
     data_type: str | None = None
-    constraints: list[Constraint15] | None = None
+    constraints: list[Constraint14] | None = None
     quote: bool | None = None
     config: Config36 | None = Field(None, title="ColumnConfig")
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension26 | Dimension27 | None = None
+    entity: Entity26 | Entity27 | None = None
     doc_blocks: list[str] | None = None
 
 
-class Contract26(BaseParserModel):
+class Contract25(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -2962,26 +3749,75 @@ class Contract26(BaseParserModel):
     checksum: str | None = None
 
 
-class Constraint16(BaseParserModel):
+class Disabled3(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type14
-    name: str | None = None
-    expression: str | None = None
-    warn_unenforced: bool | None = True
-    warn_unsupported: bool | None = True
-    to: str | None = None
-    to_columns: list[str] | None = None
-    columns: list[str] | None = None
+    database: str | None
+    schema_: str = Field(..., alias="schema")
+    name: str
+    resource_type: Literal["operation"]
+    package_name: str
+    path: str
+    original_file_path: str
+    unique_id: str
+    fqn: list[str]
+    alias: str
+    checksum: Checksum = Field(..., title="FileHash")
+    config: Config35 | None = Field(None, title="NodeConfig")
+    tags: list[str] | None = None
+    description: str | None = ""
+    columns: dict[str, Columns13] | None = None
+    meta: dict[str, Any] | None = None
+    group: str | None = None
+    docs: Docs23 | None = Field(None, title="Docs")
+    patch_path: str | None = None
+    build_path: str | None = None
+    unrendered_config: dict[str, Any] | None = None
+    created_at: float | None = None
+    config_call_dict: dict[str, Any] | None = None
+    unrendered_config_call_dict: dict[str, Any] | None = None
+    relation_name: str | None = None
+    raw_code: str | None = ""
+    doc_blocks: list[str] | None = None
+    language: str | None = "sql"
+    refs: list[Ref] | None = None
+    sources: list[list[str]] | None = None
+    metrics: list[list[str]] | None = None
+    functions: list[list[str]] | None = None
+    depends_on: DependsOn13 | None = Field(None, title="DependsOn")
+    compiled_path: str | None = None
+    compiled: bool | None = False
+    compiled_code: str | None = None
+    extra_ctes_injected: bool | None = False
+    extra_ctes: list[ExtraCte] | None = None
+    field_pre_injected_sql: str | None = Field(None, alias="_pre_injected_sql")
+    contract: Contract25 | None = Field(None, title="Contract")
+    index: int | None = None
 
 
-class Contract27(BaseParserModel):
+class Contract26(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
     enforced: bool | None = False
     alias_types: bool | None = True
+
+
+class BuildAfter1(BaseParserModel):
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    count: int | None = None
+    period: Period | None = None
+    updates_on: UpdatesOn | None = "any"
+
+
+class Freshness3(BaseParserModel):
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    build_after: BuildAfter1 = Field(..., title="ModelBuildAfter")
 
 
 class Config37(BaseParserModel):
@@ -3012,92 +3848,153 @@ class Config37(BaseParserModel):
     on_configuration_change: OnConfigurationChange | None = None
     grants: dict[str, Any] | None = None
     packages: list[str] | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
-    contract: Contract27 | None = Field(None, title="ContractConfig")
+    docs: Docs23 | None = Field(None, title="Docs")
+    contract: Contract26 | None = Field(None, title="ContractConfig")
     event_time: Any | None = None
     concurrent_batches: Any | None = None
-
-
-class DeferRelation4(BaseParserModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    database: str | None
-    schema_: str = Field(..., alias="schema")
-    alias: str
-    relation_name: str | None
-    resource_type: ResourceType
-    name: str
-    description: str
-    compiled_code: str | None
-    meta: dict[str, Any]
-    tags: list[str]
-    config: Config37 | None
-
-
-class TimeSpine1(BaseParserModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    standard_granularity_column: str
-    custom_granularities: list[CustomGranularity] | None = None
-
-
-class Disabled4(BaseParserModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    database: str | None
-    schema_: str = Field(..., alias="schema")
-    name: str
-    resource_type: Literal["model"]
-    package_name: str
-    path: str
-    original_file_path: str
-    unique_id: str
-    fqn: list[str]
-    alias: str
-    checksum: Checksum = Field(..., title="FileHash")
-    config: Config35 | None = Field(None, title="ModelConfig")
-    tags: list[str] | None = None
-    description: str | None = ""
-    columns: dict[str, Columns14] | None = None
-    meta: dict[str, Any] | None = None
-    group: str | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
-    patch_path: str | None = None
-    build_path: str | None = None
-    unrendered_config: dict[str, Any] | None = None
-    created_at: float | None = None
-    config_call_dict: dict[str, Any] | None = None
-    unrendered_config_call_dict: dict[str, Any] | None = None
-    relation_name: str | None = None
-    raw_code: str | None = ""
-    doc_blocks: list[str] | None = None
-    language: str | None = "sql"
-    refs: list[Ref] | None = None
-    sources: list[list[str]] | None = None
-    metrics: list[list[str]] | None = None
-    functions: list[list[str]] | None = None
-    depends_on: DependsOn13 | None = Field(None, title="DependsOn")
-    compiled_path: str | None = None
-    compiled: bool | None = False
-    compiled_code: str | None = None
-    extra_ctes_injected: bool | None = False
-    extra_ctes: list[ExtraCte] | None = None
-    field_pre_injected_sql: str | None = Field(None, alias="_pre_injected_sql")
-    contract: Contract26 | None = Field(None, title="Contract")
     access: Access | None = "protected"
-    constraints: list[Constraint16] | None = None
-    version: str | float | None = None
-    latest_version: str | float | None = None
-    deprecation_date: str | None = None
-    defer_relation: DeferRelation4 | None = None
-    primary_key: list[str] | None = None
-    time_spine: TimeSpine1 | None = None
+    freshness: Freshness3 | None = None
+
+
+class Type47(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
+
+
+class Constraint15(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    type: Type47
+    name: str | None = None
+    expression: str | None = None
+    warn_unenforced: bool | None = True
+    warn_unsupported: bool | None = True
+    to: str | None = None
+    to_columns: list[str] | None = None
 
 
 class Config38(BaseParserModel):
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    field_extra: dict[str, Any] | None = Field(None, alias="_extra")
+    meta: dict[str, Any] | None = None
+    tags: list[str] | None = None
+
+
+class Type48(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension28(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type48
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension29(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type49(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity28(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type49
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity29(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Columns14(BaseParserModel):
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    name: str
+    description: str | None = ""
+    meta: dict[str, Any] | None = None
+    data_type: str | None = None
+    constraints: list[Constraint15] | None = None
+    quote: bool | None = None
+    config: Config38 | None = Field(None, title="ColumnConfig")
+    tags: list[str] | None = None
+    field_extra: dict[str, Any] | None = Field(None, alias="_extra")
+    granularity: Granularity | None = None
+    dimension: Dimension28 | Dimension29 | None = None
+    entity: Entity28 | Entity29 | None = None
+    doc_blocks: list[str] | None = None
+
+
+class Contract27(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    enforced: bool | None = False
+    alias_types: bool | None = True
+    checksum: str | None = None
+
+
+class Type50(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
+
+
+class Constraint16(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    type: Type50
+    name: str | None = None
+    expression: str | None = None
+    warn_unenforced: bool | None = True
+    warn_unsupported: bool | None = True
+    to: str | None = None
+    to_columns: list[str] | None = None
+    columns: list[str] | None = None
+
+
+class Contract28(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    enforced: bool | None = False
+    alias_types: bool | None = True
+
+
+class Config39(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -3125,8 +4022,121 @@ class Config38(BaseParserModel):
     on_configuration_change: OnConfigurationChange | None = None
     grants: dict[str, Any] | None = None
     packages: list[str] | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
-    contract: Contract27 | None = Field(None, title="ContractConfig")
+    docs: Docs23 | None = Field(None, title="Docs")
+    contract: Contract28 | None = Field(None, title="ContractConfig")
+    event_time: Any | None = None
+    concurrent_batches: Any | None = None
+
+
+class DeferRelation4(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    database: str | None
+    schema_: str = Field(..., alias="schema")
+    alias: str
+    relation_name: str | None
+    resource_type: ResourceType
+    name: str
+    description: str
+    compiled_code: str | None
+    meta: dict[str, Any]
+    tags: list[str]
+    config: Config39 | None
+
+
+class TimeSpine1(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    standard_granularity_column: str
+    custom_granularities: list[CustomGranularity] | None = None
+
+
+class Disabled4(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    database: str | None
+    schema_: str = Field(..., alias="schema")
+    name: str
+    resource_type: Literal["model"]
+    package_name: str
+    path: str
+    original_file_path: str
+    unique_id: str
+    fqn: list[str]
+    alias: str
+    checksum: Checksum = Field(..., title="FileHash")
+    config: Config37 | None = Field(None, title="ModelConfig")
+    tags: list[str] | None = None
+    description: str | None = ""
+    columns: dict[str, Columns14] | None = None
+    meta: dict[str, Any] | None = None
+    group: str | None = None
+    docs: Docs23 | None = Field(None, title="Docs")
+    patch_path: str | None = None
+    build_path: str | None = None
+    unrendered_config: dict[str, Any] | None = None
+    created_at: float | None = None
+    config_call_dict: dict[str, Any] | None = None
+    unrendered_config_call_dict: dict[str, Any] | None = None
+    relation_name: str | None = None
+    raw_code: str | None = ""
+    doc_blocks: list[str] | None = None
+    language: str | None = "sql"
+    refs: list[Ref] | None = None
+    sources: list[list[str]] | None = None
+    metrics: list[list[str]] | None = None
+    functions: list[list[str]] | None = None
+    depends_on: DependsOn13 | None = Field(None, title="DependsOn")
+    compiled_path: str | None = None
+    compiled: bool | None = False
+    compiled_code: str | None = None
+    extra_ctes_injected: bool | None = False
+    extra_ctes: list[ExtraCte] | None = None
+    field_pre_injected_sql: str | None = Field(None, alias="_pre_injected_sql")
+    contract: Contract27 | None = Field(None, title="Contract")
+    access: Access | None = "protected"
+    constraints: list[Constraint16] | None = None
+    version: str | float | None = None
+    latest_version: str | float | None = None
+    deprecation_date: str | None = None
+    defer_relation: DeferRelation4 | None = None
+    primary_key: list[str] | None = None
+    time_spine: TimeSpine1 | None = None
+
+
+class Config40(BaseParserModel):
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    field_extra: dict[str, Any] | None = Field(None, alias="_extra")
+    enabled: bool | None = True
+    alias: str | None = None
+    schema_: str | None = Field(None, alias="schema")
+    database: str | None = None
+    tags: list[str] | str | None = None
+    meta: dict[str, Any] | None = None
+    group: str | None = None
+    materialized: str | None = "view"
+    incremental_strategy: str | None = None
+    batch_size: Any | None = None
+    lookback: Any | None = 1
+    begin: Any | None = None
+    persist_docs: dict[str, Any] | None = None
+    post_hook: list[PostHookItem] | None = Field(None, alias="post-hook")
+    pre_hook: list[PreHookItem] | None = Field(None, alias="pre-hook")
+    quoting: dict[str, Any] | None = None
+    column_types: dict[str, Any] | None = None
+    full_refresh: bool | None = None
+    unique_key: str | list[str] | None = None
+    on_schema_change: str | None = "ignore"
+    on_configuration_change: OnConfigurationChange | None = None
+    grants: dict[str, Any] | None = None
+    packages: list[str] | None = None
+    docs: Docs23 | None = Field(None, title="Docs")
+    contract: Contract28 | None = Field(None, title="ContractConfig")
     event_time: Any | None = None
     concurrent_batches: Any | None = None
 
@@ -3135,7 +4145,7 @@ class Constraint17(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type14
+    type: Type50
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -3144,13 +4154,61 @@ class Constraint17(BaseParserModel):
     to_columns: list[str] | None = None
 
 
-class Config39(BaseParserModel):
+class Config41(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     meta: dict[str, Any] | None = None
     tags: list[str] | None = None
+
+
+class Type52(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension30(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type52
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension31(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type53(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity30(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type53
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity31(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
 
 
 class Columns15(BaseParserModel):
@@ -3163,14 +4221,16 @@ class Columns15(BaseParserModel):
     data_type: str | None = None
     constraints: list[Constraint17] | None = None
     quote: bool | None = None
-    config: Config39 | None = Field(None, title="ColumnConfig")
+    config: Config41 | None = Field(None, title="ColumnConfig")
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension30 | Dimension31 | None = None
+    entity: Entity30 | Entity31 | None = None
     doc_blocks: list[str] | None = None
 
 
-class Contract29(BaseParserModel):
+class Contract30(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -3194,13 +4254,13 @@ class Disabled5(BaseParserModel):
     fqn: list[str]
     alias: str
     checksum: Checksum = Field(..., title="FileHash")
-    config: Config38 | None = Field(None, title="NodeConfig")
+    config: Config40 | None = Field(None, title="NodeConfig")
     tags: list[str] | None = None
     description: str | None = ""
     columns: dict[str, Columns15] | None = None
     meta: dict[str, Any] | None = None
     group: str | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
+    docs: Docs23 | None = Field(None, title="Docs")
     patch_path: str | None = None
     build_path: str | None = None
     unrendered_config: dict[str, Any] | None = None
@@ -3222,10 +4282,10 @@ class Disabled5(BaseParserModel):
     extra_ctes_injected: bool | None = False
     extra_ctes: list[ExtraCte] | None = None
     field_pre_injected_sql: str | None = Field(None, alias="_pre_injected_sql")
-    contract: Contract29 | None = Field(None, title="Contract")
+    contract: Contract30 | None = Field(None, title="Contract")
 
 
-class Config40(BaseParserModel):
+class Config42(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -3243,6 +4303,7 @@ class Config40(BaseParserModel):
     )
     store_failures: bool | None = None
     store_failures_as: str | None = None
+    sql_header: Any | None = None
     where: str | None = None
     limit: int | None = None
     fail_calc: str | None = "count(*)"
@@ -3250,11 +4311,20 @@ class Config40(BaseParserModel):
     error_if: str | None = "!= 0"
 
 
+class Type54(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
+
+
 class Constraint18(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type14
+    type: Type54
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -3263,13 +4333,61 @@ class Constraint18(BaseParserModel):
     to_columns: list[str] | None = None
 
 
-class Config41(BaseParserModel):
+class Config43(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     meta: dict[str, Any] | None = None
     tags: list[str] | None = None
+
+
+class Type55(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension32(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type55
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension33(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type56(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity32(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type56
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity33(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
 
 
 class Columns16(BaseParserModel):
@@ -3282,10 +4400,12 @@ class Columns16(BaseParserModel):
     data_type: str | None = None
     constraints: list[Constraint18] | None = None
     quote: bool | None = None
-    config: Config41 | None = Field(None, title="ColumnConfig")
+    config: Config43 | None = Field(None, title="ColumnConfig")
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension32 | Dimension33 | None = None
+    entity: Entity32 | Entity33 | None = None
     doc_blocks: list[str] | None = None
 
 
@@ -3304,13 +4424,13 @@ class Disabled6(BaseParserModel):
     fqn: list[str]
     alias: str
     checksum: Checksum = Field(..., title="FileHash")
-    config: Config40 | None = Field(None, title="TestConfig")
+    config: Config42 | None = Field(None, title="TestConfig")
     tags: list[str] | None = None
     description: str | None = ""
     columns: dict[str, Columns16] | None = None
     meta: dict[str, Any] | None = None
     group: str | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
+    docs: Docs23 | None = Field(None, title="Docs")
     patch_path: str | None = None
     build_path: str | None = None
     unrendered_config: dict[str, Any] | None = None
@@ -3332,14 +4452,14 @@ class Disabled6(BaseParserModel):
     extra_ctes_injected: bool | None = False
     extra_ctes: list[ExtraCte] | None = None
     field_pre_injected_sql: str | None = Field(None, alias="_pre_injected_sql")
-    contract: Contract29 | None = Field(None, title="Contract")
+    contract: Contract30 | None = Field(None, title="Contract")
     column_name: str | None = None
     file_key_name: str | None = None
     attached_node: str | None = None
     test_metadata: TestMetadata | None = Field(None, title="TestMetadata")
 
 
-class Contract31(BaseParserModel):
+class Contract32(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -3347,7 +4467,7 @@ class Contract31(BaseParserModel):
     alias_types: bool | None = True
 
 
-class Config42(BaseParserModel):
+class Config44(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -3375,8 +4495,8 @@ class Config42(BaseParserModel):
     on_configuration_change: OnConfigurationChange | None = None
     grants: dict[str, Any] | None = None
     packages: list[str] | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
-    contract: Contract31 | None = Field(None, title="ContractConfig")
+    docs: Docs23 | None = Field(None, title="Docs")
+    contract: Contract32 | None = Field(None, title="ContractConfig")
     event_time: Any | None = None
     concurrent_batches: Any | None = None
     strategy: str | None = None
@@ -3390,11 +4510,20 @@ class Config42(BaseParserModel):
     dbt_valid_to_current: str | None = None
 
 
+class Type57(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
+
+
 class Constraint19(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type14
+    type: Type57
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -3403,13 +4532,61 @@ class Constraint19(BaseParserModel):
     to_columns: list[str] | None = None
 
 
-class Config43(BaseParserModel):
+class Config45(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     meta: dict[str, Any] | None = None
     tags: list[str] | None = None
+
+
+class Type58(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension34(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type58
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension35(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type59(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity34(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type59
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity35(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
 
 
 class Columns17(BaseParserModel):
@@ -3422,20 +4599,13 @@ class Columns17(BaseParserModel):
     data_type: str | None = None
     constraints: list[Constraint19] | None = None
     quote: bool | None = None
-    config: Config43 | None = Field(None, title="ColumnConfig")
+    config: Config45 | None = Field(None, title="ColumnConfig")
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension34 | Dimension35 | None = None
+    entity: Entity34 | Entity35 | None = None
     doc_blocks: list[str] | None = None
-
-
-class Contract32(BaseParserModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    enforced: bool | None = False
-    alias_types: bool | None = True
-    checksum: str | None = None
 
 
 class Contract33(BaseParserModel):
@@ -3444,9 +4614,18 @@ class Contract33(BaseParserModel):
     )
     enforced: bool | None = False
     alias_types: bool | None = True
+    checksum: str | None = None
 
 
-class Config44(BaseParserModel):
+class Contract34(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    enforced: bool | None = False
+    alias_types: bool | None = True
+
+
+class Config46(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -3474,8 +4653,8 @@ class Config44(BaseParserModel):
     on_configuration_change: OnConfigurationChange | None = None
     grants: dict[str, Any] | None = None
     packages: list[str] | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
-    contract: Contract33 | None = Field(None, title="ContractConfig")
+    docs: Docs23 | None = Field(None, title="Docs")
+    contract: Contract34 | None = Field(None, title="ContractConfig")
     event_time: Any | None = None
     concurrent_batches: Any | None = None
 
@@ -3494,7 +4673,7 @@ class DeferRelation5(BaseParserModel):
     compiled_code: str | None
     meta: dict[str, Any]
     tags: list[str]
-    config: Config44 | None
+    config: Config46 | None
 
 
 class Disabled7(BaseParserModel):
@@ -3512,13 +4691,13 @@ class Disabled7(BaseParserModel):
     fqn: list[str]
     alias: str
     checksum: Checksum = Field(..., title="FileHash")
-    config: Config42 = Field(..., title="SnapshotConfig")
+    config: Config44 = Field(..., title="SnapshotConfig")
     tags: list[str] | None = None
     description: str | None = ""
     columns: dict[str, Columns17] | None = None
     meta: dict[str, Any] | None = None
     group: str | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
+    docs: Docs23 | None = Field(None, title="Docs")
     patch_path: str | None = None
     build_path: str | None = None
     unrendered_config: dict[str, Any] | None = None
@@ -3540,11 +4719,17 @@ class Disabled7(BaseParserModel):
     extra_ctes_injected: bool | None = False
     extra_ctes: list[ExtraCte] | None = None
     field_pre_injected_sql: str | None = Field(None, alias="_pre_injected_sql")
-    contract: Contract32 | None = Field(None, title="Contract")
+    contract: Contract33 | None = Field(None, title="Contract")
     defer_relation: DeferRelation5 | None = None
 
 
-class Config45(BaseParserModel):
+class Type60(Enum):
+    scalar = "scalar"
+    aggregate = "aggregate"
+    table = "table"
+
+
+class Config47(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -3572,17 +4757,30 @@ class Config45(BaseParserModel):
     on_configuration_change: OnConfigurationChange | None = None
     grants: dict[str, Any] | None = None
     packages: list[str] | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
-    contract: Contract33 | None = Field(None, title="ContractConfig")
+    docs: Docs23 | None = Field(None, title="Docs")
+    contract: Contract34 | None = Field(None, title="ContractConfig")
     event_time: Any | None = None
     concurrent_batches: Any | None = None
+    type: Type60 | None = "scalar"
+    volatility: Volatility | None = None
+    runtime_version: str | None = None
+    entry_point: str | None = None
+
+
+class Type61(Enum):
+    check = "check"
+    not_null = "not_null"
+    unique = "unique"
+    primary_key = "primary_key"
+    foreign_key = "foreign_key"
+    custom = "custom"
 
 
 class Constraint20(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type14
+    type: Type61
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -3591,13 +4789,61 @@ class Constraint20(BaseParserModel):
     to_columns: list[str] | None = None
 
 
-class Config46(BaseParserModel):
+class Config48(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     meta: dict[str, Any] | None = None
     tags: list[str] | None = None
+
+
+class Type62(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension36(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type62
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension37(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type63(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity36(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type63
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity37(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
 
 
 class Columns18(BaseParserModel):
@@ -3610,14 +4856,16 @@ class Columns18(BaseParserModel):
     data_type: str | None = None
     constraints: list[Constraint20] | None = None
     quote: bool | None = None
-    config: Config46 | None = Field(None, title="ColumnConfig")
+    config: Config48 | None = Field(None, title="ColumnConfig")
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension36 | Dimension37 | None = None
+    entity: Entity36 | Entity37 | None = None
     doc_blocks: list[str] | None = None
 
 
-class Contract35(BaseParserModel):
+class Contract36(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -3626,19 +4874,84 @@ class Contract35(BaseParserModel):
     checksum: str | None = None
 
 
-class Argument2(BaseParserModel):
+class Argument3(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
     name: str
     data_type: str
     description: str | None = None
+    default_value: Any = None
 
 
-class Type24(Enum):
+class Contract37(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    enforced: bool | None = False
+    alias_types: bool | None = True
+
+
+class Type64(Enum):
     scalar = "scalar"
     aggregate = "aggregate"
     table = "table"
+
+
+class Config49(BaseParserModel):
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    field_extra: dict[str, Any] | None = Field(None, alias="_extra")
+    enabled: bool | None = True
+    alias: str | None = None
+    schema_: str | None = Field(None, alias="schema")
+    database: str | None = None
+    tags: list[str] | str | None = None
+    meta: dict[str, Any] | None = None
+    group: str | None = None
+    materialized: str | None = "function"
+    incremental_strategy: str | None = None
+    batch_size: Any | None = None
+    lookback: Any | None = 1
+    begin: Any | None = None
+    persist_docs: dict[str, Any] | None = None
+    post_hook: list[PostHookItem] | None = Field(None, alias="post-hook")
+    pre_hook: list[PreHookItem] | None = Field(None, alias="pre-hook")
+    quoting: dict[str, Any] | None = None
+    column_types: dict[str, Any] | None = None
+    full_refresh: bool | None = None
+    unique_key: str | list[str] | None = None
+    on_schema_change: str | None = "ignore"
+    on_configuration_change: OnConfigurationChange | None = None
+    grants: dict[str, Any] | None = None
+    packages: list[str] | None = None
+    docs: Docs23 | None = Field(None, title="Docs")
+    contract: Contract37 | None = Field(None, title="ContractConfig")
+    event_time: Any | None = None
+    concurrent_batches: Any | None = None
+    type: Type64 | None = "scalar"
+    volatility: Volatility | None = None
+    runtime_version: str | None = None
+    entry_point: str | None = None
+
+
+class DeferFunction1(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    database: str | None
+    schema_: str = Field(..., alias="schema")
+    alias: str
+    resource_type: ResourceType
+    name: str
+    description: str
+    compiled_code: str | None
+    meta: dict[str, Any]
+    tags: list[str]
+    config: Config49 | None
+    arguments: list[Argument3]
+    returns: Returns = Field(..., title="FunctionReturns")
 
 
 class Disabled8(BaseParserModel):
@@ -3657,13 +4970,13 @@ class Disabled8(BaseParserModel):
     fqn: list[str]
     alias: str
     checksum: Checksum = Field(..., title="FileHash")
-    config: Config45 = Field(..., title="FunctionConfig")
+    config: Config47 = Field(..., title="FunctionConfig")
     tags: list[str] | None = None
     description: str | None = ""
     columns: dict[str, Columns18] | None = None
     meta: dict[str, Any] | None = None
     group: str | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
+    docs: Docs23 | None = Field(None, title="Docs")
     patch_path: str | None = None
     build_path: str | None = None
     unrendered_config: dict[str, Any] | None = None
@@ -3685,9 +4998,9 @@ class Disabled8(BaseParserModel):
     extra_ctes_injected: bool | None = False
     extra_ctes: list[ExtraCte] | None = None
     field_pre_injected_sql: str | None = Field(None, alias="_pre_injected_sql")
-    contract: Contract35 | None = Field(None, title="Contract")
-    arguments: list[Argument2] | None = None
-    type: Type24 | None = "scalar"
+    contract: Contract36 | None = Field(None, title="Contract")
+    arguments: list[Argument3] | None = None
+    defer_function: DeferFunction1 | None = None
 
 
 class WarnAfter2(BaseParserModel):
@@ -3727,7 +5040,7 @@ class External1(BaseParserModel):
     partitions: list[str] | list[Partition] | None = None
 
 
-class Type25(Enum):
+class Type65(Enum):
     check = "check"
     not_null = "not_null"
     unique = "unique"
@@ -3740,13 +5053,70 @@ class Constraint21(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type25
+    type: Type65
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
     warn_unsupported: bool | None = True
     to: str | None = None
     to_columns: list[str] | None = None
+
+
+class Config50(BaseParserModel):
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    field_extra: dict[str, Any] | None = Field(None, alias="_extra")
+    meta: dict[str, Any] | None = None
+    tags: list[str] | None = None
+
+
+class Type66(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension38(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type66
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension39(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type67(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity38(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type67
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity39(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
 
 
 class Columns19(BaseParserModel):
@@ -3759,10 +5129,12 @@ class Columns19(BaseParserModel):
     data_type: str | None = None
     constraints: list[Constraint21] | None = None
     quote: bool | None = None
-    config: Config46 | None = Field(None, title="ColumnConfig")
+    config: Config50 | None = Field(None, title="ColumnConfig")
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension38 | Dimension39 | None = None
+    entity: Entity38 | Entity39 | None = None
     doc_blocks: list[str] | None = None
 
 
@@ -3791,7 +5163,7 @@ class Freshness5(BaseParserModel):
     filter: str | None = None
 
 
-class Config48(BaseParserModel):
+class Config51(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -3832,7 +5204,7 @@ class Disabled9(BaseParserModel):
     meta: dict[str, Any] | None = None
     source_meta: dict[str, Any] | None = None
     tags: list[str] | None = None
-    config: Config48 | None = Field(None, title="SourceConfig")
+    config: Config51 | None = Field(None, title="SourceConfig")
     patch_path: str | None = None
     unrendered_config: dict[str, Any] | None = None
     relation_name: str | None = None
@@ -3842,7 +5214,7 @@ class Disabled9(BaseParserModel):
     doc_blocks: list[str] | None = None
 
 
-class Type26(Enum):
+class Type68(Enum):
     dashboard = "dashboard"
     notebook = "notebook"
     analysis = "analysis"
@@ -3850,7 +5222,7 @@ class Type26(Enum):
     application = "application"
 
 
-class Config49(BaseParserModel):
+class Config52(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -3871,14 +5243,14 @@ class Disabled10(BaseParserModel):
     original_file_path: str
     unique_id: str
     fqn: list[str]
-    type: Type26
+    type: Type68
     owner: Owner = Field(..., title="Owner")
     description: str | None = ""
     label: str | None = None
     maturity: Maturity | None = None
     meta: dict[str, Any] | None = None
     tags: list[str] | None = None
-    config: Config49 | None = Field(None, title="ExposureConfig")
+    config: Config52 | None = Field(None, title="ExposureConfig")
     unrendered_config: dict[str, Any] | None = None
     url: str | None = None
     depends_on: DependsOn13 | None = Field(None, title="DependsOn")
@@ -3888,7 +5260,7 @@ class Disabled10(BaseParserModel):
     created_at: float | None = None
 
 
-class Type27(Enum):
+class Type69(Enum):
     simple = "simple"
     ratio = "ratio"
     cumulative = "cumulative"
@@ -3896,7 +5268,7 @@ class Type27(Enum):
     conversion = "conversion"
 
 
-class Filter9(BaseParserModel):
+class Filter11(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -3908,13 +5280,13 @@ class Measure1(BaseParserModel):
         extra="forbid",
     )
     name: str
-    filter: Filter9 | None = None
+    filter: Filter11 | None = None
     alias: str | None = None
     join_to_timespine: bool | None = False
     fill_nulls_with: int | None = None
 
 
-class Filter10(BaseParserModel):
+class Filter12(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -3926,46 +5298,10 @@ class InputMeasure1(BaseParserModel):
         extra="forbid",
     )
     name: str
-    filter: Filter10 | None = None
+    filter: Filter12 | None = None
     alias: str | None = None
     join_to_timespine: bool | None = False
     fill_nulls_with: int | None = None
-
-
-class Filter11(BaseParserModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    where_filters: list[WhereFilter]
-
-
-class Numerator1(BaseParserModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    name: str
-    filter: Filter11 | None = None
-    alias: str | None = None
-    offset_window: OffsetWindow | None = None
-    offset_to_grain: str | None = None
-
-
-class Filter12(BaseParserModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    where_filters: list[WhereFilter]
-
-
-class Denominator1(BaseParserModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    name: str
-    filter: Filter12 | None = None
-    alias: str | None = None
-    offset_window: OffsetWindow | None = None
-    offset_to_grain: str | None = None
 
 
 class Filter13(BaseParserModel):
@@ -3975,7 +5311,7 @@ class Filter13(BaseParserModel):
     where_filters: list[WhereFilter]
 
 
-class Metric2(BaseParserModel):
+class Numerator1(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -3993,18 +5329,54 @@ class Filter14(BaseParserModel):
     where_filters: list[WhereFilter]
 
 
-class BaseMeasure1(BaseParserModel):
+class Denominator1(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
     name: str
     filter: Filter14 | None = None
     alias: str | None = None
+    offset_window: OffsetWindow | None = None
+    offset_to_grain: str | None = None
+
+
+class Filter15(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    where_filters: list[WhereFilter]
+
+
+class Metric2(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    filter: Filter15 | None = None
+    alias: str | None = None
+    offset_window: OffsetWindow | None = None
+    offset_to_grain: str | None = None
+
+
+class Filter16(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    where_filters: list[WhereFilter]
+
+
+class BaseMeasure1(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    filter: Filter16 | None = None
+    alias: str | None = None
     join_to_timespine: bool | None = False
     fill_nulls_with: int | None = None
 
 
-class Filter15(BaseParserModel):
+class Filter17(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -4016,25 +5388,63 @@ class ConversionMeasure1(BaseParserModel):
         extra="forbid",
     )
     name: str
-    filter: Filter15 | None = None
+    filter: Filter17 | None = None
     alias: str | None = None
     join_to_timespine: bool | None = False
     fill_nulls_with: int | None = None
+
+
+class Filter18(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    where_filters: list[WhereFilter]
+
+
+class BaseMetric1(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    filter: Filter18 | None = None
+    alias: str | None = None
+    offset_window: OffsetWindow | None = None
+    offset_to_grain: str | None = None
+
+
+class Filter19(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    where_filters: list[WhereFilter]
+
+
+class ConversionMetric1(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    filter: Filter19 | None = None
+    alias: str | None = None
+    offset_window: OffsetWindow | None = None
+    offset_to_grain: str | None = None
 
 
 class ConversionTypeParams1(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    base_measure: BaseMeasure1 = Field(..., title="MetricInputMeasure")
-    conversion_measure: ConversionMeasure1 = Field(..., title="MetricInputMeasure")
     entity: str
+    base_measure: BaseMeasure1 | None = None
+    conversion_measure: ConversionMeasure1 | None = None
+    base_metric: BaseMetric1 | None = None
+    conversion_metric: ConversionMetric1 | None = None
     calculation: Calculation | None = "conversion_rate"
     window: Window | None = None
     constant_properties: list[ConstantProperty] | None = None
 
 
-class Filter16(BaseParserModel):
+class Filter20(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -4046,7 +5456,7 @@ class Metric3(BaseParserModel):
         extra="forbid",
     )
     name: str
-    filter: Filter16 | None = None
+    filter: Filter20 | None = None
     alias: str | None = None
     offset_window: OffsetWindow | None = None
     offset_to_grain: str | None = None
@@ -4080,7 +5490,6 @@ class MetricAggregationParams1(BaseParserModel):
     agg_params: AggParams | None = None
     agg_time_dimension: str | None = None
     non_additive_dimension: NonAdditiveDimension1 | None = None
-    expr: str | None = None
 
 
 class TypeParams1(BaseParserModel):
@@ -4098,9 +5507,12 @@ class TypeParams1(BaseParserModel):
     conversion_type_params: ConversionTypeParams1 | None = None
     cumulative_type_params: CumulativeTypeParams1 | None = None
     metric_aggregation_params: MetricAggregationParams1 | None = None
+    fill_nulls_with: int | None = None
+    join_to_timespine: bool | None = False
+    is_private: bool | None = None
 
 
-class Filter17(BaseParserModel):
+class Filter21(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -4115,7 +5527,7 @@ class Metadata2(BaseParserModel):
     file_slice: FileSlice = Field(..., title="FileSlice")
 
 
-class Config50(BaseParserModel):
+class Config53(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -4138,14 +5550,12 @@ class Disabled11(BaseParserModel):
     fqn: list[str]
     description: str
     label: str
-    type: Type27
+    type: Type69
     type_params: TypeParams1 = Field(..., title="MetricTypeParams")
-    filter: Filter17 | None = None
+    filter: Filter21 | None = None
     metadata: Metadata2 | None = None
     time_granularity: str | None = None
-    meta: dict[str, Any] | None = None
-    tags: list[str] | None = None
-    config: Config50 | None = Field(None, title="MetricConfig")
+    config: Config53 | None = Field(None, title="MetricConfig")
     unrendered_config: dict[str, Any] | None = None
     sources: list[list[str]] | None = None
     depends_on: DependsOn13 | None = Field(None, title="DependsOn")
@@ -4153,6 +5563,8 @@ class Disabled11(BaseParserModel):
     metrics: list[list[str]] | None = None
     created_at: float | None = None
     group: str | None = None
+    meta: dict[str, Any] | None = None
+    tags: list[str] | None = None
 
 
 class Where(BaseParserModel):
@@ -4178,7 +5590,7 @@ class ExportAs(Enum):
     view = "view"
 
 
-class Config51(BaseParserModel):
+class Config54(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -4193,7 +5605,7 @@ class Export(BaseParserModel):
         extra="forbid",
     )
     name: str
-    config: Config51 = Field(..., title="ExportConfig")
+    config: Config54 = Field(..., title="ExportConfig")
     unrendered_config: dict[str, str] | None = None
 
 
@@ -4212,7 +5624,7 @@ class Cache(BaseParserModel):
     enabled: bool | None = False
 
 
-class Config52(BaseParserModel):
+class Config55(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -4241,7 +5653,7 @@ class Disabled12(BaseParserModel):
     description: str | None = None
     label: str | None = None
     metadata: Metadata3 | None = None
-    config: Config52 | None = Field(None, title="SavedQueryConfig")
+    config: Config55 | None = Field(None, title="SavedQueryConfig")
     unrendered_config: dict[str, Any] | None = None
     group: str | None = None
     depends_on: DependsOn13 | None = Field(None, title="DependsOn")
@@ -4267,31 +5679,31 @@ class Defaults(BaseParserModel):
     agg_time_dimension: str | None = None
 
 
-class Type28(Enum):
+class Type70(Enum):
     foreign = "foreign"
     natural = "natural"
     primary = "primary"
     unique = "unique"
 
 
-class Config53(BaseParserModel):
+class Config56(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
     meta: dict[str, Any] | None = None
 
 
-class Entity(BaseParserModel):
+class Entity40(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
     name: str
-    type: Type28
+    type: Type70
     description: str | None = None
     label: str | None = None
     role: str | None = None
     expr: str | None = None
-    config: Config53 | None = None
+    config: Config56 | None = None
 
 
 class NonAdditiveDimension2(BaseParserModel):
@@ -4316,10 +5728,10 @@ class Measure2(BaseParserModel):
     agg_params: AggParams | None = None
     non_additive_dimension: NonAdditiveDimension2 | None = None
     agg_time_dimension: str | None = None
-    config: Config53 | None = None
+    config: Config56 | None = None
 
 
-class Type29(Enum):
+class Type71(Enum):
     categorical = "categorical"
     time = "time"
 
@@ -4338,14 +5750,6 @@ class TimeGranularity(Enum):
     year = "year"
 
 
-class ValidityParams(BaseParserModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    is_start: bool | None = False
-    is_end: bool | None = False
-
-
 class TypeParams2(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
@@ -4362,19 +5766,19 @@ class Metadata4(BaseParserModel):
     file_slice: FileSlice = Field(..., title="FileSlice")
 
 
-class Dimension(BaseParserModel):
+class Dimension40(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
     name: str
-    type: Type29
+    type: Type71
     description: str | None = None
     label: str | None = None
     is_partition: bool | None = False
     type_params: TypeParams2 | None = None
     expr: str | None = None
     metadata: Metadata4 | None = None
-    config: Config53 | None = None
+    config: Config56 | None = None
 
 
 class Metadata5(BaseParserModel):
@@ -4385,7 +5789,7 @@ class Metadata5(BaseParserModel):
     file_slice: FileSlice = Field(..., title="FileSlice")
 
 
-class Config56(BaseParserModel):
+class Config59(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -4411,14 +5815,14 @@ class Disabled13(BaseParserModel):
     description: str | None = None
     label: str | None = None
     defaults: Defaults | None = None
-    entities: list[Entity] | None = None
+    entities: list[Entity40] | None = None
     measures: list[Measure2] | None = None
-    dimensions: list[Dimension] | None = None
+    dimensions: list[Dimension40] | None = None
     metadata: Metadata5 | None = None
     depends_on: DependsOn13 | None = Field(None, title="DependsOn")
     refs: list[Ref] | None = None
     created_at: float | None = None
-    config: Config56 | None = Field(None, title="SemanticModelConfig")
+    config: Config59 | None = Field(None, title="SemanticModelConfig")
     unrendered_config: dict[str, Any] | None = None
     primary_entity: str | None = None
     group: str | None = None
@@ -4458,7 +5862,7 @@ class Overrides(BaseParserModel):
     env_vars: dict[str, Any] | None = None
 
 
-class Config57(BaseParserModel):
+class Config60(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -4493,7 +5897,7 @@ class Disabled14(BaseParserModel):
     description: str | None = ""
     overrides: Overrides | None = None
     depends_on: DependsOn13 | None = Field(None, title="DependsOn")
-    config: Config57 | None = Field(None, title="UnitTestConfig")
+    config: Config60 | None = Field(None, title="UnitTestConfig")
     checksum: str | None = None
     schema_: str | None = Field(None, alias="schema")
     created_at: float | None = None
@@ -4519,7 +5923,7 @@ class QueryParams1(BaseParserModel):
     limit: int | None = None
 
 
-class Config58(BaseParserModel):
+class Config61(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -4534,7 +5938,7 @@ class Export1(BaseParserModel):
         extra="forbid",
     )
     name: str
-    config: Config58 = Field(..., title="ExportConfig")
+    config: Config61 = Field(..., title="ExportConfig")
     unrendered_config: dict[str, str] | None = None
 
 
@@ -4546,7 +5950,7 @@ class Metadata6(BaseParserModel):
     file_slice: FileSlice = Field(..., title="FileSlice")
 
 
-class Config59(BaseParserModel):
+class Config62(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -4575,7 +5979,7 @@ class SavedQueries(BaseParserModel):
     description: str | None = None
     label: str | None = None
     metadata: Metadata6 | None = None
-    config: Config59 | None = Field(None, title="SavedQueryConfig")
+    config: Config62 | None = Field(None, title="SavedQueryConfig")
     unrendered_config: dict[str, Any] | None = None
     group: str | None = None
     depends_on: DependsOn13 | None = Field(None, title="DependsOn")
@@ -4584,31 +5988,31 @@ class SavedQueries(BaseParserModel):
     tags: list[str] | str | None = None
 
 
-class Type30(Enum):
+class Type72(Enum):
     foreign = "foreign"
     natural = "natural"
     primary = "primary"
     unique = "unique"
 
 
-class Config60(BaseParserModel):
+class Config63(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
     meta: dict[str, Any] | None = None
 
 
-class Entity1(BaseParserModel):
+class Entity41(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
     name: str
-    type: Type30
+    type: Type72
     description: str | None = None
     label: str | None = None
     role: str | None = None
     expr: str | None = None
-    config: Config60 | None = None
+    config: Config63 | None = None
 
 
 class NonAdditiveDimension3(BaseParserModel):
@@ -4633,10 +6037,10 @@ class Measure3(BaseParserModel):
     agg_params: AggParams | None = None
     non_additive_dimension: NonAdditiveDimension3 | None = None
     agg_time_dimension: str | None = None
-    config: Config60 | None = None
+    config: Config63 | None = None
 
 
-class Type31(Enum):
+class Type73(Enum):
     categorical = "categorical"
     time = "time"
 
@@ -4657,19 +6061,19 @@ class Metadata7(BaseParserModel):
     file_slice: FileSlice = Field(..., title="FileSlice")
 
 
-class Dimension1(BaseParserModel):
+class Dimension41(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
     name: str
-    type: Type31
+    type: Type73
     description: str | None = None
     label: str | None = None
     is_partition: bool | None = False
     type_params: TypeParams3 | None = None
     expr: str | None = None
     metadata: Metadata7 | None = None
-    config: Config60 | None = None
+    config: Config63 | None = None
 
 
 class Metadata8(BaseParserModel):
@@ -4680,7 +6084,7 @@ class Metadata8(BaseParserModel):
     file_slice: FileSlice = Field(..., title="FileSlice")
 
 
-class Config63(BaseParserModel):
+class Config66(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -4706,14 +6110,14 @@ class SemanticModels(BaseParserModel):
     description: str | None = None
     label: str | None = None
     defaults: Defaults | None = None
-    entities: list[Entity1] | None = None
+    entities: list[Entity41] | None = None
     measures: list[Measure3] | None = None
-    dimensions: list[Dimension1] | None = None
+    dimensions: list[Dimension41] | None = None
     metadata: Metadata8 | None = None
     depends_on: DependsOn13 | None = Field(None, title="DependsOn")
     refs: list[Ref] | None = None
     created_at: float | None = None
-    config: Config63 | None = Field(None, title="SemanticModelConfig")
+    config: Config66 | None = Field(None, title="SemanticModelConfig")
     unrendered_config: dict[str, Any] | None = None
     primary_entity: str | None = None
     group: str | None = None
@@ -4738,7 +6142,7 @@ class Expect1(BaseParserModel):
     fixture: str | None = None
 
 
-class Config64(BaseParserModel):
+class Config67(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -4765,7 +6169,7 @@ class UnitTests(BaseParserModel):
     description: str | None = ""
     overrides: Overrides | None = None
     depends_on: DependsOn13 | None = Field(None, title="DependsOn")
-    config: Config64 | None = Field(None, title="UnitTestConfig")
+    config: Config67 | None = Field(None, title="UnitTestConfig")
     checksum: str | None = None
     schema_: str | None = Field(None, alias="schema")
     created_at: float | None = None
@@ -4773,15 +6177,13 @@ class UnitTests(BaseParserModel):
     version: str | float | None = None
 
 
-class Contract36(BaseParserModel):
-    model_config = ConfigDict(
-        extra="forbid",
-    )
-    enforced: bool | None = False
-    alias_types: bool | None = True
+class Type74(Enum):
+    scalar = "scalar"
+    aggregate = "aggregate"
+    table = "table"
 
 
-class Config65(BaseParserModel):
+class Config68(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -4809,13 +6211,17 @@ class Config65(BaseParserModel):
     on_configuration_change: OnConfigurationChange | None = None
     grants: dict[str, Any] | None = None
     packages: list[str] | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
-    contract: Contract36 | None = Field(None, title="ContractConfig")
+    docs: Docs23 | None = Field(None, title="Docs")
+    contract: Contract37 | None = Field(None, title="ContractConfig")
     event_time: Any | None = None
     concurrent_batches: Any | None = None
+    type: Type74 | None = "scalar"
+    volatility: Volatility | None = None
+    runtime_version: str | None = None
+    entry_point: str | None = None
 
 
-class Type32(Enum):
+class Type75(Enum):
     check = "check"
     not_null = "not_null"
     unique = "unique"
@@ -4828,7 +6234,7 @@ class Constraint22(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    type: Type32
+    type: Type75
     name: str | None = None
     expression: str | None = None
     warn_unenforced: bool | None = True
@@ -4837,13 +6243,61 @@ class Constraint22(BaseParserModel):
     to_columns: list[str] | None = None
 
 
-class Config66(BaseParserModel):
+class Config69(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     meta: dict[str, Any] | None = None
     tags: list[str] | None = None
+
+
+class Type76(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Dimension42(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type76
+    description: str | None = None
+    label: str | None = None
+    is_partition: bool | None = False
+    config: dict[str, Any] | None = None
+    validity_params: ValidityParams | None = None
+
+
+class Dimension43(Enum):
+    categorical = "categorical"
+    time = "time"
+
+
+class Type77(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
+
+
+class Entity42(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    name: str
+    type: Type77
+    description: str | None = None
+    label: str | None = None
+    config: dict[str, Any] | None = None
+
+
+class Entity43(Enum):
+    foreign = "foreign"
+    natural = "natural"
+    primary = "primary"
+    unique = "unique"
 
 
 class Columns20(BaseParserModel):
@@ -4856,14 +6310,16 @@ class Columns20(BaseParserModel):
     data_type: str | None = None
     constraints: list[Constraint22] | None = None
     quote: bool | None = None
-    config: Config66 | None = Field(None, title="ColumnConfig")
+    config: Config69 | None = Field(None, title="ColumnConfig")
     tags: list[str] | None = None
     field_extra: dict[str, Any] | None = Field(None, alias="_extra")
     granularity: Granularity | None = None
+    dimension: Dimension42 | Dimension43 | None = None
+    entity: Entity42 | Entity43 | None = None
     doc_blocks: list[str] | None = None
 
 
-class Contract37(BaseParserModel):
+class Contract39(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
@@ -4872,10 +6328,74 @@ class Contract37(BaseParserModel):
     checksum: str | None = None
 
 
-class Type33(Enum):
+class Contract40(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    enforced: bool | None = False
+    alias_types: bool | None = True
+
+
+class Type78(Enum):
     scalar = "scalar"
     aggregate = "aggregate"
     table = "table"
+
+
+class Config70(BaseParserModel):
+    model_config = ConfigDict(
+        extra="allow",
+    )
+    field_extra: dict[str, Any] | None = Field(None, alias="_extra")
+    enabled: bool | None = True
+    alias: str | None = None
+    schema_: str | None = Field(None, alias="schema")
+    database: str | None = None
+    tags: list[str] | str | None = None
+    meta: dict[str, Any] | None = None
+    group: str | None = None
+    materialized: str | None = "function"
+    incremental_strategy: str | None = None
+    batch_size: Any | None = None
+    lookback: Any | None = 1
+    begin: Any | None = None
+    persist_docs: dict[str, Any] | None = None
+    post_hook: list[PostHookItem] | None = Field(None, alias="post-hook")
+    pre_hook: list[PreHookItem] | None = Field(None, alias="pre-hook")
+    quoting: dict[str, Any] | None = None
+    column_types: dict[str, Any] | None = None
+    full_refresh: bool | None = None
+    unique_key: str | list[str] | None = None
+    on_schema_change: str | None = "ignore"
+    on_configuration_change: OnConfigurationChange | None = None
+    grants: dict[str, Any] | None = None
+    packages: list[str] | None = None
+    docs: Docs23 | None = Field(None, title="Docs")
+    contract: Contract40 | None = Field(None, title="ContractConfig")
+    event_time: Any | None = None
+    concurrent_batches: Any | None = None
+    type: Type78 | None = "scalar"
+    volatility: Volatility | None = None
+    runtime_version: str | None = None
+    entry_point: str | None = None
+
+
+class DeferFunction2(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    database: str | None
+    schema_: str = Field(..., alias="schema")
+    alias: str
+    resource_type: ResourceType
+    name: str
+    description: str
+    compiled_code: str | None
+    meta: dict[str, Any]
+    tags: list[str]
+    config: Config70 | None
+    arguments: list[Argument3]
+    returns: Returns = Field(..., title="FunctionReturns")
 
 
 class Functions(BaseParserModel):
@@ -4894,13 +6414,13 @@ class Functions(BaseParserModel):
     fqn: list[str]
     alias: str
     checksum: Checksum = Field(..., title="FileHash")
-    config: Config65 = Field(..., title="FunctionConfig")
+    config: Config68 = Field(..., title="FunctionConfig")
     tags: list[str] | None = None
     description: str | None = ""
     columns: dict[str, Columns20] | None = None
     meta: dict[str, Any] | None = None
     group: str | None = None
-    docs: Docs21 | None = Field(None, title="Docs")
+    docs: Docs23 | None = Field(None, title="Docs")
     patch_path: str | None = None
     build_path: str | None = None
     unrendered_config: dict[str, Any] | None = None
@@ -4922,9 +6442,9 @@ class Functions(BaseParserModel):
     extra_ctes_injected: bool | None = False
     extra_ctes: list[ExtraCte] | None = None
     field_pre_injected_sql: str | None = Field(None, alias="_pre_injected_sql")
-    contract: Contract37 | None = Field(None, title="Contract")
-    arguments: list[Argument2] | None = None
-    type: Type33 | None = "scalar"
+    contract: Contract39 | None = Field(None, title="Contract")
+    arguments: list[Argument3] | None = None
+    defer_function: DeferFunction2 | None = None
 
 
 class ManifestV12(BaseParserModel):
@@ -4946,7 +6466,7 @@ class ManifestV12(BaseParserModel):
     macros: dict[str, Macros] = Field(
         ..., description="The macros defined in the dbt project and its dependencies"
     )
-    docs: dict[str, Docs20] = Field(
+    docs: dict[str, Docs22] = Field(
         ..., description="The docs defined in the dbt project and its dependencies"
     )
     exposures: dict[str, Exposures] = Field(

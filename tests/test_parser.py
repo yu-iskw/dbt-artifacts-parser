@@ -23,18 +23,37 @@ from dbt_artifacts_parser import parser
 from dbt_artifacts_parser.utils import get_project_root
 
 
-@pytest.mark.parametrize("version", ["v1"])
+@pytest.mark.parametrize(
+    "version,path",
+    [
+        (
+            "v1",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "catalog",
+                "v1",
+                "jaffle_shop",
+                "catalog.json",
+            ),
+        ),
+        (
+            "v1",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "catalog",
+                "v1",
+                "jaffle_shop",
+                "catalog_1.11.json",
+            ),
+        ),
+    ],
+)
 class TestCatalogParser:
-    def test_parse_catalog(self, version):
-        path = os.path.join(
-            get_project_root(),
-            "tests",
-            "resources",
-            "catalog",
-            version,
-            "jaffle_shop",
-            "catalog.json",
-        )
+    def test_parse_catalog(self, version, path):
         with open(path, "r", encoding="utf-8") as fp:
             catalog_dict = yaml.safe_load(fp)
             catalog_obj = parser.parse_catalog(catalog_dict)
@@ -43,16 +62,7 @@ class TestCatalogParser:
             == f"https://schemas.getdbt.com/dbt/catalog/{version}.json"
         )
 
-    def test_parse_catalog_specific(self, version):
-        path = os.path.join(
-            get_project_root(),
-            "tests",
-            "resources",
-            "catalog",
-            version,
-            "jaffle_shop",
-            "catalog.json",
-        )
+    def test_parse_catalog_specific(self, version, path):
         with open(path, "r", encoding="utf-8") as fp:
             catalog_dict = yaml.safe_load(fp)
             catalog_obj = getattr(parser, f"parse_catalog_{version}")(catalog_dict)
@@ -245,6 +255,18 @@ class TestCatalogParser:
                 "manifest_1.10.json",
             ),
         ),
+        (
+            "v12",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "manifest",
+                "v12",
+                "jaffle_shop",
+                "manifest_1.11.json",
+            ),
+        ),
     ],
 )
 class TestManifestParser:
@@ -267,36 +289,106 @@ class TestManifestParser:
         )
 
 
-@pytest.mark.parametrize("version", ["v1", "v2", "v3", "v4", "v5", "v6"])
+@pytest.mark.parametrize(
+    "version,path",
+    [
+        (
+            "v1",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "run_results",
+                "v1",
+                "jaffle_shop",
+                "run_results.json",
+            ),
+        ),
+        (
+            "v2",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "run_results",
+                "v2",
+                "jaffle_shop",
+                "run_results.json",
+            ),
+        ),
+        (
+            "v3",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "run_results",
+                "v3",
+                "jaffle_shop",
+                "run_results.json",
+            ),
+        ),
+        (
+            "v4",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "run_results",
+                "v4",
+                "jaffle_shop",
+                "run_results.json",
+            ),
+        ),
+        (
+            "v5",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "run_results",
+                "v5",
+                "jaffle_shop",
+                "run_results.json",
+            ),
+        ),
+        (
+            "v6",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "run_results",
+                "v6",
+                "jaffle_shop",
+                "run_results.json",
+            ),
+        ),
+        (
+            "v6",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "run_results",
+                "v6",
+                "jaffle_shop",
+                "run_results_1.11.json",
+            ),
+        ),
+    ],
+)
 class TestRunResultsParser:
-    def test_parse_run_results(self, version):
-        path = os.path.join(
-            get_project_root(),
-            "tests",
-            "resources",
-            "run_results",
-            version,
-            "jaffle_shop",
-            "run_results.json",
-        )
+    def test_parse_run_results(self, version, path):
         with open(path, "r", encoding="utf-8") as fp:
-            manifest_dict = yaml.safe_load(fp)
-            manifest_obj = parser.parse_run_results(manifest_dict)
+            run_results_dict = yaml.safe_load(fp)
+            run_results_obj = parser.parse_run_results(run_results_dict)
         assert (
-            manifest_obj.metadata.dbt_schema_version
+            run_results_obj.metadata.dbt_schema_version
             == f"https://schemas.getdbt.com/dbt/run-results/{version}.json"
         )
 
-    def test_parse_run_results_specific(self, version):
-        path = os.path.join(
-            get_project_root(),
-            "tests",
-            "resources",
-            "run_results",
-            version,
-            "jaffle_shop",
-            "run_results.json",
-        )
+    def test_parse_run_results_specific(self, version, path):
         with open(path, "r", encoding="utf-8") as fp:
             run_results_dict = yaml.safe_load(fp)
             run_results_obj = getattr(parser, f"parse_run_results_{version}")(
