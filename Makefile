@@ -15,6 +15,12 @@ setup-python:
 setup-python-system:
 	bash ./dev/setup.sh --deps "development" --system
 
+# Refresh uv.lock to newest versions within pyproject.toml constraints, then sync .venv.
+# Major bumps may require editing version pins in pyproject.toml.
+.PHONY: upgrade-deps
+upgrade-deps:
+	uv lock --upgrade && uv sync
+
 # Set up the pre-commit hooks.
 .PHONY: setup-pre-commit
 setup-pre-commit:
