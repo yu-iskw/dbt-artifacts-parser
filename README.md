@@ -36,6 +36,8 @@ This package is primarily designed for dbt-core, enabling seamless interaction w
 pip install -U dbt-artifacts-parser
 ```
 
+Development dependencies are declared as a [PEP 735](https://peps.python.org/pep-0735/) **`dev` dependency group** in `pyproject.toml` (locked in `uv.lock`) and mirrored under **`[project.optional-dependencies].dev`** so `pip install dbt-artifacts-parser[dev]` keeps working. After cloning, run `make setup` or `bash dev/setup.sh --deps development` (uses **`uv sync`**). To add a dev tool: `uv add --group dev <package>`, then update **`[project.optional-dependencies].dev`** to match, and run `uv lock`.
+
 ## Python classes
 
 Those are the classes to parse dbt artifacts.

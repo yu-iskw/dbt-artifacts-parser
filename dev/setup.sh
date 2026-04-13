@@ -19,12 +19,15 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 MODULE_DIR="$(dirname "${SCRIPT_DIR}")"
 
-# Arguments
+# Arguments (default: project .venv via uv; use --system for legacy system-site installs)
 deps="production"
-use_venv=false
+use_venv=true
 while (($# > 0)); do
   if [[ "$1" == "--use-venv" ]]; then
-    use_venv=true
+    echo "Warning: --use-venv is deprecated (venv is now the default)." >&2
+    shift 1
+  elif [[ "$1" == "--system" ]]; then
+    use_venv=false
     shift 1
   elif [[ "$1" == "--deps" ]]; then
     if [[ "$2" != "production" && "$2" != "development" ]]; then
@@ -45,25 +48,18 @@ cd "${MODULE_DIR}"
 # Install uv and dependencies
 pip install --force-reinstall -r "${MODULE_DIR}/requirements.setup.txt"
 
-UV_PIP_OPTIONS=("--force-reinstall")
 if [[ "${use_venv}" == true ]]; then
-  # Create virtual environment
-  uv venv
-  # Activate virtual environment
-  if [[ -f .venv/bin/activate ]]; then
-    # shellcheck disable=SC1091
-    source .venv/bin/activate
+  # PEP 735 [dependency-groups] + uv.lock; [tool.uv] default-groups includes dev
+  if [[ "${deps}" == "production" ]]; then
+    uv sync --no-default-groups
   else
-    echo "Error: .venv/bin/activate not found"
-    exit 1
+    uv sync
   fi
 else
-  UV_PIP_OPTIONS+=("--system")
-fi
-
-# Install package and dependencies
-if [[ "${deps}" == "production" ]]; then
-  uv pip install "${UV_PIP_OPTIONS[@]}" -e "."
-else
-  uv pip install "${UV_PIP_OPTIONS[@]}" -e ".[dev,test]"
+  UV_PIP_OPTIONS=("--force-reinstall" "--system")
+  if [[ "${deps}" == "production" ]]; then
+    uv pip install "${UV_PIP_OPTIONS[@]}" -e "."
+  else
+    uv pip install "${UV_PIP_OPTIONS[@]}" -e ".[dev]"
+  fi
 fi

@@ -7,7 +7,7 @@ name = "dbt-artifacts-parser"
 authors = [{name = "yu-iskw"}]
 readme = "README.md"
 license = {file = "LICENSE"}
-requires-python = ">=3.9.0"
+requires-python = ">=3.10.0"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Information Technology",
@@ -19,7 +19,6 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -35,6 +34,8 @@ dependencies = [
 [project.urls]
 Home = "https://github.com/yu-iskw/dbt-artifacts-parser"
 
+# PyPI extra: pip install dbt-artifacts-parser[dev]
+# Keep in sync with [dependency-groups].dev (uv lock / uv sync).
 [project.optional-dependencies]
 dev = [
     "build>=1.3.0",
@@ -43,9 +44,29 @@ dev = [
     "pdoc3>=0.11.6",
     "pre-commit>=4.3.0",
     "pylint>=3.3.9",
-    "pytest>=8.4.2",
+    "pytest>=9.0.3",
     "pyyaml>=6.0.3",
     "ruff>=0.14.10",
+]
+
+# PEP 735 — uv add --group dev / uv sync (see [tool.uv] default-groups)
+[dependency-groups]
+dev = [
+    "build>=1.3.0",
+    "datamodel-code-generator>=0.45.0",
+    "mypy>=1.19.1",
+    "pdoc3>=0.11.6",
+    "pre-commit>=4.3.0",
+    "pylint>=3.3.9",
+    "pytest>=9.0.3",
+    "pyyaml>=6.0.3",
+    "ruff>=0.14.10",
+]
+
+[tool.uv]
+default-groups = ["dev"]
+# OSV / transitive floors (keep aligned with patched releases)
+constraint-dependencies = [
 ]
 
 [tool.hatch.version]

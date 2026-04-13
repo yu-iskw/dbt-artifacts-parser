@@ -16,4 +16,11 @@
 
 set -Eo pipefail
 
-python -m build
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+MODULE_DIR="$(dirname "$SCRIPT_DIR")"
+
+if [[ -x "${MODULE_DIR}/.venv/bin/python" ]]; then
+  "${MODULE_DIR}/.venv/bin/python" -m build
+else
+  python -m build
+fi
