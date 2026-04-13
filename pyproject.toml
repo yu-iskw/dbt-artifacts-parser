@@ -7,7 +7,7 @@ name = "dbt-artifacts-parser"
 authors = [{name = "yu-iskw"}]
 readme = "README.md"
 license = {file = "LICENSE"}
-requires-python = ">=3.9.0"
+requires-python = "~=3.12.0"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Information Technology",
@@ -19,7 +19,6 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -45,7 +44,7 @@ dev = [
     "pdoc3>=0.11.6",
     "pre-commit>=4.3.0",
     "pylint>=3.3.9",
-    "pytest>=8.4.2",
+    "pytest>=9.0.3",
     "pyyaml>=6.0.3",
     "ruff>=0.14.10",
 ]
@@ -59,13 +58,16 @@ dev = [
     "pdoc3>=0.11.6",
     "pre-commit>=4.3.0",
     "pylint>=3.3.9",
-    "pytest>=8.4.2",
+    "pytest>=9.0.3",
     "pyyaml>=6.0.3",
     "ruff>=0.14.10",
 ]
 
 [tool.uv]
 default-groups = ["dev"]
+# OSV / transitive floors (keep aligned with patched releases)
+constraint-dependencies = [
+]
 
 [tool.hatch.version]
 path = "dbt_artifacts_parser/__init__.py"
