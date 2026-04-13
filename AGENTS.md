@@ -32,3 +32,7 @@ When updating or adding parsers (syncing with dbt-core, regenerating Pydantic mo
 Artifact types: `catalog`, `manifest`, `run-results`, `sources`. Omit arguments to process all types and versions. If the user specifies a ref (e.g. branch), pass `--ref REF` only to the download script.
 
 A project skill **dbt-parser-refresh** encodes this workflow in detail. Skills live in `.claude/skills/` (Cursor and Claude Code). Codex users: this repo provides `.agents/skills` as a symlink to `.claude/skills`, so the same skill is available there.
+
+## Package version and PyPI release
+
+To bump the library semver (`__version__`), prepare a release, and align GitHub Releases with PyPI, follow the **package-version-bump** skill in [.claude/skills/package-version-bump/SKILL.md](.claude/skills/package-version-bump/SKILL.md).
