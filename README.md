@@ -323,12 +323,21 @@ If you are interested in contributing to this package, please check out the [CON
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/jairus-m">
+                    <img src="https://avatars.githubusercontent.com/u/114552516?v=4" width="100;" alt="jairus-m"/>
+                    <br />
+                    <sub><b>Jairus Martinez</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/judahrand">
                     <img src="https://avatars.githubusercontent.com/u/17158624?v=4" width="100;" alt="judahrand"/>
                     <br />
                     <sub><b>Judah Rand</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/kiliantscherny">
                     <img src="https://avatars.githubusercontent.com/u/90620239?v=4" width="100;" alt="kiliantscherny"/>
@@ -336,8 +345,6 @@ If you are interested in contributing to this package, please check out the [CON
                     <sub><b>Kilian Tscherny</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/mattcristal">
                     <img src="https://avatars.githubusercontent.com/u/33809495?v=4" width="100;" alt="mattcristal"/>
@@ -373,6 +380,8 @@ If you are interested in contributing to this package, please check out the [CON
                     <sub><b>Pádraic Slattery</b></sub>
                 </a>
             </td>
+		</tr>
+		<tr>
             <td align="center">
                 <a href="https://github.com/asafalina">
                     <img src="https://avatars.githubusercontent.com/u/32689896?v=4" width="100;" alt="asafalina"/>
@@ -380,8 +389,6 @@ If you are interested in contributing to this package, please check out the [CON
                     <sub><b>asafalina</b></sub>
                 </a>
             </td>
-		</tr>
-		<tr>
             <td align="center">
                 <a href="https://github.com/meyer-glean">
                     <img src="https://avatars.githubusercontent.com/u/134302890?v=4" width="100;" alt="meyer-glean"/>
