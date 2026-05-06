@@ -7,7 +7,9 @@ on:
       - pyproject.toml
       - uv.lock
       - dbt_artifacts_parser/**/*.py
+      - dev/integration_tests/**
       - tests/**/*.py
+      - tests/resources/**
       - pylintrc
   push:
     branches:
@@ -52,3 +54,4 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install "${wheels[@]}"
           python -c 'import dbt_artifacts_parser'
+          python dev/integration_tests/verify_parsers.py
