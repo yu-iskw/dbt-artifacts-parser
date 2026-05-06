@@ -40,7 +40,15 @@ jobs:
       - name: Test build
         run: |
           bash dev/build.sh
-      - name: Test installation
+      - name: Test installation from wheel
         run: |
-          pip install -e .
+          set -euo pipefail
+          shopt -s nullglob
+          wheels=(dist/*.whl)
+          if [[ ${#wheels[@]} -eq 0 ]]; then
+            echo "No wheel found under dist/"
+            exit 1
+          fi
+          python -m pip install --upgrade pip
+          python -m pip install "${wheels[@]}"
           python -c 'import dbt_artifacts_parser'
