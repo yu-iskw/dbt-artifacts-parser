@@ -74,23 +74,31 @@ path = "dbt_artifacts_parser/__init__.py"
 
 [tool.hatch.build.targets.sdist]
 exclude = [
+    ".agents/",
+    ".claude/",
     ".github/",
     ".gitignore",
     ".pre-commit-config.yaml",
     ".style.yapf",
     ".pylintrc",
     ".pypirc",
-    "Makefile",
-    "dev/",
-    "tests/",
     ".DS_Store",
     ".vscode/",
     ".trunk/",
     ".pytest_cache/",
     ".mypy_cache/",
+    ".ruff_cache/",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "Makefile",
+    "dev/",
+    "tests/",
     "dist/",
     "test.json",
-    "renovate.json"
+    "renovate.json",
+    "requirements.setup.txt",
+    "uv.lock",
+    "dbt_artifacts_parser/resources/**/*.json",
 ]
 
 [tool.ruff.lint]
