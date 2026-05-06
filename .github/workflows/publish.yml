@@ -8,6 +8,9 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment:
+      name: release
+      deployment: true
     defaults:
       run:
         shell: bash
