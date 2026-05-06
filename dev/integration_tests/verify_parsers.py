@@ -108,9 +108,7 @@ def verify_file(kind: str, version: str, path: Path) -> list[str]:
             )
     # pylint: disable=broad-exception-caught
     except Exception:
-        errors.append(
-            f"{path}: generic parse failed:\n{traceback.format_exc()}"
-        )
+        errors.append(f"{path}: generic parse failed:\n{traceback.format_exc()}")
 
     try:
         fn = getattr(parser, specific_parser_name(kind, version))
@@ -122,9 +120,7 @@ def verify_file(kind: str, version: str, path: Path) -> list[str]:
             )
     # pylint: disable=broad-exception-caught
     except Exception:
-        errors.append(
-            f"{path}: specific parse failed:\n{traceback.format_exc()}"
-        )
+        errors.append(f"{path}: specific parse failed:\n{traceback.format_exc()}")
 
     return errors
 
