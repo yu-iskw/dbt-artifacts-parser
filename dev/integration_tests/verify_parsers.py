@@ -17,18 +17,23 @@
 
 Uses repository-relative paths (not get_project_root from site-packages) so this
 works after ``pip install`` of the wheel while fixtures come from checkout.
+Repository root is resolved from this file's location only (no environment
+variables).
 """
 
 from __future__ import annotations
 
+import argparse
 import json
-import os
+import logging
 import re
 import sys
 import traceback
 from pathlib import Path
 
 from dbt_artifacts_parser import parser
+
+logger = logging.getLogger(__name__)
 
 _KINDS = ("catalog", "manifest", "run_results")
 _VERSION_DIR = re.compile(r"^v\d+$")
@@ -57,13 +62,7 @@ def specific_parser_name(kind: str, version: str) -> str:
 
 
 def resolve_repo_root() -> Path:
-    workspace = os.environ.get("GITHUB_WORKSPACE")
-    if workspace:
-        candidate = Path(workspace)
-        if (candidate / "tests" / "resources").is_dir():
-            return candidate
-    root = Path(__file__).resolve().parents[2]
-    return root
+    return Path(__file__).resolve().parents[2]
 
 
 def iter_fixture_files(resources: Path) -> list[tuple[str, str, Path]]:
@@ -82,7 +81,7 @@ def iter_fixture_files(resources: Path) -> list[tuple[str, str, Path]]:
                 continue
             version_dir = rel.parts[0]
             if not _VERSION_DIR.match(version_dir):
-                print(f"skip (unexpected layout): {path}", file=sys.stderr)
+                logger.warning("skip (unexpected layout): %s", path)
                 continue
             found.append((kind, version_dir, path))
     return found
@@ -103,7 +102,8 @@ def verify_file(kind: str, version: str, path: Path) -> list[str]:
         obj = GENERIC_PARSER[kind](data)
         if obj.metadata.dbt_schema_version != expected:
             errors.append(
-                f"{path}: generic parse metadata.dbt_schema_version "
+                f"{path}: generic parse\n"
+                f"  metadata.dbt_schema_version "
                 f"{obj.metadata.dbt_schema_version!r} != {expected!r}"
             )
     # pylint: disable=broad-exception-caught
@@ -115,7 +115,8 @@ def verify_file(kind: str, version: str, path: Path) -> list[str]:
         obj = fn(data)
         if obj.metadata.dbt_schema_version != expected:
             errors.append(
-                f"{path}: specific parse metadata.dbt_schema_version "
+                f"{path}: specific parse\n"
+                f"  metadata.dbt_schema_version "
                 f"{obj.metadata.dbt_schema_version!r} != {expected!r}"
             )
     # pylint: disable=broad-exception-caught
@@ -126,8 +127,26 @@ def verify_file(kind: str, version: str, path: Path) -> list[str]:
 
 
 def main() -> int:
+    arg_parser = argparse.ArgumentParser(
+        description="Verify parsers against tests/resources JSON fixtures.",
+    )
+    arg_parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Enable debug logging (repo root, fixtures, per-file progress).",
+    )
+    cli_args = arg_parser.parse_args()
+
+    logging.basicConfig(
+        level=logging.DEBUG if cli_args.verbose else logging.WARNING,
+        format="%(levelname)s %(message)s",
+        stream=sys.stderr,
+    )
+
     repo_root = resolve_repo_root()
+    logger.debug("repo_root=%s", repo_root)
     resources = repo_root / "tests" / "resources"
+    logger.debug("resources=%s", resources)
     if not resources.is_dir():
         print(
             f"tests/resources not found under {repo_root}; "
@@ -137,18 +156,21 @@ def main() -> int:
         return 1
 
     fixtures = iter_fixture_files(resources)
+    logger.debug("fixture_count=%d", len(fixtures))
     if not fixtures:
         print("No JSON fixtures discovered.", file=sys.stderr)
         return 1
 
     all_errors: list[str] = []
     for kind, version, path in fixtures:
+        logger.debug("verify kind=%s version=%s path=%s", kind, version, path)
         all_errors.extend(verify_file(kind, version, path))
 
     if all_errors:
         print("\n".join(all_errors), file=sys.stderr)
         return 1
 
+    logger.debug("all fixtures passed")
     print(f"OK: verified {len(fixtures)} JSON fixture(s).")
     return 0
 
