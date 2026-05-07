@@ -23,6 +23,7 @@ This package is primarily designed for dbt-core, enabling seamless interaction w
 
 | Version | Supported dbt Version | Supported pydantic Version |
 |---------|-----------------------|----------------------------|
+|  0.13   | dbt 0.19 to 1.11      | pydantic v2                |
 |  0.12   | dbt 0.19 to 1.11      | pydantic v2                |
 |  0.9    | dbt 1.7 to 1.10       | pydantic v2                |
 |  0.8    | dbt 1.5 to 1.9        | pydantic v2                |
@@ -31,6 +32,8 @@ This package is primarily designed for dbt-core, enabling seamless interaction w
 |  0.5    | dbt 1.5 to 1.7        | pydantic v1                |
 
 ## Installation
+
+Requires Python 3.10 or newer. Tested on CPython 3.10, 3.11, 3.12, and 3.13.
 
 ```bash
 pip install -U dbt-artifacts-parser
