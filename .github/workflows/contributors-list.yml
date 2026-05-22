@@ -12,6 +12,6 @@ jobs:
     name: A job to automate contrib in readme
     steps:
       - name: Contribute List
-        uses: akhilmhdh/contributors-readme-action@v2.3.11
+        uses: akhilmhdh/contributors-readme-action@83ea0b4f1ac928fbfe88b9e8460a932a528eb79f # ratchet:akhilmhdh/contributors-readme-action@v2.3.11
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
