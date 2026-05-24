@@ -48,13 +48,21 @@ Since we can't get the JSON schema of `semantic_manifest.json`, we can't generat
 
 ### Set up
 
+We use [mise](https://mise.jdx.dev/) to pin the local Python and [uv](https://docs.astral.sh/uv/) versions (`mise.toml`, `mise.lock`, `.python-version`). Install mise, then trust and install tools:
+
+```shell
+mise trust
+mise install
+```
+
 We utilize [Makefile](./Makefile) to set up the development environment.
-The subsequent command is to set up the development environment.
-It installs the dependencies and set up the pre-commit hooks.
+The subsequent command installs project dependencies and sets up pre-commit hooks (via `uv sync` into `.venv`):
 
 ```shell
 make setup
 ```
+
+Or run both steps with `mise run setup`.
 
 When using [Claude Code](https://code.claude.com/), this repo runs pre-commit as a quality gate when Claude is about to stop. Config lives in [.claude/settings.json](.claude/settings.json) and [.claude/hooks/](.claude/hooks/).
 

@@ -39,7 +39,9 @@ Requires Python 3.10 or newer. Tested on CPython 3.10, 3.11, 3.12, and 3.13.
 pip install -U dbt-artifacts-parser
 ```
 
-Development dependencies are declared as a [PEP 735](https://peps.python.org/pep-0735/) **`dev` dependency group** in `pyproject.toml` (locked in `uv.lock`) and mirrored under **`[project.optional-dependencies].dev`** so `pip install dbt-artifacts-parser[dev]` keeps working. After cloning, run `make setup` or `bash dev/setup.sh --deps development` (uses **`uv sync`**). To add a dev tool: `uv add --group dev <package>`, then update **`[project.optional-dependencies].dev`** to match, and run `uv lock`.
+Development dependencies are declared as a [PEP 735](https://peps.python.org/pep-0735/) **`dev` dependency group** in `pyproject.toml` (locked in `uv.lock`) and mirrored under **`[project.optional-dependencies].dev`** so `pip install dbt-artifacts-parser[dev]` keeps working.
+
+After cloning, install [mise](https://mise.jdx.dev/) and run `mise trust && mise install` to get Python 3.12 and uv (see `mise.toml`). Then run `make setup` or `mise run setup` (uses **`uv sync`** into `.venv`). Without mise, ensure Python ≥3.10 and uv are on your PATH, then `make setup` still works. To add a dev tool: `uv add --group dev <package>`, then update **`[project.optional-dependencies].dev`** to match, and run `uv lock`.
 
 ## Python classes
 

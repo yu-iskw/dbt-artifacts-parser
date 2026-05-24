@@ -1,0 +1,28 @@
+# Pin local dev tools (Python + uv). CI keeps actions/setup-python; this file is for contributors.
+min_version = "2025.12.0"
+
+[tools]
+python = "3.12"
+"github:astral-sh/uv" = "0.11.6"
+
+[settings]
+idiomatic_version_file_enable_tools = ["python"]
+# Activate uv-managed .venv after `make setup` / `uv sync` (does not set UV_PYTHON).
+python.uv_venv_auto = "source"
+
+[tasks.setup]
+description = "Install mise tools and set up the dev environment"
+alias = "s"
+run = ["mise install", "make setup"]
+
+[tasks.test]
+description = "Run unit tests"
+run = "make test"
+
+[tasks.lint]
+description = "Run pre-commit on all files"
+run = "make lint"
+
+[tasks.build]
+description = "Clean, lint, test, and build the package"
+run = "make build"

@@ -12,7 +12,9 @@ See [README.md](README.md) for usage and [CONTRIBUTING.md](CONTRIBUTING.md) for 
 
 Run from the **repository root**.
 
-- **Setup:** `make setup` — installs dependencies and pre-commit hooks.
+Local tool versions are pinned with [mise](https://mise.jdx.dev/) (`mise.toml`, `mise.lock`, `.python-version`). Run `mise trust && mise install` before setup if mise is available.
+
+- **Setup:** `make setup` (or `mise run setup`) — installs dependencies and pre-commit hooks.
 - **Test:** `make test`
 - **Lint:** `make lint` (runs pre-commit on all files)
 - **Build:** `make build` — clean, lint, test, then build the package.

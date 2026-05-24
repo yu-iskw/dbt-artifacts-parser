@@ -45,8 +45,12 @@ done
 # Change to the module directory
 cd "${MODULE_DIR}"
 
-# Install uv and dependencies
-pip install --force-reinstall -r "${MODULE_DIR}/requirements.setup.txt"
+# Install uv when not provided by mise or another manager
+if command -v uv >/dev/null 2>&1; then
+  echo "Using uv from PATH: $(command -v uv)"
+else
+  pip install --force-reinstall -r "${MODULE_DIR}/requirements.setup.txt"
+fi
 
 if [[ "${use_venv}" == true ]]; then
   # PEP 735 [dependency-groups] + uv.lock; [tool.uv] default-groups includes dev
