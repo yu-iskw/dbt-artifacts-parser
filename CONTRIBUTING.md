@@ -50,11 +50,13 @@ Since we can't get the JSON schema of `semantic_manifest.json`, we can't generat
 
 We utilize [Makefile](./Makefile) to set up the development environment.
 The subsequent command is to set up the development environment.
-It installs the dependencies and set up the pre-commit hooks.
+It installs the dependencies, pre-downloads [Trunk](https://docs.trunk.io/code-quality/overview/cli/getting-started/install) linter runtimes, and sets up the pre-commit hooks.
 
 ```shell
 make setup
 ```
+
+[Trunk](https://trunk.io) is included as a development tool via the committed `./trunk` launcher (see the [install guide](https://docs.trunk.io/code-quality/overview/cli/getting-started/install)). Configuration lives in [`.trunk/trunk.yaml`](.trunk/trunk.yaml). Run `./trunk check` or `make trunk-check` for an optional full-repo check; `make lint` still uses pre-commit. Generated Pydantic models under `dbt_artifacts_parser/parsers/` are excluded from Trunk, consistent with pre-commit.
 
 When using [Claude Code](https://code.claude.com/), this repo runs pre-commit as a quality gate when Claude is about to stop. Config lives in [.claude/settings.json](.claude/settings.json) and [.claude/hooks/](.claude/hooks/).
 

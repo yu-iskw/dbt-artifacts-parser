@@ -12,9 +12,10 @@ See [README.md](README.md) for usage and [CONTRIBUTING.md](CONTRIBUTING.md) for 
 
 Run from the **repository root**.
 
-- **Setup:** `make setup` — installs dependencies and pre-commit hooks.
+- **Setup:** `make setup` — installs dependencies, Trunk linter runtimes (`./trunk install`), and pre-commit hooks.
 - **Test:** `make test`
 - **Lint:** `make lint` (runs pre-commit on all files)
+- **Trunk (optional):** `make trunk-check` or `./trunk check` — hermetic linters via the committed [Trunk launcher](https://docs.trunk.io/code-quality/overview/cli/getting-started/install); config in `.trunk/trunk.yaml`. Generated code under `dbt_artifacts_parser/parsers/` is ignored.
 - **Build:** `make build` — clean, lint, test, then build the package.
 
 ## Code and contribution

@@ -39,7 +39,9 @@ Requires Python 3.10 or newer. Tested on CPython 3.10, 3.11, 3.12, and 3.13.
 pip install -U dbt-artifacts-parser
 ```
 
-Development dependencies are declared as a [PEP 735](https://peps.python.org/pep-0735/) **`dev` dependency group** in `pyproject.toml` (locked in `uv.lock`) and mirrored under **`[project.optional-dependencies].dev`** so `pip install dbt-artifacts-parser[dev]` keeps working. After cloning, run `make setup` or `bash dev/setup.sh --deps development` (uses **`uv sync`**). To add a dev tool: `uv add --group dev <package>`, then update **`[project.optional-dependencies].dev`** to match, and run `uv lock`.
+Development dependencies are declared as a [PEP 735](https://peps.python.org/pep-0735/) **`dev` dependency group** in `pyproject.toml` (locked in `uv.lock`) and mirrored under **`[project.optional-dependencies].dev`** so `pip install dbt-artifacts-parser[dev]` keeps working. After cloning, run `make setup` or `bash dev/setup.sh --deps development` (uses **`uv sync`**). To add a Python dev tool: `uv add --group dev <package>`, then update **`[project.optional-dependencies].dev`** to match, and run `uv lock`.
+
+[Trunk](https://trunk.io) is also available for local linting: the repo commits the `./trunk` launcher (see [Trunk install docs](https://docs.trunk.io/code-quality/overview/cli/getting-started/install)); `make setup` runs `./trunk install`, and `make trunk-check` runs a full-repo check. Primary linting in CI and git hooks remains **pre-commit** (`make lint`).
 
 ## Python classes
 

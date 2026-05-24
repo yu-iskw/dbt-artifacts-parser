@@ -1,6 +1,6 @@
 # Set up an environment
 .PHONY: setup
-setup: setup-python setup-pre-commit
+setup: setup-python setup-trunk setup-pre-commit
 
 .PHONY: setup-system
 setup-system: setup-python-system setup-pre-commit
@@ -21,6 +21,11 @@ setup-python-system:
 upgrade-deps:
 	uv lock --upgrade && uv sync
 
+# Install Trunk-managed linter binaries (repo-root ./trunk launcher).
+.PHONY: setup-trunk
+setup-trunk:
+	@if [ -x ./trunk ]; then ./trunk install; else echo "Skipping Trunk install: ./trunk not found"; fi
+
 # Set up the pre-commit hooks.
 .PHONY: setup-pre-commit
 setup-pre-commit:
@@ -29,6 +34,16 @@ setup-pre-commit:
 # Check all the coding style.
 .PHONY: lint
 lint: run-pre-commit
+
+# Run Trunk check on the whole repo (optional; pre-commit remains the default lint path).
+.PHONY: trunk-check
+trunk-check:
+	./trunk check -a
+
+# Format with Trunk (optional).
+.PHONY: trunk-fmt
+trunk-fmt:
+	./trunk fmt
 
 # Run the pre-commit hooks.
 .PHONY: run-pre-commit
