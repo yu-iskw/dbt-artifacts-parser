@@ -24,25 +24,18 @@ BASE_URL="https://raw.githubusercontent.com/dbt-labs/dbt-core"
 REF="main"
 RESOURCES_DIR="${MODULE_ROOT}/dbt_artifacts_parser/resources"
 
-# Artifact types and version lists. Must stay in sync with dev/generate_parser_classes.sh.
-ARTIFACT_TYPES=(catalog manifest run-results sources)
-# shellcheck disable=SC2034
-CATALOG_VERSIONS=(v1)
-# shellcheck disable=SC2034
-MANIFEST_VERSIONS=(v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12)
-# shellcheck disable=SC2034
-RUN_RESULTS_VERSIONS=(v1 v2 v3 v4 v5 v6)
-# shellcheck disable=SC2034
-SOURCES_VERSIONS=(v1 v2 v3)
+# shellcheck disable=SC1091
+source "${SCRIPT_DIR}/_artifact_versions.sh"
 
 usage() {
 	echo "Usage: $0 [--ref REF] [artifact_type] [version ...]"
 	echo "  Download dbt artifact JSON schemas from dbt-labs/dbt-core into this project's resources."
-	echo "  With no arguments (after --ref), downloads all artifact types and versions."
+	echo "  With no arguments (after --ref), downloads upstream-available schemas for all artifact types."
+	echo "  Historical versions vendored in-repo are skipped (not on dbt-core main)."
 	echo ""
 	echo "  --ref REF       Git ref: branch, tag, or commit (default: main)"
 	echo "  artifact_type   one of: catalog, manifest, run-results, sources"
-	echo "  version         optional list of versions (e.g. v1 v7). If omitted, all versions for the type are downloaded."
+	echo "  version         optional list of versions (e.g. v1 v7). If omitted, upstream versions for the type are downloaded."
 	exit "$1"
 }
 
@@ -54,22 +47,22 @@ get_artifact_metadata() {
 	catalog)
 		resource_dir="catalog"
 		file_stem="catalog"
-		default_versions_array_name="CATALOG_VERSIONS"
+		default_versions_array_name="CATALOG_DOWNLOAD_VERSIONS"
 		;;
 	manifest)
 		resource_dir="manifest"
 		file_stem="manifest"
-		default_versions_array_name="MANIFEST_VERSIONS"
+		default_versions_array_name="MANIFEST_DOWNLOAD_VERSIONS"
 		;;
 	run-results)
 		resource_dir="run-results"
 		file_stem="run-results"
-		default_versions_array_name="RUN_RESULTS_VERSIONS"
+		default_versions_array_name="RUN_RESULTS_DOWNLOAD_VERSIONS"
 		;;
 	sources)
 		resource_dir="sources"
 		file_stem="sources"
-		default_versions_array_name="SOURCES_VERSIONS"
+		default_versions_array_name="SOURCES_DOWNLOAD_VERSIONS"
 		;;
 	*)
 		echo "Invalid artifact type: ${type}" >&2

@@ -35,7 +35,9 @@ When the user wants to refresh or update parsers (e.g. "refresh parsers", "updat
 1. Run `bash dev/download_dbt_schemas.sh` with any user-specified `--ref`, artifact_type, or versions.
 2. Then run `bash dev/generate_parser_classes.sh` with the same artifact_type and versions (no `--ref`).
 
-If the user did not specify scope, use no arguments for both (download all, then generate all).
+If the user did not specify scope, use no arguments for both (download upstream-available schemas, then generate all vendored versions).
+
+**Note:** dbt-core `main` only hosts a rolling window of JSON schemas. A default download updates those upstream versions; historical schemas stay in `dbt_artifacts_parser/resources/` and are still regenerated.
 
 ### 2. Download only
 

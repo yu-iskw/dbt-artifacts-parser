@@ -26,18 +26,8 @@ base_class="dbt_artifacts_parser.parsers.base.BaseParserModel"
 target_python_version="3.10"
 output_model_type="pydantic_v2.BaseModel"
 
-# All artifact types for "generate all"
-ARTIFACT_TYPES=(catalog manifest run-results sources)
-
-# Version list per artifact type (bash arrays). Used indirectly via nameref in main (default_versions_array_name).
-# shellcheck disable=SC2034
-CATALOG_VERSIONS=(v1)
-# shellcheck disable=SC2034
-MANIFEST_VERSIONS=(v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12)
-# shellcheck disable=SC2034
-RUN_RESULTS_VERSIONS=(v1 v2 v3 v4 v5 v6)
-# shellcheck disable=SC2034
-SOURCES_VERSIONS=(v1 v2 v3)
+# shellcheck disable=SC1091
+source "${SCRIPT_DIR}/_artifact_versions.sh"
 
 usage() {
 	echo "Usage: $0 [artifact_type] [version ...]"
@@ -101,15 +91,26 @@ run_codegen() {
 	upper_ver=${ver^v}
 	input="${MODULE_ROOT}/dbt_artifacts_parser/resources/${resource_dir}/${file_stem}_${ver}.json"
 	destination="${MODULE_ROOT}/dbt_artifacts_parser/parsers/${parser_dir}/${output_file_stem}_${ver}.py"
+	codegen_input="${input}"
+	tmp_input=""
+	if python3 -c "import json,sys; s=json.load(open(sys.argv[1])); sys.exit(0 if str(s.get('\$ref','')).startswith('#/\$defs/') else 1)" "${input}"; then
+		tmp_input="$(mktemp "${TMPDIR:-/tmp}/dbt_schema_XXXXXX.json")"
+		python3 "${SCRIPT_DIR}/inline_schema_ref.py" "${input}" "${tmp_input}"
+		codegen_input="${tmp_input}"
+	fi
 	echo "Generate ${destination}"
 	datamodel-codegen --input-file-type jsonschema \
 		--target-python-version "${target_python_version}" \
 		--output-model-type "${output_model_type}" \
 		--disable-timestamp \
+		--collapse-root-models \
 		--base-class "${base_class}" \
 		--class-name "${class_prefix}${upper_ver}" \
-		--input "${input}" \
+		--input "${codegen_input}" \
 		--output "${destination}"
+	if [[ -n "${tmp_input}" ]]; then
+		rm -f "${tmp_input}"
+	fi
 }
 
 # --- Main ---

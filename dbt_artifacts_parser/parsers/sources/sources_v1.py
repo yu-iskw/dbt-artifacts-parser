@@ -3,11 +3,10 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
-from pydantic import ConfigDict
+from pydantic import AwareDatetime, ConfigDict
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
@@ -16,11 +15,11 @@ class FreshnessMetadata(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    dbt_schema_version: Optional[str] = "https://schemas.getdbt.com/dbt/sources/v1.json"
-    dbt_version: Optional[str] = "0.19.0"
-    generated_at: Optional[datetime] = "2021-02-10T04:42:33.675309Z"
-    invocation_id: Optional[str] = None
-    env: Optional[Dict[str, str]] = {}
+    dbt_schema_version: str | None = "https://schemas.getdbt.com/dbt/sources/v1.json"
+    dbt_version: str | None = "0.19.0"
+    generated_at: AwareDatetime | None = "2021-02-10T04:42:33.675309Z"
+    invocation_id: str | None = None
+    env: dict[str, str] | None = {}
 
 
 class Status(Enum):
@@ -32,7 +31,7 @@ class SourceFreshnessRuntimeError(BaseParserModel):
         extra="forbid",
     )
     unique_id: str
-    error: Optional[Union[str, int]] = None
+    error: str | int | None = None
     status: Status
 
 
@@ -61,9 +60,9 @@ class FreshnessThreshold(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    warn_after: Optional[Time] = None
-    error_after: Optional[Time] = None
-    filter: Optional[str] = None
+    warn_after: Time | None = None
+    error_after: Time | None = None
+    filter: str | None = None
 
 
 class SourceFreshnessOutput(BaseParserModel):
@@ -71,12 +70,12 @@ class SourceFreshnessOutput(BaseParserModel):
         extra="forbid",
     )
     unique_id: str
-    max_loaded_at: datetime
-    snapshotted_at: datetime
+    max_loaded_at: AwareDatetime
+    snapshotted_at: AwareDatetime
     max_loaded_at_time_ago_in_s: float
     status: Status1
     criteria: FreshnessThreshold
-    adapter_response: Dict[str, Any]
+    adapter_response: dict[str, Any]
 
 
 class SourcesV1(BaseParserModel):
@@ -84,5 +83,5 @@ class SourcesV1(BaseParserModel):
         extra="forbid",
     )
     metadata: FreshnessMetadata
-    results: List[Union[SourceFreshnessRuntimeError, SourceFreshnessOutput]]
+    results: list[SourceFreshnessRuntimeError | SourceFreshnessOutput]
     elapsed_time: float

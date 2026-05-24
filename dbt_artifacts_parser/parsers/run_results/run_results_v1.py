@@ -3,11 +3,10 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
-from pydantic import ConfigDict
+from pydantic import AwareDatetime, ConfigDict
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
@@ -17,10 +16,10 @@ class BaseArtifactMetadata(BaseParserModel):
         extra="forbid",
     )
     dbt_schema_version: str
-    dbt_version: Optional[str] = "0.19.0"
-    generated_at: Optional[datetime] = "2021-02-10T04:42:33.678063Z"
-    invocation_id: Optional[str] = None
-    env: Optional[Dict[str, str]] = {}
+    dbt_version: str | None = "0.19.0"
+    generated_at: AwareDatetime | None = "2021-02-10T04:42:33.678063Z"
+    invocation_id: str | None = None
+    env: dict[str, str] | None = {}
 
 
 class Status(Enum):
@@ -48,20 +47,20 @@ class TimingInfo(BaseParserModel):
         extra="forbid",
     )
     name: str
-    started_at: Optional[datetime] = None
-    completed_at: Optional[datetime] = None
+    started_at: AwareDatetime | None = None
+    completed_at: AwareDatetime | None = None
 
 
 class RunResultOutput(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    status: Union[Status, Status1, Status2]
-    timing: List[TimingInfo]
+    status: Status | Status1 | Status2
+    timing: list[TimingInfo]
     thread_id: str
     execution_time: float
-    message: Optional[Union[str, int]] = None
-    adapter_response: Dict[str, Any]
+    message: str | int | None = None
+    adapter_response: dict[str, Any]
     unique_id: str
 
 
@@ -70,6 +69,6 @@ class RunResultsV1(BaseParserModel):
         extra="forbid",
     )
     metadata: BaseArtifactMetadata
-    results: List[RunResultOutput]
+    results: list[RunResultOutput]
     elapsed_time: float
-    args: Optional[Dict[str, Any]] = {}
+    args: dict[str, Any] | None = {}

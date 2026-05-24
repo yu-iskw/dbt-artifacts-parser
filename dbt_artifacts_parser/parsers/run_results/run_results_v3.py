@@ -3,11 +3,10 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
-from pydantic import ConfigDict
+from pydantic import AwareDatetime, ConfigDict
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 
@@ -17,10 +16,10 @@ class BaseArtifactMetadata(BaseParserModel):
         extra="forbid",
     )
     dbt_schema_version: str
-    dbt_version: Optional[str] = "0.21.0rc1"
-    generated_at: Optional[datetime] = "2021-09-24T13:29:14.315088Z"
-    invocation_id: Optional[str] = None
-    env: Optional[Dict[str, str]] = {}
+    dbt_version: str | None = "0.21.0rc1"
+    generated_at: AwareDatetime | None = "2021-09-24T13:29:14.315088Z"
+    invocation_id: str | None = None
+    env: dict[str, str] | None = {}
 
 
 class Status(Enum):
@@ -49,19 +48,19 @@ class TimingInfo(BaseParserModel):
         extra="forbid",
     )
     name: str
-    started_at: Optional[datetime] = None
-    completed_at: Optional[datetime] = None
+    started_at: AwareDatetime | None = None
+    completed_at: AwareDatetime | None = None
 
 
 class FreshnessMetadata(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    dbt_schema_version: Optional[str] = "https://schemas.getdbt.com/dbt/sources/v2.json"
-    dbt_version: Optional[str] = "0.21.0rc1"
-    generated_at: Optional[datetime] = "2021-09-24T13:29:14.312598Z"
-    invocation_id: Optional[str] = None
-    env: Optional[Dict[str, str]] = {}
+    dbt_schema_version: str | None = "https://schemas.getdbt.com/dbt/sources/v2.json"
+    dbt_version: str | None = "0.21.0rc1"
+    generated_at: AwareDatetime | None = "2021-09-24T13:29:14.312598Z"
+    invocation_id: str | None = None
+    env: dict[str, str] | None = {}
 
 
 class Status3(Enum):
@@ -73,7 +72,7 @@ class SourceFreshnessRuntimeError(BaseParserModel):
         extra="forbid",
     )
     unique_id: str
-    error: Optional[Union[str, int]] = None
+    error: str | int | None = None
     status: Status3
 
 
@@ -102,13 +101,13 @@ class RunResultOutput(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    status: Union[Status, Status1, Status2]
-    timing: List[TimingInfo]
+    status: Status | Status1 | Status2
+    timing: list[TimingInfo]
     thread_id: str
     execution_time: float
-    adapter_response: Dict[str, Any]
-    message: Optional[str] = None
-    failures: Optional[int] = None
+    adapter_response: dict[str, Any]
+    message: str | None = None
+    failures: int | None = None
     unique_id: str
 
 
@@ -116,9 +115,9 @@ class FreshnessThreshold(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    warn_after: Optional[Time] = None
-    error_after: Optional[Time] = None
-    filter: Optional[str] = None
+    warn_after: Time | None = None
+    error_after: Time | None = None
+    filter: str | None = None
 
 
 class RunResultsV3(BaseParserModel):
@@ -126,9 +125,9 @@ class RunResultsV3(BaseParserModel):
         extra="forbid",
     )
     metadata: BaseArtifactMetadata
-    results: List[RunResultOutput]
+    results: list[RunResultOutput]
     elapsed_time: float
-    args: Optional[Dict[str, Any]] = {}
+    args: dict[str, Any] | None = {}
 
 
 class SourceFreshnessOutput(BaseParserModel):
@@ -136,12 +135,12 @@ class SourceFreshnessOutput(BaseParserModel):
         extra="forbid",
     )
     unique_id: str
-    max_loaded_at: datetime
-    snapshotted_at: datetime
+    max_loaded_at: AwareDatetime
+    snapshotted_at: AwareDatetime
     max_loaded_at_time_ago_in_s: float
     status: Status4
     criteria: FreshnessThreshold
-    adapter_response: Dict[str, Any]
-    timing: List[TimingInfo]
+    adapter_response: dict[str, Any]
+    timing: list[TimingInfo]
     thread_id: str
     execution_time: float
