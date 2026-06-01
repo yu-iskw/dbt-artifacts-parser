@@ -15,13 +15,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# Download canonical dbt artifact JSON schemas from https://schemas.getdbt.com/
 set -e
 
 # Constants
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 MODULE_ROOT="$(dirname "${SCRIPT_DIR}")"
-BASE_URL="https://raw.githubusercontent.com/dbt-labs/dbt-core"
-REF="main"
+BASE_URL="https://schemas.getdbt.com"
 RESOURCES_DIR="${MODULE_ROOT}/dbt_artifacts_parser/resources"
 
 # Artifact types and version lists. Must stay in sync with dev/generate_parser_classes.sh.
@@ -36,11 +36,10 @@ RUN_RESULTS_VERSIONS=(v1 v2 v3 v4 v5 v6)
 SOURCES_VERSIONS=(v1 v2 v3)
 
 usage() {
-	echo "Usage: $0 [--ref REF] [artifact_type] [version ...]"
-	echo "  Download dbt artifact JSON schemas from dbt-labs/dbt-core into this project's resources."
-	echo "  With no arguments (after --ref), downloads all artifact types and versions."
+	echo "Usage: $0 [artifact_type] [version ...]"
+	echo "  Download dbt artifact JSON schemas from schemas.getdbt.com into this project's resources."
+	echo "  With no arguments, downloads all artifact types and versions."
 	echo ""
-	echo "  --ref REF       Git ref: branch, tag, or commit (default: main)"
 	echo "  artifact_type   one of: catalog, manifest, run-results, sources"
 	echo "  version         optional list of versions (e.g. v1 v7). If omitted, all versions for the type are downloaded."
 	exit "$1"
@@ -82,7 +81,7 @@ download_one() {
 	local artifact_type="$1"
 	local ver="$2"
 	get_artifact_metadata "${artifact_type}"
-	url="${BASE_URL}/${REF}/schemas/dbt/${resource_dir}/${ver}.json"
+	url="${BASE_URL}/dbt/${resource_dir}/${ver}.json"
 	dest="${RESOURCES_DIR}/${resource_dir}/${file_stem}_${ver}.json"
 	mkdir -p "${RESOURCES_DIR}/${resource_dir}"
 	curl -f -S -L -o "${dest}" "${url}"
@@ -92,14 +91,6 @@ download_one() {
 # --- Argument parsing ---
 while [[ $# -gt 0 ]]; do
 	case "$1" in
-	--ref)
-		if [[ -z "${2:-}" ]]; then
-			echo "Missing value for --ref" >&2
-			usage 1
-		fi
-		REF="$2"
-		shift 2
-		;;
 	-h|--help)
 		usage 0
 		;;
