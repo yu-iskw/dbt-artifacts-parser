@@ -20,6 +20,10 @@ import pytest
 import yaml
 
 from dbt_artifacts_parser import parser
+from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
+from dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
+from dbt_artifacts_parser.parsers.run_results.run_results_v6 import RunResultsV6
+from dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
 from dbt_artifacts_parser.utils import get_project_root
 
 
@@ -436,3 +440,112 @@ class TestRunResultsParser:
 #             sources_obj.metadata.dbt_schema_version
 #             == f"https://schemas.getdbt.com/dbt/sources/{version}.json"
 #         )
+
+
+class TestFallbackToLatest:
+    def test_parse_manifest_unsupported_raises_by_default(self):
+        path = os.path.join(
+            get_project_root(),
+            "tests",
+            "resources",
+            "manifest",
+            "v12",
+            "jaffle_shop",
+            "manifest_1.11.json",
+        )
+        with open(path, "r", encoding="utf-8") as fp:
+            manifest_dict = yaml.safe_load(fp)
+        manifest_dict["metadata"]["dbt_schema_version"] = (
+            "https://schemas.getdbt.com/dbt/manifest/v99.json"
+        )
+        with pytest.raises(ValueError, match="Not a manifest.json"):
+            parser.parse_manifest(manifest_dict)
+
+    def test_parse_manifest_fallback_to_latest(self):
+        path = os.path.join(
+            get_project_root(),
+            "tests",
+            "resources",
+            "manifest",
+            "v12",
+            "jaffle_shop",
+            "manifest_1.11.json",
+        )
+        with open(path, "r", encoding="utf-8") as fp:
+            manifest_dict = yaml.safe_load(fp)
+        manifest_dict["metadata"]["dbt_schema_version"] = (
+            "https://schemas.getdbt.com/dbt/manifest/v99.json"
+        )
+        manifest_dict["future_only_field"] = "ignored"
+        with pytest.warns(UserWarning, match="falling back to latest"):
+            manifest_obj = parser.parse_manifest(manifest_dict, fallback_to_latest=True)
+        assert isinstance(manifest_obj, ManifestV12)
+        assert (
+            manifest_obj.metadata.dbt_schema_version
+            == "https://schemas.getdbt.com/dbt/manifest/v99.json"
+        )
+
+    def test_parse_manifest_fallback_wrong_artifact_type_raises(self):
+        catalog = {
+            "metadata": {
+                "dbt_schema_version": "https://schemas.getdbt.com/dbt/catalog/v99.json"
+            },
+            "nodes": {},
+            "sources": {},
+        }
+        with pytest.raises(ValueError, match="Not a manifest.json"):
+            parser.parse_manifest(catalog, fallback_to_latest=True)
+
+    def test_parse_catalog_fallback_to_latest(self):
+        path = os.path.join(
+            get_project_root(),
+            "tests",
+            "resources",
+            "catalog",
+            "v1",
+            "jaffle_shop",
+            "catalog.json",
+        )
+        with open(path, "r", encoding="utf-8") as fp:
+            catalog_dict = yaml.safe_load(fp)
+        catalog_dict["metadata"]["dbt_schema_version"] = (
+            "https://schemas.getdbt.com/dbt/catalog/v99.json"
+        )
+        catalog_dict["future_only_field"] = "ignored"
+        with pytest.warns(UserWarning, match="falling back to latest"):
+            catalog_obj = parser.parse_catalog(catalog_dict, fallback_to_latest=True)
+        assert isinstance(catalog_obj, CatalogV1)
+
+    def test_parse_run_results_fallback_to_latest(self):
+        path = os.path.join(
+            get_project_root(),
+            "tests",
+            "resources",
+            "run_results",
+            "v6",
+            "jaffle_shop",
+            "run_results.json",
+        )
+        with open(path, "r", encoding="utf-8") as fp:
+            run_results_dict = yaml.safe_load(fp)
+        run_results_dict["metadata"]["dbt_schema_version"] = (
+            "https://schemas.getdbt.com/dbt/run-results/v99.json"
+        )
+        with pytest.warns(UserWarning, match="falling back to latest"):
+            run_results_obj = parser.parse_run_results(
+                run_results_dict, fallback_to_latest=True
+            )
+        assert isinstance(run_results_obj, RunResultsV6)
+
+    def test_parse_sources_fallback_to_latest(self):
+        sources_dict = {
+            "metadata": {
+                "dbt_schema_version": "https://schemas.getdbt.com/dbt/sources/v99.json"
+            },
+            "results": [],
+            "elapsed_time": 0.0,
+            "future_only_field": "ignored",
+        }
+        with pytest.warns(UserWarning, match="falling back to latest"):
+            sources_obj = parser.parse_sources(sources_dict, fallback_to_latest=True)
+        assert isinstance(sources_obj, SourcesV3)

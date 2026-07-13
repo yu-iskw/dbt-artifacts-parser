@@ -15,10 +15,20 @@
 #  limitations under the License.
 #
 
-from typing import Type
+import re
+import warnings
+from typing import Optional, Type
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 from dbt_artifacts_parser.parsers.version_map import ArtifactTypes
+
+# Max supported schema version per artifact family slug.
+ARTIFACT_MAX_VERSIONS = {
+    "catalog": 1,
+    "manifest": 12,
+    "run-results": 6,
+    "sources": 3,
+}
 
 
 def get_dbt_schema_version(artifact_json: dict) -> str:
@@ -35,6 +45,38 @@ def get_dbt_schema_version(artifact_json: dict) -> str:
     if "dbt_schema_version" not in artifact_json["metadata"]:
         raise ValueError("'metadata.dbt_schema_version' doesnt' exist.")
     return artifact_json["metadata"]["dbt_schema_version"]
+
+
+def extract_artifact_version(schema_version: str, artifact_slug: str) -> Optional[int]:
+    """Extract the integer schema version from a dbt schema URL.
+
+    Args:
+        schema_version: Value of metadata.dbt_schema_version
+        artifact_slug: Artifact family slug (e.g. 'manifest', 'run-results')
+
+    Returns:
+        Version number, or None if the URL does not match the artifact family.
+    """
+    pattern = rf"/{re.escape(artifact_slug)}/v(\d+)\.json$"
+    match = re.search(pattern, schema_version)
+    if match is None:
+        return None
+    return int(match.group(1))
+
+
+def warn_fallback_to_latest(requested: str, parsed_as: str) -> None:
+    """Warn that an unsupported newer schema was parsed as the latest known version."""
+    warnings.warn(
+        (
+            f"Unsupported artifact schema version {requested!r}; "
+            f"falling back to latest supported schema {parsed_as!r}. "
+            "This is best-effort; unknown fields may be dropped and "
+            "incompatible changes may still fail validation."
+        ),
+        UserWarning,
+        # warn_fallback_to_latest <- parse_* <- caller
+        stacklevel=3,
+    )
 
 
 def get_artifact_type_by_id(schema_version: str) -> ArtifactTypes:

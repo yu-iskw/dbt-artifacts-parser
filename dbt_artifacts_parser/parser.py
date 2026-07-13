@@ -38,18 +38,27 @@ from dbt_artifacts_parser.parsers.run_results.run_results_v6 import RunResultsV6
 from dbt_artifacts_parser.parsers.sources.sources_v1 import SourcesV1
 from dbt_artifacts_parser.parsers.sources.sources_v2 import SourcesV2
 from dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
-from dbt_artifacts_parser.parsers.utils import get_dbt_schema_version
+from dbt_artifacts_parser.parsers.utils import (
+    ARTIFACT_MAX_VERSIONS,
+    extract_artifact_version,
+    get_dbt_schema_version,
+    warn_fallback_to_latest,
+)
 from dbt_artifacts_parser.parsers.version_map import ArtifactTypes
 
 
 #
 # catalog
 #
-def parse_catalog(catalog: dict) -> Union[CatalogV1]:
+def parse_catalog(
+    catalog: dict, *, fallback_to_latest: bool = False
+) -> Union[CatalogV1]:
     """Parse catalog.json
 
     Args:
         catalog: dict of catalog.json
+        fallback_to_latest: If True and the schema version is newer than
+            supported, parse as the latest known schema (best-effort).
 
     Returns:
         Union[CatalogV1]
@@ -57,6 +66,12 @@ def parse_catalog(catalog: dict) -> Union[CatalogV1]:
     dbt_schema_version = get_dbt_schema_version(artifact_json=catalog)
     if dbt_schema_version == ArtifactTypes.CATALOG_V1.value.dbt_schema_version:
         return CatalogV1(**catalog)
+    if fallback_to_latest:
+        version = extract_artifact_version(dbt_schema_version, "catalog")
+        max_version = ARTIFACT_MAX_VERSIONS["catalog"]
+        if version is not None and version > max_version:
+            warn_fallback_to_latest(dbt_schema_version, f"v{max_version}")
+            return CatalogV1.model_validate(catalog, extra="ignore")
     raise ValueError("Not a catalog.json")
 
 
@@ -73,6 +88,8 @@ def parse_catalog_v1(catalog: dict) -> CatalogV1:
 #
 def parse_manifest(
     manifest: dict,
+    *,
+    fallback_to_latest: bool = False,
 ) -> Union[
     ManifestV1,
     ManifestV2,
@@ -91,6 +108,8 @@ def parse_manifest(
 
     Args:
         manifest: A dict of manifest.json
+        fallback_to_latest: If True and the schema version is newer than
+            supported, parse as the latest known schema (best-effort).
 
     Returns:
        Union[
@@ -124,6 +143,12 @@ def parse_manifest(
         return ManifestV11(**manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V12.value.dbt_schema_version:
         return ManifestV12(**manifest)
+    if fallback_to_latest:
+        version = extract_artifact_version(dbt_schema_version, "manifest")
+        max_version = ARTIFACT_MAX_VERSIONS["manifest"]
+        if version is not None and version > max_version:
+            warn_fallback_to_latest(dbt_schema_version, f"v{max_version}")
+            return ManifestV12.model_validate(manifest, extra="ignore")
     raise ValueError("Not a manifest.json")
 
 
@@ -228,6 +253,8 @@ def parse_manifest_v12(manifest: dict) -> ManifestV12:
 #
 def parse_run_results(
     run_results: dict,
+    *,
+    fallback_to_latest: bool = False,
 ) -> Union[
     RunResultsV1, RunResultsV2, RunResultsV3, RunResultsV4, RunResultsV5, RunResultsV6
 ]:
@@ -235,6 +262,8 @@ def parse_run_results(
 
     Args:
         run_results: A dict of run-results.json
+        fallback_to_latest: If True and the schema version is newer than
+            supported, parse as the latest known schema (best-effort).
 
     Returns:
         Union[RunResultsV1, RunResultsV2, RunResultsV3, RunResultsV4]:
@@ -252,6 +281,12 @@ def parse_run_results(
         return RunResultsV5(**run_results)
     elif dbt_schema_version == ArtifactTypes.RUN_RESULTS_V6.value.dbt_schema_version:
         return RunResultsV6(**run_results)
+    if fallback_to_latest:
+        version = extract_artifact_version(dbt_schema_version, "run-results")
+        max_version = ARTIFACT_MAX_VERSIONS["run-results"]
+        if version is not None and version > max_version:
+            warn_fallback_to_latest(dbt_schema_version, f"v{max_version}")
+            return RunResultsV6.model_validate(run_results, extra="ignore")
     raise ValueError("Not a run_results.json")
 
 
@@ -306,11 +341,15 @@ def parse_run_results_v6(run_results: dict) -> RunResultsV6:
 #
 # sources
 #
-def parse_sources(sources: dict) -> Union[SourcesV1, SourcesV2, SourcesV3]:
+def parse_sources(
+    sources: dict, *, fallback_to_latest: bool = False
+) -> Union[SourcesV1, SourcesV2, SourcesV3]:
     """Parse sources.json
 
     Args:
         sources: A dict of sources.json
+        fallback_to_latest: If True and the schema version is newer than
+            supported, parse as the latest known schema (best-effort).
 
     Returns:
         Union[SourcesV1, SourcesV2, SourcesV3]
@@ -322,6 +361,12 @@ def parse_sources(sources: dict) -> Union[SourcesV1, SourcesV2, SourcesV3]:
         return SourcesV2(**sources)
     elif dbt_schema_version == ArtifactTypes.SOURCES_V3.value.dbt_schema_version:
         return SourcesV3(**sources)
+    if fallback_to_latest:
+        version = extract_artifact_version(dbt_schema_version, "sources")
+        max_version = ARTIFACT_MAX_VERSIONS["sources"]
+        if version is not None and version > max_version:
+            warn_fallback_to_latest(dbt_schema_version, f"v{max_version}")
+            return SourcesV3.model_validate(sources, extra="ignore")
     raise ValueError("Not a sources.json")
 
 
