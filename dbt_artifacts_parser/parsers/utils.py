@@ -17,18 +17,14 @@
 
 import re
 import warnings
-from typing import Optional, Type
+from typing import Optional, Type, TypeVar
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 from dbt_artifacts_parser.parsers.version_map import ArtifactTypes
 
-# Max supported schema version per artifact family slug.
-ARTIFACT_MAX_VERSIONS = {
-    "catalog": 1,
-    "manifest": 12,
-    "run-results": 6,
-    "sources": 3,
-}
+T = TypeVar("T", bound=BaseParserModel)
+
+_ARTIFACT_SLUGS = ("catalog", "manifest", "run-results", "sources")
 
 
 def get_dbt_schema_version(artifact_json: dict) -> str:
@@ -64,6 +60,21 @@ def extract_artifact_version(schema_version: str, artifact_slug: str) -> Optiona
     return int(match.group(1))
 
 
+def _max_versions_from_artifact_types() -> dict[str, int]:
+    """Derive max supported version per slug from ArtifactTypes."""
+    maxima: dict[str, int] = {slug: 0 for slug in _ARTIFACT_SLUGS}
+    for artifact_type in ArtifactTypes:
+        schema_version = artifact_type.value.dbt_schema_version
+        for slug in _ARTIFACT_SLUGS:
+            version = extract_artifact_version(schema_version, slug)
+            if version is not None and version > maxima[slug]:
+                maxima[slug] = version
+    return maxima
+
+
+ARTIFACT_MAX_VERSIONS = _max_versions_from_artifact_types()
+
+
 def warn_fallback_to_latest(requested: str, parsed_as: str) -> None:
     """Warn that an unsupported newer schema was parsed as the latest known version."""
     warnings.warn(
@@ -74,9 +85,26 @@ def warn_fallback_to_latest(requested: str, parsed_as: str) -> None:
             "incompatible changes may still fail validation."
         ),
         UserWarning,
-        # warn_fallback_to_latest <- parse_* <- caller
-        stacklevel=3,
+        stacklevel=4,
     )
+
+
+def try_parse_fallback_to_latest(
+    artifact_json: dict,
+    schema_version: str,
+    artifact_slug: str,
+    model_class: Type[T],
+) -> Optional[T]:
+    """Parse as the latest known model when schema_version is a newer forward version.
+
+    Returns None when fallback does not apply (wrong family or not newer).
+    """
+    version = extract_artifact_version(schema_version, artifact_slug)
+    max_version = ARTIFACT_MAX_VERSIONS[artifact_slug]
+    if version is None or version <= max_version:
+        return None
+    warn_fallback_to_latest(schema_version, f"v{max_version}")
+    return model_class.model_validate(artifact_json, extra="ignore")
 
 
 def get_artifact_type_by_id(schema_version: str) -> ArtifactTypes:
