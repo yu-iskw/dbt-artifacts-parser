@@ -18,4 +18,4 @@
 A dbt artifacts parser in python
 """
 
-__version__ = "0.13.2"
+__version__ = "0.14.0"
