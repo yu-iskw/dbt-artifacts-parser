@@ -21,7 +21,9 @@ set -e
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 MODULE_ROOT="$(dirname "${SCRIPT_DIR}")"
 BASE_URL="https://raw.githubusercontent.com/dbt-labs/dbt-core"
-REF="main"
+# Default follows dbt-core v1 branch layout (schemas/dbt is not on main / v2).
+# For releases, prefer an explicit stable tag (e.g. --ref v1.11.12).
+REF="1.latest"
 RESOURCES_DIR="${MODULE_ROOT}/dbt_artifacts_parser/resources"
 
 # Artifact types and version lists. Must stay in sync with dev/generate_parser_classes.sh.
@@ -40,7 +42,8 @@ usage() {
 	echo "  Download dbt artifact JSON schemas from dbt-labs/dbt-core into this project's resources."
 	echo "  With no arguments (after --ref), downloads all artifact types and versions."
 	echo ""
-	echo "  --ref REF       Git ref: branch, tag, or commit (default: main)"
+	echo "  --ref REF       Git ref: branch, tag, or commit (default: 1.latest)."
+	echo "                  For releases, pass a stable tag (e.g. v1.11.12), not a pre-release."
 	echo "  artifact_type   one of: catalog, manifest, run-results, sources"
 	echo "  version         optional list of versions (e.g. v1 v7). If omitted, all versions for the type are downloaded."
 	exit "$1"

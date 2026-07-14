@@ -21,6 +21,7 @@ Activate this skill when the user says or implies:
 - **Generate:** `bash dev/generate_parser_classes.sh [artifact_type] [version ...]`
 - **Artifact types:** `catalog`, `manifest`, `run-results`, `sources`
 - **Versions:** e.g. `v1`, `v7`. Omit args to process all types and versions.
+- **Default ref:** `1.latest` (dbt Core v1 schema tree). Prefer an explicit **stable tag** for releases (e.g. `--ref v1.11.12`). Do not use pre-release refs unless the user explicitly asks.
 
 ## Order rule
 
@@ -51,21 +52,21 @@ When schemas are already present and the user only wants to regenerate code (e.g
 
 ## Passing through user intent
 
-- **Ref:** If the user specifies a ref (e.g. `main` or a branch), pass `--ref REF` only to the download script.
+- **Ref:** If the user specifies a ref (e.g. `1.latest`, a stable tag like `v1.11.12`, or a branch), pass `--ref REF` only to the download script. If unspecified, the download script defaults to `1.latest`.
 - **Scope:** If they specify an artifact or version (e.g. "just manifest v7"), use the same artifact_type and version(s) for both scripts when running both.
 
 ## Example
 
-Full refresh (all types and versions):
+Full refresh from a stable release tag:
 
 ```bash
-bash dev/download_dbt_schemas.sh
+bash dev/download_dbt_schemas.sh --ref v1.11.12
 bash dev/generate_parser_classes.sh
 ```
 
 Refresh only manifest v7:
 
 ```bash
-bash dev/download_dbt_schemas.sh manifest v7
+bash dev/download_dbt_schemas.sh --ref v1.11.12 manifest v7
 bash dev/generate_parser_classes.sh manifest v7
 ```
