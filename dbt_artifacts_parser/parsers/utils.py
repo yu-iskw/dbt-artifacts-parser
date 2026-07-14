@@ -15,9 +15,12 @@
 #  limitations under the License.
 #
 
+import copy
 import re
 import warnings
-from typing import Optional, Type, TypeVar
+from typing import Any, Optional, Sequence, Type, TypeVar, Union
+
+from pydantic import ValidationError
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 from dbt_artifacts_parser.parsers.version_map import ArtifactTypes
@@ -25,6 +28,7 @@ from dbt_artifacts_parser.parsers.version_map import ArtifactTypes
 T = TypeVar("T", bound=BaseParserModel)
 
 _ARTIFACT_SLUGS = ("catalog", "manifest", "run-results", "sources")
+_MAX_EXTRA_STRIP_RETRIES = 50
 
 
 def get_dbt_schema_version(artifact_json: dict) -> str:
@@ -89,6 +93,65 @@ def warn_fallback_to_latest(requested: str, parsed_as: str) -> None:
     )
 
 
+def _delete_at_loc(payload: Any, loc: Sequence[Union[str, int]]) -> bool:
+    """Delete the value at a Pydantic error loc.
+
+    Returns True if something was removed.
+    """
+    if not loc:
+        return False
+    current = payload
+    for part in loc[:-1]:
+        if isinstance(current, dict) and part in current:
+            current = current[part]
+        elif (
+            isinstance(current, list)
+            and isinstance(part, int)
+            and 0 <= part < len(current)
+        ):
+            current = current[part]
+        else:
+            return False
+    last = loc[-1]
+    if isinstance(current, dict) and last in current:
+        del current[last]
+        return True
+    if isinstance(current, list) and isinstance(last, int) and 0 <= last < len(current):
+        del current[last]
+        return True
+    return False
+
+
+def validate_preserving_allowed_extras(model_class: Type[T], artifact_json: dict) -> T:
+    """Validate without overriding nested extra config.
+
+    Strips only ``extra_forbidden`` fields and retries so nested ``extra="allow"``
+    models (e.g. dbt config) keep schema-allowed custom keys.
+    """
+    payload = copy.deepcopy(artifact_json)
+    for _ in range(_MAX_EXTRA_STRIP_RETRIES):
+        try:
+            return model_class.model_validate(payload)
+        except ValidationError as exc:
+            errors = exc.errors()
+            forbidden_locs = [
+                err["loc"] for err in errors if err.get("type") == "extra_forbidden"
+            ]
+            if not forbidden_locs or len(forbidden_locs) != len(errors):
+                raise
+            removed_any = False
+            # Delete deepest paths first so parent locs stay valid when stripping lists.
+            for loc in sorted(forbidden_locs, key=len, reverse=True):
+                if _delete_at_loc(payload, loc):
+                    removed_any = True
+            if not removed_any:
+                raise
+    raise RuntimeError(
+        f"Exceeded {_MAX_EXTRA_STRIP_RETRIES} retries while stripping "
+        f"extra_forbidden fields for {model_class.__name__}"
+    )
+
+
 def try_parse_fallback_to_latest(
     artifact_json: dict,
     schema_version: str,
@@ -104,7 +167,7 @@ def try_parse_fallback_to_latest(
     if version is None or version <= max_version:
         return None
     warn_fallback_to_latest(schema_version, f"v{max_version}")
-    return model_class.model_validate(artifact_json, extra="ignore")
+    return validate_preserving_allowed_extras(model_class, artifact_json)
 
 
 def get_artifact_type_by_id(schema_version: str) -> ArtifactTypes:

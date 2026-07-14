@@ -18,6 +18,7 @@ import os
 
 import pytest
 import yaml
+from pydantic import ValidationError
 
 from dbt_artifacts_parser import parser
 from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
@@ -549,3 +550,47 @@ class TestFallbackToLatest:
         with pytest.warns(UserWarning, match="falling back to latest"):
             sources_obj = parser.parse_sources(sources_dict, fallback_to_latest=True)
         assert isinstance(sources_obj, SourcesV3)
+
+    def test_parse_manifest_fallback_preserves_allowed_config_extras(self):
+        path = os.path.join(
+            get_project_root(),
+            "tests",
+            "resources",
+            "manifest",
+            "v12",
+            "jaffle_shop",
+            "manifest_1.11.json",
+        )
+        with open(path, "r", encoding="utf-8") as fp:
+            manifest_dict = yaml.safe_load(fp)
+        manifest_dict["metadata"]["dbt_schema_version"] = (
+            "https://schemas.getdbt.com/dbt/manifest/v99.json"
+        )
+        manifest_dict["future_only_field"] = "ignored"
+        node_id = "model.jaffle_shop.stg_products"
+        manifest_dict["nodes"][node_id]["config"]["custom_team_key"] = "analytics"
+        with pytest.warns(UserWarning, match="falling back to latest"):
+            manifest_obj = parser.parse_manifest(manifest_dict, fallback_to_latest=True)
+        assert "future_only_field" not in manifest_obj.model_dump()
+        node = manifest_obj.nodes[node_id]
+        assert node.config.model_extra["custom_team_key"] == "analytics"
+
+    def test_parse_manifest_fallback_raises_on_incompatible_required_fields(self):
+        path = os.path.join(
+            get_project_root(),
+            "tests",
+            "resources",
+            "manifest",
+            "v12",
+            "jaffle_shop",
+            "manifest_1.11.json",
+        )
+        with open(path, "r", encoding="utf-8") as fp:
+            manifest_dict = yaml.safe_load(fp)
+        manifest_dict["metadata"]["dbt_schema_version"] = (
+            "https://schemas.getdbt.com/dbt/manifest/v99.json"
+        )
+        del manifest_dict["nodes"]
+        with pytest.warns(UserWarning, match="falling back to latest"):
+            with pytest.raises(ValidationError):
+                parser.parse_manifest(manifest_dict, fallback_to_latest=True)
