@@ -29,7 +29,7 @@ When updating or adding parsers (syncing with dbt-core, regenerating Pydantic mo
 1. **Download first:** `bash dev/download_dbt_schemas.sh [--ref REF] [artifact_type] [version ...]`
 2. **Then generate:** `bash dev/generate_parser_classes.sh [artifact_type] [version ...]`
 
-Artifact types: `catalog`, `manifest`, `run-results`, `sources`. Omit arguments to process all types and versions. If the user specifies a ref (e.g. branch), pass `--ref REF` only to the download script.
+Artifact types: `catalog`, `manifest`, `run-results`, `sources`. Omit arguments to process all types and versions. Default download ref is `1.latest` (dbt Core v1; `main` no longer hosts `schemas/dbt`). For releases, pass an explicit stable tag (e.g. `--ref v1.11.12`). If the user specifies a ref, pass `--ref REF` only to the download script.
 
 A project skill **dbt-parser-refresh** encodes this workflow in detail. Skills live in `.claude/skills/` (Cursor and Claude Code). Codex users: this repo provides `.agents/skills` as a symlink to `.claude/skills`, so the same skill is available there.
 
