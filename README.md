@@ -113,6 +113,12 @@ with open("path/to/manifest.json", "r") as fp:
     manifest_dict = json.load(fp)
     manifest_obj = parse_manifest(manifest=manifest_dict)
 
+# Opt-in best-effort parse when the schema version is newer than this
+# package supports. Fields forbidden by the latest schema are dropped;
+# nested extras allowed by the schema (e.g. custom dbt config keys) are
+# kept. Prefer refreshing parsers for full support of new versions.
+manifest_obj = parse_manifest(manifest=manifest_dict, fallback_to_latest=True)
+
 # parse manifest.json v1
 from dbt_artifacts_parser.parser import parse_manifest_v1
 
