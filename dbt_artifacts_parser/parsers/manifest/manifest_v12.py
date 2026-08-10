@@ -27,7 +27,7 @@ class Metadata(BaseParserModel):
         extra="forbid",
     )
     dbt_schema_version: Optional[str] = None
-    dbt_version: Optional[str] = "1.12.0a1"
+    dbt_version: Optional[str] = "1.12.0b1"
     generated_at: Optional[str] = None
     invocation_id: Optional[str] = None
     invocation_started_at: Optional[str] = None
@@ -111,9 +111,10 @@ class Config(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "seed"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -296,9 +297,10 @@ class Config2(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -383,9 +385,10 @@ class Config3(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -512,7 +515,7 @@ class Ref(BaseParserModel):
     )
     name: str
     package: Optional[str] = None
-    version: Optional[Union[str, float]] = None
+    version: Optional[Union[int, float, str]] = None
 
 
 class DependsOn1(BaseParserModel):
@@ -595,9 +598,10 @@ class Config5(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field("dbt_test__audit", alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "test"
     severity: Optional[constr(pattern=r"^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$")] = (
         "ERROR"
@@ -773,9 +777,10 @@ class Config7(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -993,6 +998,19 @@ class Freshness(BaseParserModel):
     build_after: BuildAfter = Field(..., title="ModelBuildAfter")
 
 
+class OnError(Enum):
+    skip_children = "skip_children"
+    continue_ = "continue"
+
+
+class LatestVersionPointer(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    enabled: Optional[bool] = None
+    alias: Optional[str] = None
+
+
 class Config9(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -1002,9 +1020,10 @@ class Config9(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -1027,6 +1046,10 @@ class Config9(BaseParserModel):
     concurrent_batches: Optional[Any] = None
     access: Optional[Access] = "protected"
     freshness: Optional[Freshness] = None
+    on_error: Optional[OnError] = None
+    latest_version_pointer: Optional[LatestVersionPointer] = Field(
+        None, title="LatestVersionPointer"
+    )
 
 
 class Type12(Enum):
@@ -1176,9 +1199,10 @@ class Config11(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -1280,8 +1304,8 @@ class Nodes4(BaseParserModel):
     contract: Optional[Contract8] = Field(None, title="Contract")
     access: Optional[Access] = "protected"
     constraints: Optional[List[Constraint5]] = None
-    version: Optional[Union[str, float]] = None
-    latest_version: Optional[Union[str, float]] = None
+    version: Optional[Union[int, float, str]] = None
+    latest_version: Optional[Union[int, float, str]] = None
     deprecation_date: Optional[str] = None
     defer_relation: Optional[DeferRelation1] = None
     primary_key: Optional[List[str]] = None
@@ -1297,9 +1321,10 @@ class Config12(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -1475,9 +1500,10 @@ class Config14(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field("dbt_test__audit", alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "test"
     severity: Optional[constr(pattern=r"^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$")] = (
         "ERROR"
@@ -1677,9 +1703,10 @@ class Config16(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "snapshot"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -1835,9 +1862,10 @@ class Config18(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -1944,6 +1972,13 @@ class Volatility(Enum):
     non_deterministic = "non-deterministic"
 
 
+class Snowflake(BaseParserModel):
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    quote_args: Optional[bool] = True
+
+
 class Config19(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -1953,9 +1988,10 @@ class Config19(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "function"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -1980,6 +2016,7 @@ class Config19(BaseParserModel):
     volatility: Optional[Volatility] = None
     runtime_version: Optional[str] = None
     entry_point: Optional[str] = None
+    snowflake: Optional[Snowflake] = Field(None, title="SnowflakeFunctionConfig")
 
 
 class Type26(Enum):
@@ -2134,9 +2171,10 @@ class Config21(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "function"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -2161,6 +2199,7 @@ class Config21(BaseParserModel):
     volatility: Optional[Volatility] = None
     runtime_version: Optional[str] = None
     entry_point: Optional[str] = None
+    snowflake: Optional[Snowflake] = Field(None, title="SnowflakeFunctionConfig")
 
 
 class DeferFunction(BaseParserModel):
@@ -2256,7 +2295,7 @@ class Freshness1(BaseParserModel):
     filter: Optional[str] = None
 
 
-class Partition(BaseParserModel):
+class Partitions(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
@@ -2276,7 +2315,7 @@ class External(BaseParserModel):
     file_format: Optional[str] = None
     row_format: Optional[str] = None
     tbl_properties: Optional[str] = None
-    partitions: Optional[Union[List[str], List[Partition]]] = None
+    partitions: Optional[List[Union[Partitions, str]]] = None
 
 
 class Type30(Enum):
@@ -2414,6 +2453,7 @@ class Config23(BaseParserModel):
     loaded_at_query: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None
     tags: Optional[List[str]] = None
+    static_analysis: Optional[str] = None
 
 
 class Sources(BaseParserModel):
@@ -2478,8 +2518,14 @@ class Argument3(BaseParserModel):
     description: Optional[str] = ""
 
 
-class SupportedLanguage(Enum):
+class SupportedLanguages(Enum):
     python = "python"
+    sql = "sql"
+
+
+class SupportedLanguages1(Enum):
+    python = "python"
+    javascript = "javascript"
     sql = "sql"
 
 
@@ -2502,7 +2548,9 @@ class Macros(BaseParserModel):
     patch_path: Optional[str] = None
     arguments: Optional[List[Argument3]] = None
     created_at: Optional[float] = None
-    supported_languages: Optional[List[SupportedLanguage]] = None
+    supported_languages: Optional[
+        List[Union[SupportedLanguages, SupportedLanguages1]]
+    ] = None
 
 
 class Docs22(BaseParserModel):
@@ -3033,9 +3081,10 @@ class Config28(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "seed"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -3174,9 +3223,10 @@ class Config30(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -3261,9 +3311,10 @@ class Config31(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -3456,9 +3507,10 @@ class Config33(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field("dbt_test__audit", alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "test"
     severity: Optional[constr(pattern=r"^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$")] = (
         "ERROR"
@@ -3634,9 +3686,10 @@ class Config35(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -3846,9 +3899,10 @@ class Config37(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -3871,6 +3925,10 @@ class Config37(BaseParserModel):
     concurrent_batches: Optional[Any] = None
     access: Optional[Access] = "protected"
     freshness: Optional[Freshness3] = None
+    on_error: Optional[OnError] = None
+    latest_version_pointer: Optional[LatestVersionPointer] = Field(
+        None, title="LatestVersionPointer"
+    )
 
 
 class Type47(Enum):
@@ -4020,9 +4078,10 @@ class Config39(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -4116,8 +4175,8 @@ class Disabled4(BaseParserModel):
     contract: Optional[Contract27] = Field(None, title="Contract")
     access: Optional[Access] = "protected"
     constraints: Optional[List[Constraint16]] = None
-    version: Optional[Union[str, float]] = None
-    latest_version: Optional[Union[str, float]] = None
+    version: Optional[Union[int, float, str]] = None
+    latest_version: Optional[Union[int, float, str]] = None
     deprecation_date: Optional[str] = None
     defer_relation: Optional[DeferRelation4] = None
     primary_key: Optional[List[str]] = None
@@ -4133,9 +4192,10 @@ class Config40(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -4311,9 +4371,10 @@ class Config42(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field("dbt_test__audit", alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "test"
     severity: Optional[constr(pattern=r"^([Ww][Aa][Rr][Nn]|[Ee][Rr][Rr][Oo][Rr])$")] = (
         "ERROR"
@@ -4493,9 +4554,10 @@ class Config44(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "snapshot"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -4651,9 +4713,10 @@ class Config46(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -4755,9 +4818,10 @@ class Config47(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "function"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -4782,6 +4846,7 @@ class Config47(BaseParserModel):
     volatility: Optional[Volatility] = None
     runtime_version: Optional[str] = None
     entry_point: Optional[str] = None
+    snowflake: Optional[Snowflake] = Field(None, title="SnowflakeFunctionConfig")
 
 
 class Type61(Enum):
@@ -4936,9 +5001,10 @@ class Config49(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "function"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -4963,6 +5029,7 @@ class Config49(BaseParserModel):
     volatility: Optional[Volatility] = None
     runtime_version: Optional[str] = None
     entry_point: Optional[str] = None
+    snowflake: Optional[Snowflake] = Field(None, title="SnowflakeFunctionConfig")
 
 
 class DeferFunction1(BaseParserModel):
@@ -5067,7 +5134,7 @@ class External1(BaseParserModel):
     file_format: Optional[str] = None
     row_format: Optional[str] = None
     tbl_properties: Optional[str] = None
-    partitions: Optional[Union[List[str], List[Partition]]] = None
+    partitions: Optional[List[Union[Partitions, str]]] = None
 
 
 class Type65(Enum):
@@ -5205,6 +5272,7 @@ class Config51(BaseParserModel):
     loaded_at_query: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None
     tags: Optional[List[str]] = None
+    static_analysis: Optional[str] = None
 
 
 class Disabled9(BaseParserModel):
@@ -5689,7 +5757,7 @@ class Disabled12(BaseParserModel):
     depends_on: Optional[DependsOn13] = Field(None, title="DependsOn")
     created_at: Optional[float] = None
     refs: Optional[List[Ref]] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
 
 
 class NodeRelation(BaseParserModel):
@@ -5900,14 +5968,15 @@ class Config60(BaseParserModel):
     tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     enabled: Optional[bool] = True
+    static_analysis: Optional[str] = None
 
 
 class Versions(BaseParserModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-    include: Optional[List[Union[str, float]]] = None
-    exclude: Optional[List[Union[str, float]]] = None
+    include: Optional[List[Union[int, float, str]]] = None
+    exclude: Optional[List[Union[int, float, str]]] = None
 
 
 class Disabled14(BaseParserModel):
@@ -5932,7 +6001,7 @@ class Disabled14(BaseParserModel):
     schema_: Optional[str] = Field(None, alias="schema")
     created_at: Optional[float] = None
     versions: Optional[Versions] = None
-    version: Optional[Union[str, float]] = None
+    version: Optional[Union[int, float, str]] = None
 
 
 class Where1(BaseParserModel):
@@ -6015,7 +6084,7 @@ class SavedQueries(BaseParserModel):
     depends_on: Optional[DependsOn13] = Field(None, title="DependsOn")
     created_at: Optional[float] = None
     refs: Optional[List[Ref]] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
 
 
 class Type72(Enum):
@@ -6180,6 +6249,7 @@ class Config67(BaseParserModel):
     tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     enabled: Optional[bool] = True
+    static_analysis: Optional[str] = None
 
 
 class UnitTests(BaseParserModel):
@@ -6204,7 +6274,7 @@ class UnitTests(BaseParserModel):
     schema_: Optional[str] = Field(None, alias="schema")
     created_at: Optional[float] = None
     versions: Optional[Versions] = None
-    version: Optional[Union[str, float]] = None
+    version: Optional[Union[int, float, str]] = None
 
 
 class Type74(Enum):
@@ -6222,9 +6292,10 @@ class Config68(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "function"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -6249,6 +6320,7 @@ class Config68(BaseParserModel):
     volatility: Optional[Volatility] = None
     runtime_version: Optional[str] = None
     entry_point: Optional[str] = None
+    snowflake: Optional[Snowflake] = Field(None, title="SnowflakeFunctionConfig")
 
 
 class Type75(Enum):
@@ -6393,9 +6465,10 @@ class Config70(BaseParserModel):
     alias: Optional[str] = None
     schema_: Optional[str] = Field(None, alias="schema")
     database: Optional[str] = None
-    tags: Optional[Union[List[str], str]] = None
+    tags: Optional[Union[str, List[str]]] = None
     meta: Optional[Dict[str, Any]] = None
     group: Optional[str] = None
+    static_analysis: Optional[str] = None
     materialized: Optional[str] = "function"
     incremental_strategy: Optional[str] = None
     batch_size: Optional[Any] = None
@@ -6420,6 +6493,7 @@ class Config70(BaseParserModel):
     volatility: Optional[Volatility] = None
     runtime_version: Optional[str] = None
     entry_point: Optional[str] = None
+    snowflake: Optional[Snowflake] = Field(None, title="SnowflakeFunctionConfig")
 
 
 class DeferFunction2(BaseParserModel):
