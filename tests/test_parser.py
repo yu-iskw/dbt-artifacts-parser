@@ -55,6 +55,18 @@ from dbt_artifacts_parser.utils import get_project_root
                 "catalog_1.11.json",
             ),
         ),
+        (
+            "v1",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "catalog",
+                "v1",
+                "jaffle_shop",
+                "catalog_1.12.json",
+            ),
+        ),
     ],
 )
 class TestCatalogParser:
@@ -272,6 +284,18 @@ class TestCatalogParser:
                 "manifest_1.11.json",
             ),
         ),
+        (
+            "v12",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "manifest",
+                "v12",
+                "jaffle_shop",
+                "manifest_1.12.json",
+            ),
+        ),
     ],
 )
 class TestManifestParser:
@@ -379,6 +403,18 @@ class TestManifestParser:
                 "v6",
                 "jaffle_shop",
                 "run_results_1.11.json",
+            ),
+        ),
+        (
+            "v6",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "run_results",
+                "v6",
+                "jaffle_shop",
+                "run_results_1.12.json",
             ),
         ),
     ],

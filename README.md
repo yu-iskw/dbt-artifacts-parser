@@ -23,6 +23,8 @@ This package is primarily designed for dbt-core, enabling seamless interaction w
 
 | Version | Supported dbt Version | Supported pydantic Version |
 |---------|-----------------------|----------------------------|
+|  0.15   | dbt 0.19 to 1.12      | pydantic v2                |
+|  0.14   | dbt 0.19 to 1.11      | pydantic v2                |
 |  0.13   | dbt 0.19 to 1.11      | pydantic v2                |
 |  0.12   | dbt 0.19 to 1.11      | pydantic v2                |
 |  0.9    | dbt 1.7 to 1.10       | pydantic v2                |
