@@ -14,13 +14,28 @@ on:
   push:
     branches:
       - main
+    paths:
+      - .github/workflows/test.yml
+      - pyproject.toml
+      - uv.lock
+      - dbt_artifacts_parser/**/*.py
+      - dev/integration_tests/**
+      - tests/**/*.py
+      - tests/resources/**
+      - pylintrc
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.draft == false }}
     runs-on: ubuntu-slim
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        python-version: ${{ fromJSON(github.event_name == 'pull_request' && '["3.13"]' || '["3.10","3.11","3.12","3.13"]') }}
       fail-fast: false
 
     defaults:
