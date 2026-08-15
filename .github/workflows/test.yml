@@ -34,7 +34,7 @@ concurrency:
 jobs:
   test:
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.draft == false }}
-    name: Test supported Python versions
+    name: Test supported environments
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -45,16 +45,8 @@ jobs:
         uses: astral-sh/setup-uv@94527f2e458b27549849d47d273a16bec83a01e9 # v7
         with:
           enable-cache: true
-      - name: Install supported Python versions
-        run: uv python install 3.10 3.11 3.12 3.13
-      - name: Run tests across Python versions in parallel
-        run: |
-          set -euo pipefail
-          nox_spec='nox[uv]==2026.7.11'
-          uvx --from "${nox_spec}" nox --list >/dev/null
-          printf '%s\0' 3.10 3.11 3.12 3.13 \
-            | xargs -0 -P "$(nproc)" -I{} \
-                uvx --from "${nox_spec}" nox --session "tests-{}"
+      - name: Run compatibility tests
+        run: uv run --with "nox[uv]==2026.7.11" bash dev/test_all.sh
       - name: Prepare primary validation environment
         run: uv sync --frozen --all-extras --python 3.13
       - name: Test build
