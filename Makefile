@@ -40,10 +40,15 @@ run-pre-commit:
 update-pre-commit:
 	uv run pre-commit autoupdate
 
-# Run the unit tests.
+# Run the unit tests in the current environment.
 .PHONY: test
 test:
 	uv run bash ./dev/test_python.sh
+
+# Run the complete supported-Python suite through the same entrypoint as CI.
+.PHONY: test-all
+test-all:
+	uv run --with "nox[uv]==2026.7.11" bash ./dev/test_all.sh
 
 # Build the package
 .PHONY: build
