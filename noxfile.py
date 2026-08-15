@@ -13,12 +13,5 @@ nox.options.default_venv_backend = "uv"
 def tests(session: nox.Session) -> None:
     """Run the test suite in an isolated uv-backed environment."""
     env = {"UV_PROJECT_ENVIRONMENT": str(session.virtualenv.location)}
-    session.run_install(
-        "uv",
-        "sync",
-        "--frozen",
-        "--all-extras",
-        f"--python={session.virtualenv.location}",
-        env=env,
-    )
+    session.run_install("uv", "sync", "--frozen", "--all-extras", env=env)
     session.run("bash", "dev/test_python.sh", external=True, env=env)
