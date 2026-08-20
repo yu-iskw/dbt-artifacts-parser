@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - .github/workflows/test.yml
+      - noxfile.py
       - pyproject.toml
       - uv.lock
       - dbt_artifacts_parser/**/*.py
@@ -14,34 +15,41 @@ on:
   push:
     branches:
       - main
+    paths:
+      - .github/workflows/test.yml
+      - noxfile.py
+      - pyproject.toml
+      - uv.lock
+      - dbt_artifacts_parser/**/*.py
+      - dev/integration_tests/**
+      - tests/**/*.py
+      - tests/resources/**
+      - pylintrc
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
-    runs-on: ubuntu-slim
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
-      fail-fast: false
-
+    name: Test supported environments
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
-
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # ratchet:actions/checkout@v6
-      - name: Set up Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # ratchet:actions/setup-python@v6
+      - name: Set up uv
+        uses: astral-sh/setup-uv@94527f2e458b27549849d47d273a16bec83a01e9 # v7
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: |
-          python -m pip install -r requirements.setup.txt
-          bash dev/setup.sh --deps "development"
-      - name: Run tests
-        run: bash dev/test_python.sh
+          enable-cache: true
+      - name: Run compatibility tests
+        run: uv run --with "nox[uv]==2026.7.11" bash dev/test_all.sh
+      - name: Prepare primary validation environment
+        run: uv sync --frozen --all-extras --python 3.13
       - name: Test build
-        run: |
-          bash dev/build.sh
+        run: uv run bash dev/build.sh
       - name: Test installation from wheel
         run: |
           set -euo pipefail
@@ -51,7 +59,6 @@ jobs:
             echo "No wheel found under dist/"
             exit 1
           fi
-          python -m pip install --upgrade pip
-          python -m pip install "${wheels[@]}"
-          python -c 'import dbt_artifacts_parser'
-          python dev/integration_tests/verify_parsers.py --verbose
+          uv pip install "${wheels[@]}"
+          uv run python -c 'import dbt_artifacts_parser'
+          uv run python dev/integration_tests/verify_parsers.py --verbose
