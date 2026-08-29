@@ -208,9 +208,7 @@ def check_drift(schema_root: Path, repository: str, ref: str) -> list[str]:
         upstream_schema = canonicalize(fetch_json(upstream_entry["download_url"]))
         if local_schema != upstream_schema:
             paths = ", ".join(differing_paths(local_schema, upstream_schema))
-            issues.append(
-                f"{category} v{local_version}: structural drift at {paths}"
-            )
+            issues.append(f"{category} v{local_version}: structural drift at {paths}")
     return issues
 
 
