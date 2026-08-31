@@ -13,6 +13,10 @@ It enables us to deal with `catalog.json`, `manifest.json`, `run-results.json` a
 
 This package is primarily designed for dbt-core, enabling seamless interaction with dbt artifacts as Python objects. While dbt Cloud provides additional artifact types beyond those of dbt-core, this package does not offer comprehensive support for them.
 
+## Related packages
+
+TypeScript users should use [dbt-artifacts-parser-ts](https://github.com/yu-iskw/dbt-artifacts-parser-ts) (npm package `dbt-artifacts-parser`).
+
 ## Supported Versions and Compatibility
 
 > **⚠️ Important Note:**
