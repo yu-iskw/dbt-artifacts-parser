@@ -1,0 +1,33 @@
+name: Check dbt artifact schema drift
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 8 * * 1"
+  pull_request:
+    paths:
+      - .github/workflows/schema-drift.yml
+      - dev/check_dbt_schema_drift.py
+      - dbt_artifacts_parser/resources/**
+
+permissions:
+  contents: read
+
+jobs:
+  schema-drift:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # ratchet:actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # ratchet:actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Compare schemas with latest stable dbt Core v1
+        env:
+          GITHUB_TOKEN: ${{ github.event_name != 'pull_request' && github.token || '' }}
+        run: >-
+          python dev/check_dbt_schema_drift.py
+          --schema-root dbt_artifacts_parser/resources
