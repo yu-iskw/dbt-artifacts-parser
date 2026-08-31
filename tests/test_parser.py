@@ -630,3 +630,84 @@ class TestFallbackToLatest:
         with pytest.warns(UserWarning, match="falling back to latest"):
             with pytest.raises(ValidationError):
                 parser.parse_manifest(manifest_dict, fallback_to_latest=True)
+
+
+def _manifest_v12_with_macros(macros: dict) -> dict:
+    return {
+        "metadata": {
+            "dbt_schema_version": "https://schemas.getdbt.com/dbt/manifest/v12.json",
+            "dbt_version": "1.11.8",
+        },
+        "nodes": {},
+        "sources": {},
+        "macros": macros,
+        "docs": {},
+        "exposures": {},
+        "metrics": {},
+        "groups": {},
+        "selectors": {},
+        "disabled": {},
+        "parent_map": {},
+        "child_map": {},
+        "group_map": {},
+        "saved_queries": {},
+        "semantic_models": {},
+        "unit_tests": {},
+    }
+
+
+class TestManifestV12DbtPatchCompatibility:
+    def test_parse_manifest_v12_accepts_macro_config_and_javascript(self):
+        unique_id = "macro.example.generate_schema_name"
+        manifest = _manifest_v12_with_macros(
+            {
+                unique_id: {
+                    "name": "generate_schema_name",
+                    "resource_type": "macro",
+                    "package_name": "example",
+                    "path": "macros/generate_schema_name.sql",
+                    "original_file_path": "macros/generate_schema_name.sql",
+                    "unique_id": unique_id,
+                    "macro_sql": (
+                        "{% macro generate_schema_name(custom_schema_name, node) %}"
+                        "{{ custom_schema_name }}"
+                        "{% endmacro %}"
+                    ),
+                    "config": {
+                        "meta": {},
+                        "docs": {"show": True, "node_color": None},
+                    },
+                    "supported_languages": ["sql", "python", "javascript"],
+                }
+            }
+        )
+        parsed = parser.parse_manifest_v12(manifest)
+        macro = parsed.macros[unique_id]
+        assert macro.config is not None
+        assert macro.config.meta == {}
+        assert macro.config.docs is not None
+        assert macro.config.docs.show is True
+        assert macro.config.docs.node_color is None
+        languages = [language.value for language in macro.supported_languages]
+        assert languages == ["sql", "python", "javascript"]
+        dispatched = parser.parse_manifest(manifest)
+        assert dispatched.macros[unique_id].config is not None
+
+    def test_parse_manifest_v12_accepts_javascript_on_1_12_fixture(self):
+        path = os.path.join(
+            get_project_root(),
+            "tests",
+            "resources",
+            "manifest",
+            "v12",
+            "jaffle_shop",
+            "manifest_1.12.json",
+        )
+        with open(path, "r", encoding="utf-8") as fp:
+            manifest_dict = yaml.safe_load(fp)
+        parsed = parser.parse_manifest_v12(manifest_dict)
+        macro = parsed.macros["macro.dbt.materialization_function_default"]
+        languages = [language.value for language in macro.supported_languages]
+        assert "javascript" in languages
+        assert macro.config is not None
+        assert macro.config.docs is not None
