@@ -1,1 +1,26 @@
-{\n  "metadata": {\n    "dbt_schema_version": "https://schemas.getdbt.com/dbt/run-results/v6.json",\n    "dbt_version": "2.0.4",\n    "generated_at": "2026-09-18T00:00:00Z",\n    "invocation_id": "00000000-0000-0000-0000-000000000002"\n  },\n  "results": [\n    {\n      "status": "success",\n      "timing": [],\n      "thread_id": "main",\n      "execution_time": 0.1,\n      "adapter_response": {},\n      "message": null,\n      "failures": null,\n      "unique_id": "model.compat.example",\n      "compiled": true,\n      "compiled_code": "select 1 as id",\n      "relation_name": "compat.example",\n      "static_analysis_off_reason": "configuredoff"\n    }\n  ],\n  "elapsed_time": 0.1,\n  "args": {}\n}\n
+{
+  "metadata": {
+    "dbt_schema_version": "https://schemas.getdbt.com/dbt/run-results/v6.json",
+    "dbt_version": "2.0.4",
+    "generated_at": "2026-09-18T00:00:00Z",
+    "invocation_id": "00000000-0000-0000-0000-000000000002"
+  },
+  "results": [
+    {
+      "status": "success",
+      "timing": [],
+      "thread_id": "main",
+      "execution_time": 0.1,
+      "adapter_response": {},
+      "message": null,
+      "failures": null,
+      "unique_id": "model.compat.example",
+      "compiled": true,
+      "compiled_code": "select 1 as id",
+      "relation_name": "compat.example",
+      "static_analysis_off_reason": "configuredoff"
+    }
+  ],
+  "elapsed_time": 0.1,
+  "args": {}
+}
