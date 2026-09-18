@@ -1,0 +1,19 @@
+name: "dbt_v2_canary"
+version: "1.0"
+config-version: 2
+
+profile: "dbt_v2_canary"
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+
+clean-targets:
+  - "target"
+
+models:
+  dbt_v2_canary:
+    +materialized: table
+
+on-run-start:
+  - "{{ log('dbt v2 compatibility canary', info=True) }}"
