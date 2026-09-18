@@ -441,42 +441,41 @@ class TestRunResultsParser:
         )
 
 
-# TODO add fixtures of sources.json
-# @pytest.mark.parametrize("version", ["v1", "v2", "v3"])
-# class TestSourcesParser:
-#     def test_parse_sources(self, version):
-#         path = os.path.join(
-#             get_project_root(),
-#             "tests",
-#             "resources",
-#             version,
-#             "jaffle_shop",
-#             "sources.json",
-#         )
-#         with open(path, "r", encoding="utf-8") as fp:
-#             sources_dict = yaml.safe_load(fp)
-#             sources_obj = parser.parse_sources(sources_dict)
-#         assert (
-#             sources_obj.metadata.dbt_schema_version
-#             == f"https://schemas.getdbt.com/dbt/sources/{version}.json"
-#         )
+@pytest.mark.parametrize(
+    "version,path",
+    [
+        (
+            "v3",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "sources",
+                "v3",
+                "jaffle_shop",
+                "sources.json",
+            ),
+        ),
+    ],
+)
+class TestSourcesParser:
+    def test_parse_sources(self, version, path):
+        with open(path, "r", encoding="utf-8") as fp:
+            sources_dict = yaml.safe_load(fp)
+            sources_obj = parser.parse_sources(sources_dict)
+        assert (
+            sources_obj.metadata.dbt_schema_version
+            == f"https://schemas.getdbt.com/dbt/sources/{version}.json"
+        )
 
-#     def test_parse_sources_specific(self, version):
-#         path = os.path.join(
-#             get_project_root(),
-#             "tests",
-#             "resources",
-#             version,
-#             "jaffle_shop",
-#             "sources.json",
-#         )
-#         with open(path, "r", encoding="utf-8") as fp:
-#             sources_dict = yaml.safe_load(fp)
-#             sources_obj = getattr(parser, f"parse_sources_{version}")(sources_dict)
-#         assert (
-#             sources_obj.metadata.dbt_schema_version
-#             == f"https://schemas.getdbt.com/dbt/sources/{version}.json"
-#         )
+    def test_parse_sources_specific(self, version, path):
+        with open(path, "r", encoding="utf-8") as fp:
+            sources_dict = yaml.safe_load(fp)
+            sources_obj = getattr(parser, f"parse_sources_{version}")(sources_dict)
+        assert (
+            sources_obj.metadata.dbt_schema_version
+            == f"https://schemas.getdbt.com/dbt/sources/{version}.json"
+        )
 
 
 class TestFallbackToLatest:

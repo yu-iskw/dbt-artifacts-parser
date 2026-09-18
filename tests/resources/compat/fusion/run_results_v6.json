@@ -1,0 +1,32 @@
+{
+  "metadata": {
+    "dbt_schema_version": "https://schemas.getdbt.com/dbt/run-results/v6.json",
+    "dbt_version": "2.0.0",
+    "generated_at": "2026-01-01T00:00:00.000000Z",
+    "invocation_id": "00000000-0000-0000-0000-000000000003",
+    "env": {}
+  },
+  "results": [
+    {
+      "status": "success",
+      "timing": [],
+      "thread_id": "Thread-1",
+      "execution_time": 0.5,
+      "adapter_response": {"code": "SUCCESS", "rows_affected": 1},
+      "message": "Succeeded",
+      "failures": null,
+      "unique_id": "model.jaffle_shop.customers",
+      "compiled": null,
+      "compiled_code": "select 1 as id",
+      "relation_name": "analytics.customers",
+      "batch_results": null,
+      "static_analysis_off_reason": "config"
+    }
+  ],
+  "elapsed_time": 0.5,
+  "args": {
+    "command": "run",
+    "which": "run",
+    "full_refresh": false
+  }
+}

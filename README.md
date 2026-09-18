@@ -25,9 +25,20 @@ TypeScript users should use [dbt-artifacts-parser-ts](https://github.com/yu-iskw
 > - **To parse dbt 1.9 or later, please migrate your code to pydantic v2.**
 > - **We will reassess version compatibility upon the release of pydantic v3.**
 
+Parser **models are versioned by artifact schema** (`metadata.dbt_schema_version`), not by dbt engine version (`metadata.dbt_version`). dbt 2.x currently emits the same public schema URLs as recent dbt 1.x (`manifest` v12, `run_results` v6, `sources` v3, `catalog` v1).
+
+| Kind of support | What it means |
+|-----------------|---------------|
+| Artifact schema support | Canonical Pydantic models generated from the published JSON schemas |
+| Producer-tested | Committed fixtures (and CI) that parsed successfully for that producer |
+
+dbt 2.x JSON is the same schema family as dbt 1.x. Known Fusion/dbt 2.x wire differences (for example capitalized `sources.json` freshness statuses, Fusion-only extra keys) are handled by a small compatibility layer in `dbt_artifacts_parser/compatibility/` **before** strict validation. `fallback_to_latest=True` is **not** the dbt 2.x path; it only applies when the schema URL itself is newer than this package (for example `manifest/v13`).
+
+This package does **not** parse Fusion Parquet artifacts under `target/private/`, and it does **not** yet parse `freshness.json` (`freshness/v0`).
+
 | Version | Supported dbt Version | Supported pydantic Version |
 |---------|-----------------------|----------------------------|
-|  0.15   | dbt 0.19 to 1.12      | pydantic v2                |
+|  0.15   | dbt 0.19 to 1.12 JSON; dbt 2.x JSON via schema-compatible compatibility rules | pydantic v2                |
 |  0.14   | dbt 0.19 to 1.11      | pydantic v2                |
 |  0.13   | dbt 0.19 to 1.11      | pydantic v2                |
 |  0.12   | dbt 0.19 to 1.11      | pydantic v2                |

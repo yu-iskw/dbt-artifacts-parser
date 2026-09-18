@@ -31,6 +31,7 @@ Since the Pydantic models in this package are generated from dbt artifacts, we e
 1. We do not manually modify the generated Pydantic models.
 2. We utilize dbt artifacts from stable versions of dbt.
 3. We support only those Pydantic models that can be generated from publicly available JSON schemas of dbt artifacts.
+4. Same-schema producer differences (for example dbt 2.x/Fusion JSON that still declares `manifest/v12`) belong in `dbt_artifacts_parser/compatibility/`, not in generated models and not in `fallback_to_latest`. Each rule must name the artifact, schema version, producer, wire difference, normalization, fixture, and a removal condition. Unknown extras must still fail validation. If the compatibility layer starts describing an alternate schema, stop and wait for an official schema change instead.
 
 First, we don't manually modify the generated Pydantic models, because it is quite hard to maintain changes on the generated Pydantic models.
 For instance, we have to re-generate all pydantic models, if we upgrade pydantic major version.
