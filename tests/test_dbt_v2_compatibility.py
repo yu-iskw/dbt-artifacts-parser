@@ -6,6 +6,7 @@ import pytest
 from pydantic import ValidationError
 
 from dbt_artifacts_parser import parser
+from dbt_artifacts_parser.compatibility.manifest import normalize_manifest_v12
 from dbt_artifacts_parser.parsers.run_results.run_results_v6 import RunResultsV6
 from dbt_artifacts_parser.utils import get_project_root
 
@@ -97,3 +98,43 @@ def test_run_results_v6_stays_strict_for_unknown_fields():
 
     with pytest.raises(ValidationError):
         parser.parse_run_results(run_results)
+
+
+def test_manifest_v12_normalizer_is_narrow():
+    manifest = {
+        "nodes": {
+            "model.compat.example": {
+                "classifiers": [],
+                "static_analysis_off_reason": "configuredoff",
+                "depends_on": {
+                    "nodes": [],
+                    "nodes_with_ref_location": [],
+                },
+                "unknown_future_field": "must-survive-normalization",
+            }
+        },
+        "unit_tests": {
+            "unit_test.compat.example": {
+                "checksum": {"name": "none", "checksum": ""},
+                "database": "db",
+                "tested_node_unique_id": "model.compat.example",
+                "unknown_future_field": "must-survive-normalization",
+            }
+        },
+    }
+    original = copy.deepcopy(manifest)
+
+    normalized = normalize_manifest_v12(manifest)
+
+    assert manifest == original
+    node = normalized["nodes"]["model.compat.example"]
+    assert "classifiers" not in node
+    assert "static_analysis_off_reason" not in node
+    assert "nodes_with_ref_location" not in node["depends_on"]
+    assert node["unknown_future_field"] == "must-survive-normalization"
+
+    unit_test = normalized["unit_tests"]["unit_test.compat.example"]
+    assert unit_test["checksum"] == ""
+    assert "database" not in unit_test
+    assert "tested_node_unique_id" not in unit_test
+    assert unit_test["unknown_future_field"] == "must-survive-normalization"
