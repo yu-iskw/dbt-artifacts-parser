@@ -14,6 +14,14 @@ _RESOURCE_COLLECTIONS = (
     "functions",
 )
 
+_SEED_V2_EXTRA_FIELDS = {
+    "contract",
+    "functions",
+    "metrics",
+    "refs",
+    "sources",
+}
+
 _UNIT_TEST_V2_EXTRA_FIELDS = {
     "_event_status",
     "_pre_injected_sql",
@@ -50,6 +58,12 @@ def _normalize_resource_item(item: Dict[str, Any]) -> None:
     depends_on = item.get("depends_on")
     if isinstance(depends_on, dict):
         depends_on.pop("nodes_with_ref_location", None)
+
+    if item.get("resource_type") == "seed":
+        for field_name in _SEED_V2_EXTRA_FIELDS:
+            item.pop(field_name, None)
+        if isinstance(depends_on, dict):
+            depends_on.pop("nodes", None)
 
 
 def normalize_manifest_v12(manifest: Dict[str, Any]) -> Dict[str, Any]:
