@@ -16,6 +16,7 @@
 #
 from typing import Union
 
+from dbt_artifacts_parser.compatibility.manifest import normalize_manifest_v12
 from dbt_artifacts_parser.compatibility.run_results import RunResultsV6Compat
 from dbt_artifacts_parser.compatibility.sources import normalize_sources_v3
 from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
@@ -142,7 +143,7 @@ def parse_manifest(
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V11.value.dbt_schema_version:
         return ManifestV11(**manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V12.value.dbt_schema_version:
-        return ManifestV12(**manifest)
+        return ManifestV12(**normalize_manifest_v12(manifest))
     if fallback_to_latest:
         parsed = try_parse_fallback_to_latest(
             manifest, dbt_schema_version, "manifest", ManifestV12
@@ -244,7 +245,7 @@ def parse_manifest_v12(manifest: dict) -> ManifestV12:
     """Parse manifest.json ver.12"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V12.value.dbt_schema_version:
-        return ManifestV12(**manifest)
+        return ManifestV12(**normalize_manifest_v12(manifest))
     raise ValueError("Not a manifest.json v12")
 
 
