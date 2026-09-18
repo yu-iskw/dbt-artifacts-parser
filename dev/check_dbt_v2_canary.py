@@ -54,8 +54,7 @@ def main(artifact_dir: Path) -> None:
     run_results = parser.parse_run_results(raw_run_results)
     assert run_results.results
     assert any(
-        result.static_analysis_off_reason is not None
-        for result in run_results.results
+        result.static_analysis_off_reason is not None for result in run_results.results
     ), "expected a dbt v2 static_analysis_off_reason result field"
 
     raw_sources = load_json(artifact_dir / "sources.json")
