@@ -1,0 +1,8 @@
+version: 2
+
+macros:
+  - name: compat_macro
+    arguments:
+      - name: value
+        type: string
+        description: Value returned by the compatibility macro.
