@@ -1,1 +1,20 @@
-"""Compatibility overlays for run_results.json producer differences."""\n\nfrom typing import List, Optional\n\nfrom dbt_artifacts_parser.parsers.run_results.run_results_v6 import Result, RunResultsV6\n\n\nclass RunResultV6Compat(Result):\n    """run-results/v6 result plus fields emitted by dbt v2/Fusion."""\n\n    static_analysis_off_reason: Optional[str] = None\n\n\nclass RunResultsV6Compat(RunResultsV6):\n    """run-results/v6 artifact with dbt v2-compatible result rows."""\n\n    results: List[RunResultV6Compat]\n
+"""Compatibility overlays for run_results.json producer differences."""
+
+from typing import List, Optional
+
+from dbt_artifacts_parser.parsers.run_results.run_results_v6 import (
+    Result,
+    RunResultsV6,
+)
+
+
+class RunResultV6Compat(Result):
+    """run-results/v6 result plus fields emitted by dbt v2/Fusion."""
+
+    static_analysis_off_reason: Optional[str] = None
+
+
+class RunResultsV6Compat(RunResultsV6):
+    """run-results/v6 artifact with dbt v2-compatible result rows."""
+
+    results: List[RunResultV6Compat]
