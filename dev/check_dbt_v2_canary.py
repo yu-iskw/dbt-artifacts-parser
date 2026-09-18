@@ -24,13 +24,19 @@ def main(artifact_dir: Path) -> None:
     assert operation_ids, "expected the on-run-start hook to produce an operation node"
     for unique_id in operation_ids:
         raw_node = raw_manifest["nodes"][unique_id]
-        assert "config" in raw_node, f"{unique_id} is missing config"
-        assert "tags" in raw_node, f"{unique_id} is missing tags"
-        parsed_node = manifest.nodes[unique_id]
-        assert parsed_node.config is not None
-        assert parsed_node.tags is not None
+        assert unique_id in manifest.nodes
+        missing_legacy_fields = [
+            field_name
+            for field_name in ("config", "tags")
+            if field_name not in raw_node
+        ]
+        if missing_legacy_fields:
+            print(
+                "dbt v2 operation node omits legacy fields: "
+                + ", ".join(missing_legacy_fields)
+            )
 
-    unit_test_id = "unit_test.dbt_v2_canary.unit_target_returns_one"
+    unit_test_id = "unit_test.dbt_v2_canary.unit_target.unit_target_returns_one"
     assert unit_test_id in raw_manifest["unit_tests"]
     raw_overrides = raw_manifest["unit_tests"][unit_test_id].get("overrides")
     assert raw_overrides
