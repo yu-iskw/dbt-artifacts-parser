@@ -1,0 +1,70 @@
+name: dbt v2 artifact compatibility
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 7 * * 1"
+  pull_request:
+    paths:
+      - "dbt_artifacts_parser/compatibility/**"
+      - "dbt_artifacts_parser/parser.py"
+      - "tests/dbt_v2_canary/**"
+      - "tests/test_dbt_v2_compatibility.py"
+      - ".github/workflows/dbt_v2_compatibility.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  compatibility:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dbt-version:
+          - "2.0.0"
+          - "latest-2.0"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install parser and dbt
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+          if [[ "${{ matrix.dbt-version }}" == "latest-2.0" ]]; then
+            python -m pip install "dbt>=2.0,<2.1"
+          else
+            python -m pip install "dbt==${{ matrix.dbt-version }}"
+          fi
+          dbt --version
+
+      - name: Generate dbt v2 artifacts
+        shell: bash
+        working-directory: tests/dbt_v2_canary
+        run: |
+          rm -rf target db.db canary_artifacts
+          mkdir -p canary_artifacts
+
+          dbt parse --profiles-dir .
+          cp target/manifest.json canary_artifacts/manifest.json
+
+          dbt seed --profiles-dir .
+          dbt run --profiles-dir . --static-analysis off
+          cp target/run_results.json canary_artifacts/run_results.json
+
+          dbt source freshness --profiles-dir . --select source:raw.fresh_events
+          cp target/sources.json canary_artifacts/sources.json
+
+          dbt compile --profiles-dir . --write-catalog
+          cp target/catalog.json canary_artifacts/catalog.json
+
+      - name: Validate emitted artifacts
+        run: |
+          python dev/check_dbt_v2_canary.py tests/dbt_v2_canary/canary_artifacts
