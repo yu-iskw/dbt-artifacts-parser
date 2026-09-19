@@ -27,7 +27,7 @@ REF="1.latest"
 RESOURCES_DIR="${MODULE_ROOT}/dbt_artifacts_parser/resources"
 
 # Artifact types and version lists. Must stay in sync with dev/generate_parser_classes.sh.
-ARTIFACT_TYPES=(catalog manifest run-results sources)
+ARTIFACT_TYPES=(catalog manifest run-results sources freshness)
 # shellcheck disable=SC2034
 CATALOG_VERSIONS=(v1)
 # shellcheck disable=SC2034
@@ -36,15 +36,22 @@ MANIFEST_VERSIONS=(v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12)
 RUN_RESULTS_VERSIONS=(v1 v2 v3 v4 v5 v6)
 # shellcheck disable=SC2034
 SOURCES_VERSIONS=(v1 v2 v3)
+# shellcheck disable=SC2034
+FRESHNESS_VERSIONS=(v0)
+# freshness/v0 is published on schemas.getdbt.com, not dbt-core 1.latest.
+SCHEMA_REGISTRY_BASE_URL="https://raw.githubusercontent.com/dbt-labs/schemas.getdbt.com"
+SCHEMA_REGISTRY_REF="main"
 
 usage() {
 	echo "Usage: $0 [--ref REF] [artifact_type] [version ...]"
-	echo "  Download dbt artifact JSON schemas from dbt-labs/dbt-core into this project's resources."
+	echo "  Download dbt artifact JSON schemas into this project's resources."
+	echo "  Core 1.x types come from dbt-labs/dbt-core; freshness comes from dbt-labs/schemas.getdbt.com."
 	echo "  With no arguments (after --ref), downloads all artifact types and versions."
 	echo ""
-	echo "  --ref REF       Git ref: branch, tag, or commit (default: 1.latest)."
+	echo "  --ref REF       Git ref for dbt-core downloads: branch, tag, or commit (default: 1.latest)."
 	echo "                  For releases, pass a stable tag (e.g. v1.11.12), not a pre-release."
-	echo "  artifact_type   one of: catalog, manifest, run-results, sources"
+	echo "                  Ignored for freshness (always fetched from schemas.getdbt.com main)."
+	echo "  artifact_type   one of: catalog, manifest, run-results, sources, freshness"
 	echo "  version         optional list of versions (e.g. v1 v7). If omitted, all versions for the type are downloaded."
 	exit "$1"
 }
@@ -74,6 +81,11 @@ get_artifact_metadata() {
 		file_stem="sources"
 		default_versions_array_name="SOURCES_VERSIONS"
 		;;
+	freshness)
+		resource_dir="freshness"
+		file_stem="freshness"
+		default_versions_array_name="FRESHNESS_VERSIONS"
+		;;
 	*)
 		echo "Invalid artifact type: ${type}" >&2
 		usage 1
@@ -85,7 +97,11 @@ download_one() {
 	local artifact_type="$1"
 	local ver="$2"
 	get_artifact_metadata "${artifact_type}"
-	url="${BASE_URL}/${REF}/schemas/dbt/${resource_dir}/${ver}.json"
+	if [[ "${artifact_type}" == "freshness" ]]; then
+		url="${SCHEMA_REGISTRY_BASE_URL}/${SCHEMA_REGISTRY_REF}/dbt/${resource_dir}/${ver}.json"
+	else
+		url="${BASE_URL}/${REF}/schemas/dbt/${resource_dir}/${ver}.json"
+	fi
 	dest="${RESOURCES_DIR}/${resource_dir}/${file_stem}_${ver}.json"
 	mkdir -p "${RESOURCES_DIR}/${resource_dir}"
 	curl -f -S -L -o "${dest}" "${url}"

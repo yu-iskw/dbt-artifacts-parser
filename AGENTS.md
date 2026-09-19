@@ -4,7 +4,7 @@ This file is the single source of project expectations for Codex, Cursor, and ot
 
 ## Project overview
 
-dbt-artifacts-parser is a Python package that parses dbt artifacts (catalog, manifest, run-results, sources) as Python objects. Pydantic models are generated from the official dbt artifact JSON schemas (from dbt-labs/dbt-core). We do not manually edit generated parser models; we use dbt artifacts from stable dbt versions only; we support only artifacts whose JSON schemas are publicly available.
+dbt-artifacts-parser is a Python package that parses dbt artifacts (catalog, manifest, run-results, sources, freshness) as Python objects. Pydantic models are generated from the official dbt artifact JSON schemas. We do not manually edit generated parser models; we use dbt artifacts from stable dbt versions only; we support only artifacts whose JSON schemas are publicly available.
 
 See [README.md](README.md) for usage and [CONTRIBUTING.md](CONTRIBUTING.md) for full contribution and implementation policy.
 
@@ -29,7 +29,9 @@ When updating or adding parsers (syncing with dbt-core, regenerating Pydantic mo
 1. **Download first:** `bash dev/download_dbt_schemas.sh [--ref REF] [artifact_type] [version ...]`
 2. **Then generate:** `bash dev/generate_parser_classes.sh [artifact_type] [version ...]`
 
-Artifact types: `catalog`, `manifest`, `run-results`, `sources`. Omit arguments to process all types and versions. Default download ref is `1.latest` (dbt Core v1; `main` no longer hosts `schemas/dbt`). For releases, pass an explicit stable tag (e.g. `--ref v1.11.12`). If the user specifies a ref, pass `--ref REF` only to the download script.
+Artifact types: `catalog`, `manifest`, `run-results`, `sources`, `freshness`. Omit arguments to process all types and versions. Default download ref is `1.latest` (dbt Core v1; `main` no longer hosts `schemas/dbt`). For Core 1.x releases, pass an explicit stable tag (e.g. `--ref v1.11.12`). If the user specifies a ref, pass `--ref REF` only to the download script. `freshness/v0` is fetched from [dbt-labs/schemas.getdbt.com](https://github.com/dbt-labs/schemas.getdbt.com); `--ref` does not apply to it.
+
+A new dbt executable does not require a new generated parser unless it introduces a new artifact type or a new `dbt_schema_version`. dbt 2.x `freshness.json` is `freshness/v0`. dbt 2.x files that still declare `manifest/v12`, `run-results/v6`, `catalog/v1`, or Core-conformant `sources/v3` reuse the existing classes. dbt 2.0's legacy `sources.json` sidecar is not a conformant `sources/v3` document (PascalCase status); parse `freshness.json` instead.
 
 A project skill **dbt-parser-refresh** encodes this workflow in detail. Skills live in `.claude/skills/` (Cursor and Claude Code). Codex users: this repo provides `.agents/skills` as a symlink to `.claude/skills`, so the same skill is available there.
 

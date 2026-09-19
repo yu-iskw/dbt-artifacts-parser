@@ -35,13 +35,14 @@ from dbt_artifacts_parser import parser
 
 logger = logging.getLogger(__name__)
 
-_KINDS = ("catalog", "manifest", "run_results")
+_KINDS = ("catalog", "manifest", "run_results", "freshness")
 _VERSION_DIR = re.compile(r"^v\d+$")
 
 GENERIC_PARSER = {
     "catalog": parser.parse_catalog,
     "manifest": parser.parse_manifest,
     "run_results": parser.parse_run_results,
+    "freshness": parser.parse_freshness,
 }
 
 
@@ -58,6 +59,8 @@ def specific_parser_name(kind: str, version: str) -> str:
         return f"parse_manifest_{version}"
     if kind == "run_results":
         return f"parse_run_results_{version}"
+    if kind == "freshness":
+        return f"parse_freshness_{version}"
     raise ValueError(f"unknown kind: {kind}")
 
 

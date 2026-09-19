@@ -17,6 +17,7 @@
 from typing import Union
 
 from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
+from dbt_artifacts_parser.parsers.freshness.freshness_v0 import FreshnessV0
 from dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
 from dbt_artifacts_parser.parsers.manifest.manifest_v2 import ManifestV2
 from dbt_artifacts_parser.parsers.manifest.manifest_v3 import ManifestV3
@@ -390,3 +391,39 @@ def parse_sources_v3(sources: dict) -> SourcesV3:
     if dbt_schema_version == ArtifactTypes.SOURCES_V3.value.dbt_schema_version:
         return SourcesV3(**sources)
     raise ValueError("Not a sources.json v3")
+
+
+#
+# freshness
+#
+def parse_freshness(
+    freshness: dict, *, fallback_to_latest: bool = False
+) -> Union[FreshnessV0]:
+    """Parse freshness.json
+
+    Args:
+        freshness: A dict of freshness.json
+        fallback_to_latest: If True and the schema version is newer than
+            supported, parse as the latest known schema (best-effort).
+
+    Returns:
+        Union[FreshnessV0]
+    """
+    dbt_schema_version = get_dbt_schema_version(artifact_json=freshness)
+    if dbt_schema_version == ArtifactTypes.FRESHNESS_V0.value.dbt_schema_version:
+        return FreshnessV0(**freshness)
+    if fallback_to_latest:
+        parsed = try_parse_fallback_to_latest(
+            freshness, dbt_schema_version, "freshness", FreshnessV0
+        )
+        if parsed is not None:
+            return parsed
+    raise ValueError("Not a freshness.json")
+
+
+def parse_freshness_v0(freshness: dict) -> FreshnessV0:
+    """Parse freshness.json v0"""
+    dbt_schema_version = get_dbt_schema_version(artifact_json=freshness)
+    if dbt_schema_version == ArtifactTypes.FRESHNESS_V0.value.dbt_schema_version:
+        return FreshnessV0(**freshness)
+    raise ValueError("Not a freshness.json v0")

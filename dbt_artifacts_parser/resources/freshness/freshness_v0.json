@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "title": "FreshnessExecutionResultArtifact",
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "title": "FreshnessResultsMetadata",
+      "properties": {
+        "dbt_schema_version": {
+          "type": "string"
+        },
+        "dbt_version": {
+          "type": "string"
+        },
+        "generated_at": {
+          "type": "string"
+        },
+        "invocation_id": {
+          "type": "string"
+        },
+        "invocation_started_at": {
+          "type": "string"
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "propertyNames": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "dbt_schema_version",
+        "dbt_version",
+        "generated_at",
+        "invocation_id"
+      ]
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "title": "FreshnessResultsNode",
+        "properties": {
+          "unique_id": {
+            "type": "string"
+          },
+          "resource_type": {
+            "type": "string"
+          },
+          "max_loaded_at": {
+            "type": "string"
+          },
+          "snapshotted_at": {
+            "type": "string"
+          },
+          "max_loaded_at_time_ago_in_s": {
+            "type": "number"
+          },
+          "status": {
+            "enum": [
+              "Pass",
+              "Warn",
+              "Error"
+            ]
+          },
+          "criteria": {
+            "type": "object",
+            "title": "FreshnessDefinition",
+            "properties": {
+              "error_after": {
+                "type": "object",
+                "title": "FreshnessRules",
+                "properties": {
+                  "count": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null
+                  },
+                  "period": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "second",
+                          "minute",
+                          "hour",
+                          "day"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "count",
+                  "period"
+                ]
+              },
+              "warn_after": {
+                "type": "object",
+                "title": "FreshnessRules",
+                "properties": {
+                  "count": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null
+                  },
+                  "period": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "second",
+                          "minute",
+                          "hour",
+                          "day"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "count",
+                  "period"
+                ]
+              },
+              "filter": {
+                "type": "string"
+              },
+              "loaded_at_field": {
+                "type": "string"
+              },
+              "loaded_at_query": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "error_after",
+              "warn_after"
+            ]
+          },
+          "adapter_response": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "type": "string"
+            }
+          },
+          "timing": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "title": "TimingInfo",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "started_at": {
+                  "type": "string"
+                },
+                "completed_at": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "name"
+              ]
+            }
+          },
+          "thread_id": {
+            "type": "string"
+          },
+          "execution_time": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "unique_id",
+          "max_loaded_at",
+          "snapshotted_at",
+          "max_loaded_at_time_ago_in_s",
+          "status",
+          "criteria",
+          "adapter_response",
+          "timing",
+          "thread_id",
+          "execution_time"
+        ]
+      }
+    },
+    "elapsed_time": {
+      "type": "number"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "metadata",
+    "results",
+    "elapsed_time"
+  ],
+  "$id": "https://schemas.getdbt.com/dbt/freshness/v0.json"
+}
