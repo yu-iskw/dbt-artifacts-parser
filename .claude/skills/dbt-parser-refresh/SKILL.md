@@ -1,6 +1,6 @@
 ---
 name: dbt-parser-refresh
-description: Refreshes dbt artifact schemas from dbt-labs/dbt-core and regenerates Pydantic parser classes. Use when the user asks to update parsers, sync with upstream, download dbt schemas, or regenerate parser models.
+description: Refreshes dbt artifact schemas from dbt-labs/dbt-core (and freshness from schemas.getdbt.com) and regenerates Pydantic parser classes. Use when the user asks to update parsers, sync with upstream, download dbt schemas, or regenerate parser models.
 ---
 
 # dbt Parser Refresh
@@ -19,9 +19,10 @@ Activate this skill when the user says or implies:
 - Run all commands from the **repository root**.
 - **Download:** `bash dev/download_dbt_schemas.sh [--ref REF] [artifact_type] [version ...]`
 - **Generate:** `bash dev/generate_parser_classes.sh [artifact_type] [version ...]`
-- **Artifact types:** `catalog`, `manifest`, `run-results`, `sources`
-- **Versions:** e.g. `v1`, `v7`. Omit args to process all types and versions.
-- **Default ref:** `1.latest` (dbt Core v1 schema tree). Prefer an explicit **stable tag** for releases (e.g. `--ref v1.11.12`). Do not use pre-release refs unless the user explicitly asks.
+- **Artifact types:** `catalog`, `manifest`, `run-results`, `sources`, `freshness`
+- **Versions:** e.g. `v1`, `v7`, `v0`. Omit args to process all types and versions.
+- **Default ref:** `1.latest` (dbt Core v1 schema tree for catalog/manifest/run-results/sources). Prefer an explicit **stable tag** for Core 1.x releases (e.g. `--ref v1.11.12`). Do not use pre-release refs unless the user explicitly asks.
+- **freshness:** downloaded from `dbt-labs/schemas.getdbt.com` (`main/dbt/freshness/v0.json`). `--ref` does not apply.
 
 ## Order rule
 
@@ -52,7 +53,7 @@ When schemas are already present and the user only wants to regenerate code (e.g
 
 ## Passing through user intent
 
-- **Ref:** If the user specifies a ref (e.g. `1.latest`, a stable tag like `v1.11.12`, or a branch), pass `--ref REF` only to the download script. If unspecified, the download script defaults to `1.latest`.
+- **Ref:** If the user specifies a ref (e.g. `1.latest`, a stable tag like `v1.11.12`, or a branch), pass `--ref REF` only to the download script. If unspecified, the download script defaults to `1.latest`. `--ref` is ignored when downloading `freshness`.
 - **Scope:** If they specify an artifact or version (e.g. "just manifest v7"), use the same artifact_type and version(s) for both scripts when running both.
 
 ## Example
@@ -69,4 +70,11 @@ Refresh only manifest v7:
 ```bash
 bash dev/download_dbt_schemas.sh --ref v1.11.12 manifest v7
 bash dev/generate_parser_classes.sh manifest v7
+```
+
+Refresh only freshness v0:
+
+```bash
+bash dev/download_dbt_schemas.sh freshness v0
+bash dev/generate_parser_classes.sh freshness v0
 ```

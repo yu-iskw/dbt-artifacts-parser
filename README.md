@@ -9,9 +9,13 @@
 # dbt-artifacts-parser
 
 This is a dbt artifacts parser in python.
-It enables us to deal with `catalog.json`, `manifest.json`, `run-results.json` and `sources.json` as python objects.
+It enables us to deal with `catalog.json`, `manifest.json`, `run-results.json`, `sources.json` and `freshness.json` as python objects.
 
 This package is primarily designed for dbt-core, enabling seamless interaction with dbt artifacts as Python objects. While dbt Cloud provides additional artifact types beyond those of dbt-core, this package does not offer comprehensive support for them.
+
+Parser selection uses `metadata.dbt_schema_version`, not `metadata.dbt_version`. A new dbt executable does not require a new generated parser unless it introduces a new artifact type or a new schema version. dbt 2.x JSON that still declares `manifest/v12`, `run-results/v6`, `catalog/v1`, or `sources/v3` is parsed with the existing classes.
+
+dbt 2.0 writes `freshness.json` (`freshness/v0`) from `dbt freshness`. It also writes a legacy `sources.json` sidecar that still claims `sources/v3` but uses PascalCase status values (`Pass` / `Warn` / `Error`). That sidecar does not validate as Core `SourcesV3`; parse `freshness.json` with `parse_freshness()` instead.
 
 ## Related packages
 
@@ -27,6 +31,7 @@ TypeScript users should use [dbt-artifacts-parser-ts](https://github.com/yu-iskw
 
 | Version | Supported dbt Version | Supported pydantic Version |
 |---------|-----------------------|----------------------------|
+|  0.16   | dbt 0.19 to 1.12, plus dbt 2.x JSON that reuses those schema versions, and freshness/v0 | pydantic v2 |
 |  0.15   | dbt 0.19 to 1.12      | pydantic v2                |
 |  0.14   | dbt 0.19 to 1.11      | pydantic v2                |
 |  0.13   | dbt 0.19 to 1.11      | pydantic v2                |
@@ -84,6 +89,10 @@ Those are the classes to parse dbt artifacts.
 - [SourcesV1](dbt_artifacts_parser/parsers/sources/sources_v1.py) for sources.json v1
 - [SourcesV2](dbt_artifacts_parser/parsers/sources/sources_v2.py) for sources.json v2
 - [SourcesV3](dbt_artifacts_parser/parsers/sources/sources_v3.py) for sources.json v3
+
+### Freshness
+
+- [FreshnessV0](dbt_artifacts_parser/parsers/freshness/freshness_v0.py) for freshness.json v0
 
 ## Examples
 
@@ -297,6 +306,26 @@ from dbt_artifacts_parser.parser import parse_sources_v3
 with open("path/to/sources.json", "r") as fp:
     sources_dict = json.load(fp)
     sources_obj = parse_sources_v3(sources=sources_dict)
+```
+
+### Parse freshness.json
+
+```python
+import json
+
+# parse any version of freshness.json
+from dbt_artifacts_parser.parser import parse_freshness
+
+with open("path/to/freshness.json", "r") as fp:
+    freshness_dict = json.load(fp)
+    freshness_obj = parse_freshness(freshness=freshness_dict)
+
+# parse freshness.json v0
+from dbt_artifacts_parser.parser import parse_freshness_v0
+
+with open("path/to/freshness.json", "r") as fp:
+    freshness_dict = json.load(fp)
+    freshness_obj = parse_freshness_v0(freshness=freshness_dict)
 ```
 
 ## Contributors

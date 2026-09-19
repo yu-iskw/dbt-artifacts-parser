@@ -21,6 +21,7 @@ import os
 import pytest
 
 from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
+from dbt_artifacts_parser.parsers.freshness.freshness_v0 import FreshnessV0
 from dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
 from dbt_artifacts_parser.parsers.manifest.manifest_v2 import ManifestV2
 from dbt_artifacts_parser.parsers.manifest.manifest_v3 import ManifestV3
@@ -133,6 +134,7 @@ class TestDbtUtils:
         [
             # v1
             (ArtifactTypes.CATALOG_V1, CatalogV1),
+            (ArtifactTypes.FRESHNESS_V0, FreshnessV0),
             (ArtifactTypes.MANIFEST_V1, ManifestV1),
             (ArtifactTypes.RUN_RESULTS_V1, RunResultsV1),
             (ArtifactTypes.SOURCES_V1, SourcesV1),
