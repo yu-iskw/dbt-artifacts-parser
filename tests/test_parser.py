@@ -22,6 +22,7 @@ from pydantic import ValidationError
 
 from dbt_artifacts_parser import parser
 from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
+from dbt_artifacts_parser.parsers.freshness.freshness_v0 import FreshnessV0
 from dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
 from dbt_artifacts_parser.parsers.run_results.run_results_v6 import RunResultsV6
 from dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
@@ -441,42 +442,133 @@ class TestRunResultsParser:
         )
 
 
-# TODO add fixtures of sources.json
-# @pytest.mark.parametrize("version", ["v1", "v2", "v3"])
-# class TestSourcesParser:
-#     def test_parse_sources(self, version):
-#         path = os.path.join(
-#             get_project_root(),
-#             "tests",
-#             "resources",
-#             version,
-#             "jaffle_shop",
-#             "sources.json",
-#         )
-#         with open(path, "r", encoding="utf-8") as fp:
-#             sources_dict = yaml.safe_load(fp)
-#             sources_obj = parser.parse_sources(sources_dict)
-#         assert (
-#             sources_obj.metadata.dbt_schema_version
-#             == f"https://schemas.getdbt.com/dbt/sources/{version}.json"
-#         )
+class TestDbtV2Artifacts:
+    """dbt v2 still uses classic schema majors plus freshness v0."""
 
-#     def test_parse_sources_specific(self, version):
-#         path = os.path.join(
-#             get_project_root(),
-#             "tests",
-#             "resources",
-#             version,
-#             "jaffle_shop",
-#             "sources.json",
-#         )
-#         with open(path, "r", encoding="utf-8") as fp:
-#             sources_dict = yaml.safe_load(fp)
-#             sources_obj = getattr(parser, f"parse_sources_{version}")(sources_dict)
-#         assert (
-#             sources_obj.metadata.dbt_schema_version
-#             == f"https://schemas.getdbt.com/dbt/sources/{version}.json"
-#         )
+    def test_parse_manifest_v2(self):
+        path = os.path.join(
+            get_project_root(),
+            "tests",
+            "resources",
+            "manifest",
+            "v12",
+            "jaffle_shop",
+            "manifest_v2.json",
+        )
+        with open(path, "r", encoding="utf-8") as fp:
+            manifest_dict = yaml.safe_load(fp)
+        with pytest.warns(UserWarning, match="Stripped unknown fields"):
+            manifest_obj = parser.parse_manifest(manifest_dict)
+        assert isinstance(manifest_obj, ManifestV12)
+        assert (
+            manifest_obj.metadata.dbt_schema_version
+            == "https://schemas.getdbt.com/dbt/manifest/v12.json"
+        )
+        assert manifest_obj.metadata.dbt_version.startswith("2.")
+        # classifiers is present on the raw 2.0.6 fixture but not in published v12.
+        first_node_id = next(iter(manifest_dict["nodes"]))
+        assert "classifiers" in manifest_dict["nodes"][first_node_id]
+        assert "classifiers" not in manifest_obj.nodes[first_node_id].model_dump()
+
+    def test_parse_catalog_v2(self):
+        path = os.path.join(
+            get_project_root(),
+            "tests",
+            "resources",
+            "catalog",
+            "v1",
+            "jaffle_shop",
+            "catalog_v2.json",
+        )
+        with open(path, "r", encoding="utf-8") as fp:
+            catalog_dict = yaml.safe_load(fp)
+        catalog_obj = parser.parse_catalog(catalog_dict)
+        assert isinstance(catalog_obj, CatalogV1)
+        assert (
+            catalog_obj.metadata.dbt_schema_version
+            == "https://schemas.getdbt.com/dbt/catalog/v1.json"
+        )
+        assert catalog_obj.metadata.dbt_version.startswith("2.")
+
+    def test_parse_run_results_v2(self):
+        path = os.path.join(
+            get_project_root(),
+            "tests",
+            "resources",
+            "run_results",
+            "v6",
+            "jaffle_shop",
+            "run_results_v2.json",
+        )
+        with open(path, "r", encoding="utf-8") as fp:
+            run_results_dict = yaml.safe_load(fp)
+        run_results_obj = parser.parse_run_results(run_results_dict)
+        assert isinstance(run_results_obj, RunResultsV6)
+        assert (
+            run_results_obj.metadata.dbt_schema_version
+            == "https://schemas.getdbt.com/dbt/run-results/v6.json"
+        )
+        assert run_results_obj.metadata.dbt_version.startswith("2.")
+
+    def test_parse_sources_v2(self):
+        path = os.path.join(
+            get_project_root(),
+            "tests",
+            "resources",
+            "sources",
+            "v3",
+            "jaffle_shop",
+            "sources_v2.json",
+        )
+        with open(path, "r", encoding="utf-8") as fp:
+            sources_dict = yaml.safe_load(fp)
+        assert sources_dict["results"][0]["status"] == "Pass"
+        sources_obj = parser.parse_sources(sources_dict)
+        assert isinstance(sources_obj, SourcesV3)
+        assert (
+            sources_obj.metadata.dbt_schema_version
+            == "https://schemas.getdbt.com/dbt/sources/v3.json"
+        )
+        assert sources_obj.metadata.dbt_version.startswith("2.")
+        assert sources_obj.results
+        assert sources_obj.results[0].status.value == "pass"
+
+    def test_parse_freshness_v2(self):
+        path = os.path.join(
+            get_project_root(),
+            "tests",
+            "resources",
+            "freshness",
+            "v0",
+            "jaffle_shop",
+            "freshness_v2.json",
+        )
+        with open(path, "r", encoding="utf-8") as fp:
+            freshness_dict = yaml.safe_load(fp)
+        freshness_obj = parser.parse_freshness(freshness_dict)
+        assert isinstance(freshness_obj, FreshnessV0)
+        assert (
+            freshness_obj.metadata.dbt_schema_version
+            == "https://schemas.getdbt.com/dbt/freshness/v0.json"
+        )
+        assert freshness_obj.metadata.dbt_version.startswith("2.")
+        assert freshness_obj.results
+        assert freshness_obj.results[0].status.value == "Pass"
+
+    def test_parse_freshness_v0_specific(self):
+        path = os.path.join(
+            get_project_root(),
+            "tests",
+            "resources",
+            "freshness",
+            "v0",
+            "jaffle_shop",
+            "freshness_v2.json",
+        )
+        with open(path, "r", encoding="utf-8") as fp:
+            freshness_dict = yaml.safe_load(fp)
+        freshness_obj = parser.parse_freshness_v0(freshness_dict)
+        assert isinstance(freshness_obj, FreshnessV0)
 
 
 class TestFallbackToLatest:

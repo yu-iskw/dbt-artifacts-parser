@@ -19,9 +19,9 @@ Activate this skill when the user says or implies:
 - Run all commands from the **repository root**.
 - **Download:** `bash dev/download_dbt_schemas.sh [--ref REF] [artifact_type] [version ...]`
 - **Generate:** `bash dev/generate_parser_classes.sh [artifact_type] [version ...]`
-- **Artifact types:** `catalog`, `manifest`, `run-results`, `sources`
+- **Artifact types:** `catalog`, `manifest`, `run-results`, `sources`, `freshness`
 - **Versions:** e.g. `v1`, `v7`. Omit args to process all types and versions.
-- **Default ref:** `1.latest` (dbt Core v1 schema tree). Prefer an explicit **stable tag** for releases (e.g. `--ref v1.11.12`). Do not use pre-release refs unless the user explicitly asks.
+- **Default ref:** `1.latest` (dbt Core v1 schema tree) for the download script’s classic artifacts. Prefer an explicit **stable tag** for releases (e.g. `--ref v1.11.12`). Do not use pre-release refs unless the user explicitly asks. Freshness schemas are taken from https://schemas.getdbt.com/ (CDN), not from `1.latest`.
 
 ## Order rule
 

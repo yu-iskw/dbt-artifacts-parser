@@ -27,8 +27,15 @@ from dbt_artifacts_parser.parsers.version_map import ArtifactTypes
 
 T = TypeVar("T", bound=BaseParserModel)
 
-_ARTIFACT_SLUGS = ("catalog", "manifest", "run-results", "sources")
+_ARTIFACT_SLUGS = ("catalog", "manifest", "run-results", "sources", "freshness")
 _MAX_EXTRA_STRIP_RETRIES = 50
+
+# dbt v2 sources.json uses Pass/Warn/Error; published sources v3 schema uses lowercase.
+_SOURCES_STATUS_ALIASES = {
+    "Pass": "pass",
+    "Warn": "warn",
+    "Error": "error",
+}
 
 
 def get_dbt_schema_version(artifact_json: dict) -> str:
@@ -96,7 +103,8 @@ def warn_fallback_to_latest(requested: str, parsed_as: str) -> None:
 def _delete_at_loc(payload: Any, loc: Sequence[Union[str, int]]) -> bool:
     """Delete the value at a Pydantic error loc.
 
-    Returns True if something was removed.
+    Skips loc segments that are union-member labels (e.g. ``Nodes``, ``Nodes8``)
+    rather than real JSON keys. Returns True if something was removed.
     """
     if not loc:
         return False
@@ -111,7 +119,8 @@ def _delete_at_loc(payload: Any, loc: Sequence[Union[str, int]]) -> bool:
         ):
             current = current[part]
         else:
-            return False
+            # Union/discriminator labels are not present in the payload.
+            continue
     last = loc[-1]
     if isinstance(current, dict) and last in current:
         del current[last]
@@ -122,28 +131,76 @@ def _delete_at_loc(payload: Any, loc: Sequence[Union[str, int]]) -> bool:
     return False
 
 
+def warn_stripped_unknown_fields(model_name: str) -> None:
+    """Warn that unknown fields were stripped to match the published schema."""
+    warnings.warn(
+        (
+            f"Stripped unknown fields while parsing as {model_name}. "
+            "dbt may emit optional fields not yet present in the published "
+            "JSON schema; those values are dropped. Prefer refreshing parsers "
+            "when schemas.getdbt.com publishes an update."
+        ),
+        UserWarning,
+        stacklevel=4,
+    )
+
+
+def normalize_sources_result_status(artifact_json: dict) -> dict:
+    """Normalize dbt v2 capitalized freshness statuses for sources v3.
+
+    Published sources v3 expects ``pass`` / ``warn`` / ``error``; dbt v2
+    ``sources.json`` may emit ``Pass`` / ``Warn`` / ``Error`` (same casing as
+    freshness v0). Returns a shallow-copied dict when changes are needed.
+    """
+    results = artifact_json.get("results")
+    if not isinstance(results, list):
+        return artifact_json
+    changed = False
+    new_results = []
+    for item in results:
+        if isinstance(item, dict) and item.get("status") in _SOURCES_STATUS_ALIASES:
+            updated = dict(item)
+            updated["status"] = _SOURCES_STATUS_ALIASES[item["status"]]
+            new_results.append(updated)
+            changed = True
+        else:
+            new_results.append(item)
+    if not changed:
+        return artifact_json
+    payload = dict(artifact_json)
+    payload["results"] = new_results
+    return payload
+
+
 def validate_preserving_allowed_extras(model_class: Type[T], artifact_json: dict) -> T:
     """Validate without overriding nested extra config.
 
-    Strips only ``extra_forbidden`` fields and retries so nested ``extra="allow"``
-    models (e.g. dbt config) keep schema-allowed custom keys.
+    Strips ``extra_forbidden`` fields and retries so nested ``extra="allow"``
+    models (e.g. dbt config) keep schema-allowed custom keys. Also strips
+    optional dbt v2 fields that are absent from the published schema when
+    those extras prevent union-member matching.
     """
     payload = copy.deepcopy(artifact_json)
+    stripped_unknown = False
     for _ in range(_MAX_EXTRA_STRIP_RETRIES):
         try:
-            return model_class.model_validate(payload)
+            parsed = model_class.model_validate(payload)
+            if stripped_unknown:
+                warn_stripped_unknown_fields(model_class.__name__)
+            return parsed
         except ValidationError as exc:
             errors = exc.errors()
             forbidden_locs = [
                 err["loc"] for err in errors if err.get("type") == "extra_forbidden"
             ]
-            if not forbidden_locs or len(forbidden_locs) != len(errors):
+            if not forbidden_locs:
                 raise
             removed_any = False
             # Delete deepest paths first so parent locs stay valid when stripping lists.
             for loc in sorted(forbidden_locs, key=len, reverse=True):
                 if _delete_at_loc(payload, loc):
                     removed_any = True
+                    stripped_unknown = True
             if not removed_any:
                 raise
     raise RuntimeError(
