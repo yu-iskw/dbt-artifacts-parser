@@ -19,6 +19,8 @@ These artifacts are essential for understanding the state of your data transform
 - <https://schemas.getdbt.com/> (canonical published schemas)
 - <https://github.com/dbt-labs/dbt-core/tree/1.latest/schemas/dbt> (checked in on the dbt Core v1 branch)
 
+dbt v2 is the current engine generation; it continues to publish classic artifact JSON under the same schema majors as recent dbt v1, plus `freshness.json`. This package does not track Fusion as a separate artifact format.
+
 We can generate pydantic models from the JSON schema of dbt artifacts using [datamodel-code-generator](https://docs.pydantic.dev/latest/integrations/datamodel_code_generator/).
 
 - <https://docs.pydantic.dev/latest/integrations/datamodel_code_generator/>
@@ -66,10 +68,10 @@ These are the steps to generate the Pydantic models from dbt artifacts in this p
 1. Add or update the JSON schemas of dbt artifacts in the repository
 2. Generate Pydantic models from the JSON schemas
 
-We get JSON schemas of dbt artifacts which we want to add or update from [dbt-core `schemas/dbt` on `1.latest`](https://github.com/dbt-labs/dbt-core/tree/1.latest/schemas/dbt) (or the matching stable release tag). Published schemas also live at [schemas.getdbt.com](https://schemas.getdbt.com/).
+We get JSON schemas of dbt artifacts which we want to add or update from [dbt-core `schemas/dbt` on `1.latest`](https://github.com/dbt-labs/dbt-core/tree/1.latest/schemas/dbt) (or the matching stable release tag). Published schemas also live at [schemas.getdbt.com](https://schemas.getdbt.com/). Schemas that exist only on the CDN (for example `freshness/v0.json`) are downloaded from schemas.getdbt.com into `dbt_artifacts_parser/resources/`.
 We manage the downloaded JSON schemas in the directory of [dbt_artifacts_parser/resources/](./dbt_artifacts_parser/resources/).
 
-Download with [dev/download_dbt_schemas.sh](./dev/download_dbt_schemas.sh) (default ref `1.latest`). For parser releases, pass an explicit **stable** tag (for example `--ref v1.11.12`), not a pre-release.
+Download classic schemas with [dev/download_dbt_schemas.sh](./dev/download_dbt_schemas.sh) (default ref `1.latest`). For parser releases, pass an explicit **stable** tag (for example `--ref v1.11.12`), not a pre-release.
 
 [dev/generate_parser_classes.sh](./dev/generate_parser_classes.sh) is a script to generate Pydantic models from the JSON schemas of dbt artifacts.
 If we want to add new dbt artifact(s), we need to modify the script to generate the new pydantic models.

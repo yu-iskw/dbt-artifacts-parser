@@ -21,13 +21,15 @@ set -e
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 MODULE_ROOT="$(dirname "${SCRIPT_DIR}")"
 BASE_URL="https://raw.githubusercontent.com/dbt-labs/dbt-core"
+# Freshness (and any future CDN-only schema) is not in dbt-core schemas/dbt.
+CDN_BASE_URL="https://schemas.getdbt.com/dbt"
 # Default follows dbt-core v1 branch layout (schemas/dbt is not on main / v2).
 # For releases, prefer an explicit stable tag (e.g. --ref v1.11.12).
 REF="1.latest"
 RESOURCES_DIR="${MODULE_ROOT}/dbt_artifacts_parser/resources"
 
 # Artifact types and version lists. Must stay in sync with dev/generate_parser_classes.sh.
-ARTIFACT_TYPES=(catalog manifest run-results sources)
+ARTIFACT_TYPES=(catalog manifest run-results sources freshness)
 # shellcheck disable=SC2034
 CATALOG_VERSIONS=(v1)
 # shellcheck disable=SC2034
@@ -36,20 +38,25 @@ MANIFEST_VERSIONS=(v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12)
 RUN_RESULTS_VERSIONS=(v1 v2 v3 v4 v5 v6)
 # shellcheck disable=SC2034
 SOURCES_VERSIONS=(v1 v2 v3)
+# shellcheck disable=SC2034
+FRESHNESS_VERSIONS=(v0)
 
 usage() {
 	echo "Usage: $0 [--ref REF] [artifact_type] [version ...]"
-	echo "  Download dbt artifact JSON schemas from dbt-labs/dbt-core into this project's resources."
+	echo "  Download dbt artifact JSON schemas into this project's resources."
+	echo "  Classic schemas come from dbt-labs/dbt-core; freshness comes from schemas.getdbt.com."
 	echo "  With no arguments (after --ref), downloads all artifact types and versions."
 	echo ""
-	echo "  --ref REF       Git ref: branch, tag, or commit (default: 1.latest)."
+	echo "  --ref REF       Git ref for classic schemas: branch, tag, or commit (default: 1.latest)."
+	echo "                  Ignored for freshness (always fetched from schemas.getdbt.com)."
 	echo "                  For releases, pass a stable tag (e.g. v1.11.12), not a pre-release."
-	echo "  artifact_type   one of: catalog, manifest, run-results, sources"
+	echo "  artifact_type   one of: catalog, manifest, run-results, sources, freshness"
 	echo "  version         optional list of versions (e.g. v1 v7). If omitted, all versions for the type are downloaded."
 	exit "$1"
 }
 
-# Sets resource_dir, file_stem, default_versions_array_name for the given artifact type.
+# Sets resource_dir, file_stem, default_versions_array_name, schema_source for the given artifact type.
+# schema_source is "core" (dbt-core raw GitHub) or "cdn" (schemas.getdbt.com).
 # Exits with usage if type is invalid.
 get_artifact_metadata() {
 	local type="$1"
@@ -58,21 +65,31 @@ get_artifact_metadata() {
 		resource_dir="catalog"
 		file_stem="catalog"
 		default_versions_array_name="CATALOG_VERSIONS"
+		schema_source="core"
 		;;
 	manifest)
 		resource_dir="manifest"
 		file_stem="manifest"
 		default_versions_array_name="MANIFEST_VERSIONS"
+		schema_source="core"
 		;;
 	run-results)
 		resource_dir="run-results"
 		file_stem="run-results"
 		default_versions_array_name="RUN_RESULTS_VERSIONS"
+		schema_source="core"
 		;;
 	sources)
 		resource_dir="sources"
 		file_stem="sources"
 		default_versions_array_name="SOURCES_VERSIONS"
+		schema_source="core"
+		;;
+	freshness)
+		resource_dir="freshness"
+		file_stem="freshness"
+		default_versions_array_name="FRESHNESS_VERSIONS"
+		schema_source="cdn"
 		;;
 	*)
 		echo "Invalid artifact type: ${type}" >&2
@@ -85,7 +102,12 @@ download_one() {
 	local artifact_type="$1"
 	local ver="$2"
 	get_artifact_metadata "${artifact_type}"
-	url="${BASE_URL}/${REF}/schemas/dbt/${resource_dir}/${ver}.json"
+	if [[ "${schema_source}" == "cdn" ]]; then
+		# CDN paths omit the "v" prefix: freshness/v0.json, not freshness/vv0.json.
+		url="${CDN_BASE_URL}/${resource_dir}/${ver}.json"
+	else
+		url="${BASE_URL}/${REF}/schemas/dbt/${resource_dir}/${ver}.json"
+	fi
 	dest="${RESOURCES_DIR}/${resource_dir}/${file_stem}_${ver}.json"
 	mkdir -p "${RESOURCES_DIR}/${resource_dir}"
 	curl -f -S -L -o "${dest}" "${url}"

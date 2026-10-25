@@ -17,6 +17,7 @@
 from typing import Union
 
 from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
+from dbt_artifacts_parser.parsers.freshness.freshness_v0 import FreshnessV0
 from dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
 from dbt_artifacts_parser.parsers.manifest.manifest_v2 import ManifestV2
 from dbt_artifacts_parser.parsers.manifest.manifest_v3 import ManifestV3
@@ -40,7 +41,9 @@ from dbt_artifacts_parser.parsers.sources.sources_v2 import SourcesV2
 from dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
 from dbt_artifacts_parser.parsers.utils import (
     get_dbt_schema_version,
+    normalize_sources_result_status,
     try_parse_fallback_to_latest,
+    validate_preserving_allowed_extras,
 )
 from dbt_artifacts_parser.parsers.version_map import ArtifactTypes
 
@@ -63,7 +66,7 @@ def parse_catalog(
     """
     dbt_schema_version = get_dbt_schema_version(artifact_json=catalog)
     if dbt_schema_version == ArtifactTypes.CATALOG_V1.value.dbt_schema_version:
-        return CatalogV1(**catalog)
+        return validate_preserving_allowed_extras(CatalogV1, catalog)
     if fallback_to_latest:
         parsed = try_parse_fallback_to_latest(
             catalog, dbt_schema_version, "catalog", CatalogV1
@@ -77,7 +80,7 @@ def parse_catalog_v1(catalog: dict) -> CatalogV1:
     """Parse catalog.json v1"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=catalog)
     if dbt_schema_version == ArtifactTypes.CATALOG_V1.value.dbt_schema_version:
-        return CatalogV1(**catalog)
+        return validate_preserving_allowed_extras(CatalogV1, catalog)
     raise ValueError("Not a catalog.json v1")
 
 
@@ -118,29 +121,29 @@ def parse_manifest(
     """
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V1.value.dbt_schema_version:
-        return ManifestV1(**manifest)
+        return validate_preserving_allowed_extras(ManifestV1, manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V2.value.dbt_schema_version:
-        return ManifestV2(**manifest)
+        return validate_preserving_allowed_extras(ManifestV2, manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V3.value.dbt_schema_version:
-        return ManifestV3(**manifest)
+        return validate_preserving_allowed_extras(ManifestV3, manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V4.value.dbt_schema_version:
-        return ManifestV4(**manifest)
+        return validate_preserving_allowed_extras(ManifestV4, manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V5.value.dbt_schema_version:
-        return ManifestV5(**manifest)
+        return validate_preserving_allowed_extras(ManifestV5, manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V6.value.dbt_schema_version:
-        return ManifestV6(**manifest)
+        return validate_preserving_allowed_extras(ManifestV6, manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V7.value.dbt_schema_version:
-        return ManifestV7(**manifest)
+        return validate_preserving_allowed_extras(ManifestV7, manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V8.value.dbt_schema_version:
-        return ManifestV8(**manifest)
+        return validate_preserving_allowed_extras(ManifestV8, manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V9.value.dbt_schema_version:
-        return ManifestV9(**manifest)
+        return validate_preserving_allowed_extras(ManifestV9, manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V10.value.dbt_schema_version:
-        return ManifestV10(**manifest)
+        return validate_preserving_allowed_extras(ManifestV10, manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V11.value.dbt_schema_version:
-        return ManifestV11(**manifest)
+        return validate_preserving_allowed_extras(ManifestV11, manifest)
     elif dbt_schema_version == ArtifactTypes.MANIFEST_V12.value.dbt_schema_version:
-        return ManifestV12(**manifest)
+        return validate_preserving_allowed_extras(ManifestV12, manifest)
     if fallback_to_latest:
         parsed = try_parse_fallback_to_latest(
             manifest, dbt_schema_version, "manifest", ManifestV12
@@ -154,7 +157,7 @@ def parse_manifest_v1(manifest: dict) -> ManifestV1:
     """Parse manifest.json ver.1"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V1.value.dbt_schema_version:
-        return ManifestV1(**manifest)
+        return validate_preserving_allowed_extras(ManifestV1, manifest)
     raise ValueError("Not a manifest.json v1")
 
 
@@ -162,7 +165,7 @@ def parse_manifest_v2(manifest: dict) -> ManifestV2:
     """Parse manifest.json ver.2"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V2.value.dbt_schema_version:
-        return ManifestV2(**manifest)
+        return validate_preserving_allowed_extras(ManifestV2, manifest)
     raise ValueError("Not a manifest.json v2")
 
 
@@ -170,7 +173,7 @@ def parse_manifest_v3(manifest: dict) -> ManifestV3:
     """Parse manifest.json ver.3"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V3.value.dbt_schema_version:
-        return ManifestV3(**manifest)
+        return validate_preserving_allowed_extras(ManifestV3, manifest)
     raise ValueError("Not a manifest.json v3")
 
 
@@ -178,7 +181,7 @@ def parse_manifest_v4(manifest: dict) -> ManifestV4:
     """Parse manifest.json ver.4"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V4.value.dbt_schema_version:
-        return ManifestV4(**manifest)
+        return validate_preserving_allowed_extras(ManifestV4, manifest)
     raise ValueError("Not a manifest.json v4")
 
 
@@ -186,7 +189,7 @@ def parse_manifest_v5(manifest: dict) -> ManifestV5:
     """Parse manifest.json ver.5"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V5.value.dbt_schema_version:
-        return ManifestV5(**manifest)
+        return validate_preserving_allowed_extras(ManifestV5, manifest)
     raise ValueError("Not a manifest.json v5")
 
 
@@ -194,7 +197,7 @@ def parse_manifest_v6(manifest: dict) -> ManifestV6:
     """Parse manifest.json ver.6"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V6.value.dbt_schema_version:
-        return ManifestV6(**manifest)
+        return validate_preserving_allowed_extras(ManifestV6, manifest)
     raise ValueError("Not a manifest.json v6")
 
 
@@ -202,7 +205,7 @@ def parse_manifest_v7(manifest: dict) -> ManifestV7:
     """Parse manifest.json ver.7"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V7.value.dbt_schema_version:
-        return ManifestV7(**manifest)
+        return validate_preserving_allowed_extras(ManifestV7, manifest)
     raise ValueError("Not a manifest.json v7")
 
 
@@ -210,7 +213,7 @@ def parse_manifest_v8(manifest: dict) -> ManifestV8:
     """Parse manifest.json ver.8"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V8.value.dbt_schema_version:
-        return ManifestV8(**manifest)
+        return validate_preserving_allowed_extras(ManifestV8, manifest)
     raise ValueError("Not a manifest.json v8")
 
 
@@ -218,7 +221,7 @@ def parse_manifest_v9(manifest: dict) -> ManifestV9:
     """Parse manifest.json ver.9"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V9.value.dbt_schema_version:
-        return ManifestV9(**manifest)
+        return validate_preserving_allowed_extras(ManifestV9, manifest)
     raise ValueError("Not a manifest.json v9")
 
 
@@ -226,7 +229,7 @@ def parse_manifest_v10(manifest: dict) -> ManifestV10:
     """Parse manifest.json ver.10"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V10.value.dbt_schema_version:
-        return ManifestV10(**manifest)
+        return validate_preserving_allowed_extras(ManifestV10, manifest)
     raise ValueError("Not a manifest.json v10")
 
 
@@ -234,7 +237,7 @@ def parse_manifest_v11(manifest: dict) -> ManifestV11:
     """Parse manifest.json ver.11"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V11.value.dbt_schema_version:
-        return ManifestV11(**manifest)
+        return validate_preserving_allowed_extras(ManifestV11, manifest)
     raise ValueError("Not a manifest.json v11")
 
 
@@ -242,7 +245,7 @@ def parse_manifest_v12(manifest: dict) -> ManifestV12:
     """Parse manifest.json ver.12"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
     if dbt_schema_version == ArtifactTypes.MANIFEST_V12.value.dbt_schema_version:
-        return ManifestV12(**manifest)
+        return validate_preserving_allowed_extras(ManifestV12, manifest)
     raise ValueError("Not a manifest.json v12")
 
 
@@ -268,17 +271,17 @@ def parse_run_results(
     """
     dbt_schema_version = get_dbt_schema_version(artifact_json=run_results)
     if dbt_schema_version == ArtifactTypes.RUN_RESULTS_V1.value.dbt_schema_version:
-        return RunResultsV1(**run_results)
+        return validate_preserving_allowed_extras(RunResultsV1, run_results)
     elif dbt_schema_version == ArtifactTypes.RUN_RESULTS_V2.value.dbt_schema_version:
-        return RunResultsV2(**run_results)
+        return validate_preserving_allowed_extras(RunResultsV2, run_results)
     elif dbt_schema_version == ArtifactTypes.RUN_RESULTS_V3.value.dbt_schema_version:
-        return RunResultsV3(**run_results)
+        return validate_preserving_allowed_extras(RunResultsV3, run_results)
     elif dbt_schema_version == ArtifactTypes.RUN_RESULTS_V4.value.dbt_schema_version:
-        return RunResultsV4(**run_results)
+        return validate_preserving_allowed_extras(RunResultsV4, run_results)
     elif dbt_schema_version == ArtifactTypes.RUN_RESULTS_V5.value.dbt_schema_version:
-        return RunResultsV5(**run_results)
+        return validate_preserving_allowed_extras(RunResultsV5, run_results)
     elif dbt_schema_version == ArtifactTypes.RUN_RESULTS_V6.value.dbt_schema_version:
-        return RunResultsV6(**run_results)
+        return validate_preserving_allowed_extras(RunResultsV6, run_results)
     if fallback_to_latest:
         parsed = try_parse_fallback_to_latest(
             run_results, dbt_schema_version, "run-results", RunResultsV6
@@ -292,7 +295,7 @@ def parse_run_results_v1(run_results: dict) -> RunResultsV1:
     """Parse run-results.json v1"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=run_results)
     if dbt_schema_version == ArtifactTypes.RUN_RESULTS_V1.value.dbt_schema_version:
-        return RunResultsV1(**run_results)
+        return validate_preserving_allowed_extras(RunResultsV1, run_results)
     raise ValueError("Not a run-results.json v1")
 
 
@@ -300,7 +303,7 @@ def parse_run_results_v2(run_results: dict) -> RunResultsV2:
     """Parse run-results.json v2"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=run_results)
     if dbt_schema_version == ArtifactTypes.RUN_RESULTS_V2.value.dbt_schema_version:
-        return RunResultsV2(**run_results)
+        return validate_preserving_allowed_extras(RunResultsV2, run_results)
     raise ValueError("Not a run-results.json v2")
 
 
@@ -308,7 +311,7 @@ def parse_run_results_v3(run_results: dict) -> RunResultsV3:
     """Parse run-results.json v3"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=run_results)
     if dbt_schema_version == ArtifactTypes.RUN_RESULTS_V3.value.dbt_schema_version:
-        return RunResultsV3(**run_results)
+        return validate_preserving_allowed_extras(RunResultsV3, run_results)
     raise ValueError("Not a run-results.json v3")
 
 
@@ -316,7 +319,7 @@ def parse_run_results_v4(run_results: dict) -> RunResultsV4:
     """Parse run-results.json v4"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=run_results)
     if dbt_schema_version == ArtifactTypes.RUN_RESULTS_V4.value.dbt_schema_version:
-        return RunResultsV4(**run_results)
+        return validate_preserving_allowed_extras(RunResultsV4, run_results)
     raise ValueError("Not a run-results.json v4")
 
 
@@ -324,7 +327,7 @@ def parse_run_results_v5(run_results: dict) -> RunResultsV5:
     """Parse run-results.json v5"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=run_results)
     if dbt_schema_version == ArtifactTypes.RUN_RESULTS_V5.value.dbt_schema_version:
-        return RunResultsV5(**run_results)
+        return validate_preserving_allowed_extras(RunResultsV5, run_results)
     raise ValueError("Not a run-results.json v5")
 
 
@@ -332,7 +335,7 @@ def parse_run_results_v6(run_results: dict) -> RunResultsV6:
     """Parse run-results.json v6"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=run_results)
     if dbt_schema_version == ArtifactTypes.RUN_RESULTS_V6.value.dbt_schema_version:
-        return RunResultsV6(**run_results)
+        return validate_preserving_allowed_extras(RunResultsV6, run_results)
     raise ValueError("Not a run-results.json v6")
 
 
@@ -354,14 +357,19 @@ def parse_sources(
     """
     dbt_schema_version = get_dbt_schema_version(artifact_json=sources)
     if dbt_schema_version == ArtifactTypes.SOURCES_V1.value.dbt_schema_version:
-        return SourcesV1(**sources)
+        return validate_preserving_allowed_extras(SourcesV1, sources)
     elif dbt_schema_version == ArtifactTypes.SOURCES_V2.value.dbt_schema_version:
-        return SourcesV2(**sources)
+        return validate_preserving_allowed_extras(SourcesV2, sources)
     elif dbt_schema_version == ArtifactTypes.SOURCES_V3.value.dbt_schema_version:
-        return SourcesV3(**sources)
+        return validate_preserving_allowed_extras(
+            SourcesV3, normalize_sources_result_status(sources)
+        )
     if fallback_to_latest:
         parsed = try_parse_fallback_to_latest(
-            sources, dbt_schema_version, "sources", SourcesV3
+            normalize_sources_result_status(sources),
+            dbt_schema_version,
+            "sources",
+            SourcesV3,
         )
         if parsed is not None:
             return parsed
@@ -372,7 +380,7 @@ def parse_sources_v1(sources: dict) -> SourcesV1:
     """Parse sources.json v1"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=sources)
     if dbt_schema_version == ArtifactTypes.SOURCES_V1.value.dbt_schema_version:
-        return SourcesV1(**sources)
+        return validate_preserving_allowed_extras(SourcesV1, sources)
     raise ValueError("Not a sources.json v1")
 
 
@@ -380,7 +388,7 @@ def parse_sources_v2(sources: dict) -> SourcesV2:
     """Parse sources.json v2"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=sources)
     if dbt_schema_version == ArtifactTypes.SOURCES_V2.value.dbt_schema_version:
-        return SourcesV2(**sources)
+        return validate_preserving_allowed_extras(SourcesV2, sources)
     raise ValueError("Not a sources.json v2")
 
 
@@ -388,5 +396,43 @@ def parse_sources_v3(sources: dict) -> SourcesV3:
     """Parse sources.json v3"""
     dbt_schema_version = get_dbt_schema_version(artifact_json=sources)
     if dbt_schema_version == ArtifactTypes.SOURCES_V3.value.dbt_schema_version:
-        return SourcesV3(**sources)
+        return validate_preserving_allowed_extras(
+            SourcesV3, normalize_sources_result_status(sources)
+        )
     raise ValueError("Not a sources.json v3")
+
+
+#
+# freshness (dbt v2 freshness.json)
+#
+def parse_freshness(
+    freshness: dict, *, fallback_to_latest: bool = False
+) -> Union[FreshnessV0]:
+    """Parse freshness.json
+
+    Args:
+        freshness: dict of freshness.json
+        fallback_to_latest: If True and the schema version is newer than
+            supported, parse as the latest known schema (best-effort).
+
+    Returns:
+        Union[FreshnessV0]
+    """
+    dbt_schema_version = get_dbt_schema_version(artifact_json=freshness)
+    if dbt_schema_version == ArtifactTypes.FRESHNESS_V0.value.dbt_schema_version:
+        return validate_preserving_allowed_extras(FreshnessV0, freshness)
+    if fallback_to_latest:
+        parsed = try_parse_fallback_to_latest(
+            freshness, dbt_schema_version, "freshness", FreshnessV0
+        )
+        if parsed is not None:
+            return parsed
+    raise ValueError("Not a freshness.json")
+
+
+def parse_freshness_v0(freshness: dict) -> FreshnessV0:
+    """Parse freshness.json v0"""
+    dbt_schema_version = get_dbt_schema_version(artifact_json=freshness)
+    if dbt_schema_version == ArtifactTypes.FRESHNESS_V0.value.dbt_schema_version:
+        return validate_preserving_allowed_extras(FreshnessV0, freshness)
+    raise ValueError("Not a freshness.json v0")

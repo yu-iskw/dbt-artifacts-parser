@@ -27,7 +27,7 @@ TypeScript users should use [dbt-artifacts-parser-ts](https://github.com/yu-iskw
 
 | Version | Supported dbt Version | Supported pydantic Version |
 |---------|-----------------------|----------------------------|
-|  0.15   | dbt 0.19 to 1.12      | pydantic v2                |
+|  0.15   | dbt 0.19 to 1.12, and dbt v2 | pydantic v2                |
 |  0.14   | dbt 0.19 to 1.11      | pydantic v2                |
 |  0.13   | dbt 0.19 to 1.11      | pydantic v2                |
 |  0.12   | dbt 0.19 to 1.11      | pydantic v2                |
@@ -36,6 +36,8 @@ TypeScript users should use [dbt-artifacts-parser-ts](https://github.com/yu-iskw
 |  0.7    | dbt 1.5 to 1.8        | pydantic v2                |
 |  0.6    | dbt 1.5 to 1.8        | pydantic v1                |
 |  0.5    | dbt 1.5 to 1.7        | pydantic v1                |
+
+Artifact schema majors are independent of the dbt product major. dbt v2 writes the same classic JSON schema majors as recent dbt v1 (manifest v12, catalog v1, run-results v6, sources v3) and additionally writes `freshness.json` (schema v0). This library tracks those public schemas; it does not treat Fusion as a separate artifact format.
 
 ## Installation
 
@@ -84,6 +86,10 @@ Those are the classes to parse dbt artifacts.
 - [SourcesV1](dbt_artifacts_parser/parsers/sources/sources_v1.py) for sources.json v1
 - [SourcesV2](dbt_artifacts_parser/parsers/sources/sources_v2.py) for sources.json v2
 - [SourcesV3](dbt_artifacts_parser/parsers/sources/sources_v3.py) for sources.json v3
+
+### Freshness
+
+- [FreshnessV0](dbt_artifacts_parser/parsers/freshness/freshness_v0.py) for freshness.json v0 (dbt v2)
 
 ## Examples
 
@@ -297,6 +303,22 @@ from dbt_artifacts_parser.parser import parse_sources_v3
 with open("path/to/sources.json", "r") as fp:
     sources_dict = json.load(fp)
     sources_obj = parse_sources_v3(sources=sources_dict)
+```
+
+### Parse freshness.json (dbt v2)
+
+```python
+import json
+
+from dbt_artifacts_parser.parser import parse_freshness, parse_freshness_v0
+
+with open("path/to/freshness.json", "r") as fp:
+    freshness_dict = json.load(fp)
+    freshness_obj = parse_freshness(freshness=freshness_dict)
+
+with open("path/to/freshness.json", "r") as fp:
+    freshness_dict = json.load(fp)
+    freshness_obj = parse_freshness_v0(freshness=freshness_dict)
 ```
 
 ## Contributors
