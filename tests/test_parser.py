@@ -22,6 +22,7 @@ from pydantic import ValidationError
 
 from dbt_artifacts_parser import parser
 from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
+from dbt_artifacts_parser.parsers.freshness.freshness_v0 import FreshnessV0
 from dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
 from dbt_artifacts_parser.parsers.run_results.run_results_v6 import RunResultsV6
 from dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
@@ -479,6 +480,105 @@ class TestRunResultsParser:
 #         )
 
 
+@pytest.mark.parametrize(
+    "version,path",
+    [
+        (
+            "v0",
+            os.path.join(
+                get_project_root(),
+                "tests",
+                "resources",
+                "freshness",
+                "v0",
+                "jaffle_shop",
+                "freshness.json",
+            ),
+        ),
+    ],
+)
+class TestFreshnessParser:
+    def test_parse_freshness(self, version, path):
+        with open(path, "r", encoding="utf-8") as fp:
+            freshness_dict = yaml.safe_load(fp)
+            freshness_obj = parser.parse_freshness(freshness_dict)
+        assert (
+            freshness_obj.metadata.dbt_schema_version
+            == f"https://schemas.getdbt.com/dbt/freshness/{version}.json"
+        )
+        assert freshness_obj.metadata.dbt_version.startswith("2.")
+        assert isinstance(freshness_obj, FreshnessV0)
+        assert freshness_obj.results[0].status.value == "Pass"
+
+    def test_parse_freshness_specific(self, version, path):
+        with open(path, "r", encoding="utf-8") as fp:
+            freshness_dict = yaml.safe_load(fp)
+            freshness_obj = getattr(parser, f"parse_freshness_{version}")(
+                freshness_dict
+            )
+        assert (
+            freshness_obj.metadata.dbt_schema_version
+            == f"https://schemas.getdbt.com/dbt/freshness/{version}.json"
+        )
+        assert isinstance(freshness_obj, FreshnessV0)
+
+
+class TestDbtVersionDoesNotSelectParser:
+    def test_parse_catalog_with_dbt_2_version_uses_catalog_v1(self):
+        path = os.path.join(
+            get_project_root(),
+            "tests",
+            "resources",
+            "catalog",
+            "v1",
+            "jaffle_shop",
+            "catalog_1.12.json",
+        )
+        with open(path, "r", encoding="utf-8") as fp:
+            catalog_dict = yaml.safe_load(fp)
+        catalog_dict["metadata"]["dbt_version"] = "2.0.5"
+        catalog_obj = parser.parse_catalog(catalog_dict)
+        assert isinstance(catalog_obj, CatalogV1)
+        assert catalog_obj.metadata.dbt_version == "2.0.5"
+        assert (
+            catalog_obj.metadata.dbt_schema_version
+            == "https://schemas.getdbt.com/dbt/catalog/v1.json"
+        )
+
+
+class TestFusionSourcesJsonIsNotSourcesV3:
+    def test_parse_sources_rejects_pascal_case_status(self):
+        sources_dict = {
+            "metadata": {
+                "dbt_schema_version": "https://schemas.getdbt.com/dbt/sources/v3.json",
+                "dbt_version": "2.0.5",
+                "generated_at": "2026-08-28T00:00:00.000000Z",
+                "invocation_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+                "env": {},
+            },
+            "results": [
+                {
+                    "unique_id": "source.jaffle_shop.jaffle_shop.orders",
+                    "max_loaded_at": "2026-08-27T23:30:00+00:00",
+                    "snapshotted_at": "2026-08-28T00:00:00+00:00",
+                    "max_loaded_at_time_ago_in_s": 1800,
+                    "status": "Pass",
+                    "criteria": {
+                        "warn_after": {"count": 12, "period": "hour"},
+                        "error_after": {"count": 24, "period": "hour"},
+                    },
+                    "adapter_response": {},
+                    "timing": [{"name": "execute"}],
+                    "thread_id": "Thread-1",
+                    "execution_time": 0.05,
+                }
+            ],
+            "elapsed_time": 0.2,
+        }
+        with pytest.raises(ValidationError):
+            parser.parse_sources(sources_dict)
+
+
 class TestFallbackToLatest:
     def test_parse_manifest_unsupported_raises_by_default(self):
         path = os.path.join(
@@ -586,6 +686,28 @@ class TestFallbackToLatest:
         with pytest.warns(UserWarning, match="falling back to latest"):
             sources_obj = parser.parse_sources(sources_dict, fallback_to_latest=True)
         assert isinstance(sources_obj, SourcesV3)
+
+    def test_parse_freshness_fallback_to_latest(self):
+        path = os.path.join(
+            get_project_root(),
+            "tests",
+            "resources",
+            "freshness",
+            "v0",
+            "jaffle_shop",
+            "freshness.json",
+        )
+        with open(path, "r", encoding="utf-8") as fp:
+            freshness_dict = yaml.safe_load(fp)
+        freshness_dict["metadata"]["dbt_schema_version"] = (
+            "https://schemas.getdbt.com/dbt/freshness/v99.json"
+        )
+        freshness_dict["future_only_field"] = "ignored"
+        with pytest.warns(UserWarning, match="falling back to latest"):
+            freshness_obj = parser.parse_freshness(
+                freshness_dict, fallback_to_latest=True
+            )
+        assert isinstance(freshness_obj, FreshnessV0)
 
     def test_parse_manifest_fallback_preserves_allowed_config_extras(self):
         path = os.path.join(

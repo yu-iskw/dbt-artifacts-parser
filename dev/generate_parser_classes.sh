@@ -27,7 +27,7 @@ target_python_version="3.10"
 output_model_type="pydantic_v2.BaseModel"
 
 # All artifact types for "generate all"
-ARTIFACT_TYPES=(catalog manifest run-results sources)
+ARTIFACT_TYPES=(catalog manifest run-results sources freshness)
 
 # Version list per artifact type (bash arrays). Used indirectly via nameref in main (default_versions_array_name).
 # shellcheck disable=SC2034
@@ -38,13 +38,15 @@ MANIFEST_VERSIONS=(v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12)
 RUN_RESULTS_VERSIONS=(v1 v2 v3 v4 v5 v6)
 # shellcheck disable=SC2034
 SOURCES_VERSIONS=(v1 v2 v3)
+# shellcheck disable=SC2034
+FRESHNESS_VERSIONS=(v0)
 
 usage() {
 	echo "Usage: $0 [artifact_type] [version ...]"
 	echo "  Generate Pydantic parser classes from dbt artifact JSON schemas."
 	echo "  With no arguments, generates all artifact types and versions."
 	echo ""
-	echo "  artifact_type  one of: catalog, manifest, run-results, sources"
+	echo "  artifact_type  one of: catalog, manifest, run-results, sources, freshness"
 	echo "  version        optional list of versions (e.g. v1 v7). If omitted, all versions for the type are generated."
 	exit "$1"
 }
@@ -86,6 +88,14 @@ get_artifact_metadata() {
 		class_prefix="Sources"
 		default_versions_array_name="SOURCES_VERSIONS"
 		;;
+	freshness)
+		resource_dir="freshness"
+		parser_dir="freshness"
+		file_stem="freshness"
+		output_file_stem="freshness"
+		class_prefix="Freshness"
+		default_versions_array_name="FRESHNESS_VERSIONS"
+		;;
 	*)
 		echo "Invalid artifact type: ${type}" >&2
 		usage 1
@@ -101,6 +111,7 @@ run_codegen() {
 	upper_ver=${ver^v}
 	input="${MODULE_ROOT}/dbt_artifacts_parser/resources/${resource_dir}/${file_stem}_${ver}.json"
 	destination="${MODULE_ROOT}/dbt_artifacts_parser/parsers/${parser_dir}/${output_file_stem}_${ver}.py"
+	mkdir -p "$(dirname "${destination}")"
 	echo "Generate ${destination}"
 	datamodel-codegen --input-file-type jsonschema \
 		--target-python-version "${target_python_version}" \

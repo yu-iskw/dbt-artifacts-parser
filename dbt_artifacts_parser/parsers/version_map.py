@@ -20,6 +20,7 @@ from typing import Type
 
 from dbt_artifacts_parser.parsers.base import BaseParserModel
 from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
+from dbt_artifacts_parser.parsers.freshness.freshness_v0 import FreshnessV0
 from dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
 from dbt_artifacts_parser.parsers.manifest.manifest_v2 import ManifestV2
 from dbt_artifacts_parser.parsers.manifest.manifest_v3 import ManifestV3
@@ -121,4 +122,8 @@ class ArtifactTypes(Enum):
     )
     SOURCES_V3 = ArtifactType(
         "https://schemas.getdbt.com/dbt/sources/v3.json", SourcesV3
+    )
+    # Freshness
+    FRESHNESS_V0 = ArtifactType(
+        "https://schemas.getdbt.com/dbt/freshness/v0.json", FreshnessV0
     )

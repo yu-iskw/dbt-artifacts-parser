@@ -27,7 +27,7 @@ from dbt_artifacts_parser.parsers.version_map import ArtifactTypes
 
 T = TypeVar("T", bound=BaseParserModel)
 
-_ARTIFACT_SLUGS = ("catalog", "manifest", "run-results", "sources")
+_ARTIFACT_SLUGS = ("catalog", "manifest", "run-results", "sources", "freshness")
 _MAX_EXTRA_STRIP_RETRIES = 50
 
 
