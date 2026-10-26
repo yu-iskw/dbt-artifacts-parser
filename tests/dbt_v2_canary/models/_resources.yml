@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: fresh_events
+    columns:
+      - name: id
+        data_type: integer
+  - name: unit_target
+    columns:
+      - name: id
+        data_type: integer
+
+sources:
+  - name: raw
+    schema: main
+    tables:
+      - name: fresh_events
+        config:
+          loaded_at_field: loaded_at
+          freshness:
+            warn_after: {count: 1, period: hour}
+            error_after: {count: 24, period: hour}
+      - name: stale_events
+        config:
+          loaded_at_field: loaded_at
+          freshness:
+            warn_after: {count: 1, period: hour}
+            error_after: {count: 24, period: hour}
+
+unit_tests:
+  - name: unit_target_returns_one
+    model: unit_target
+    overrides:
+      vars:
+        compatibility_mode: "'v2'"
+    given: []
+    expect:
+      rows:
+        - {id: 1}
+
+groups:
+  - name: analytics
+    owner:
+      name: Compatibility
+      email: compatibility@example.com
+
+exposures:
+  - name: compatibility_dashboard
+    type: dashboard
+    maturity: low
+    url: https://example.com/dbt-v2-canary
+    depends_on:
+      - ref('fresh_events')
+    owner:
+      name: Compatibility
+      email: compatibility@example.com

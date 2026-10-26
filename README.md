@@ -37,6 +37,26 @@ TypeScript users should use [dbt-artifacts-parser-ts](https://github.com/yu-iskw
 |  0.6    | dbt 1.5 to 1.8        | pydantic v1                |
 |  0.5    | dbt 1.5 to 1.7        | pydantic v1                |
 
+
+### Artifact schemas vs. dbt producer versions
+
+Parser classes are versioned by the artifact's `metadata.dbt_schema_version`, not by
+the dbt engine version. dbt v2 currently continues to emit the existing JSON artifact
+schema families (manifest v12, run-results v6, sources v3, and catalog v1), while the
+Rust producer can have small wire-level differences from the published JSON schemas.
+
+The repository therefore tests two compatibility layers:
+
+- **Schema support:** generated Pydantic models stay aligned with the published dbt JSON schemas.
+- **Producer-tested support:** committed fixtures plus the
+  [dbt v2 compatibility workflow](.github/workflows/dbt_v2_compatibility.yml) exercise
+  dbt 2.0.0 and the latest 2.0.x producer.
+
+Known producer-only differences are handled in a narrow
+`dbt_artifacts_parser.compatibility` layer rather than by editing generated models or
+globally relaxing Pydantic validation. Parquet/index/metadata artifacts introduced by
+dbt v2 are outside this JSON parser compatibility contract.
+
 ## Installation
 
 Requires Python 3.10 or newer. Tested on CPython 3.10, 3.11, 3.12, and 3.13.

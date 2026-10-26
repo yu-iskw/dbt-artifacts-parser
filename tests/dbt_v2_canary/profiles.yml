@@ -1,0 +1,8 @@
+dbt_v2_canary:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: db.db
+      threads: 1
+      schema: main
